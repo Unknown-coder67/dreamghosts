@@ -24,10 +24,25 @@ body {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  animation: fade 60s infinite;
+  overflow: hidden;
   z-index: -2;
+}
+
+.bg img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  animation: fadeSlide 60s infinite;
+}
+
+@keyframes fadeSlide {
+  0% { opacity: 0; }
+  5% { opacity: 1; }
+  10% { opacity: 1; }
+  15% { opacity: 0; }
+  100% { opacity: 0; }
 }
 
 .overlay {
@@ -36,20 +51,6 @@ body {
   height: 100%;
   background: rgba(0,0,0,0.65);
   z-index: -1;
-}
-
-@keyframes fade {
-  0%   { background-image: url("images/bg1.jpg"); }
-  10%  { background-image: url("images/bg2.jpg"); }
-  20%  { background-image: url("images/bg3.jpg"); }
-  30%  { background-image: url("images/bg4.jpg"); }
-  40%  { background-image: url("images/bg5.jpg"); }
-  50%  { background-image: url("images/bg6.jpg"); }
-  60%  { background-image: url("images/bg7.jpg"); }
-  70%  { background-image: url("images/bg8.jpg"); }
-  80%  { background-image: url("images/bg9.jpg"); }
-  90%  { background-image: url("images/bg10.jpg"); }
-  100% { background-image: url("images/bg1.jpg"); }
 }
 
 .container {
@@ -103,7 +104,19 @@ footer {
 
 <body>
 
-<div class="bg"></div>
+<div class="bg">
+  <img src="images/bg1.jpg" style="animation-delay:0s">
+  <img src="images/bg2.jpg" style="animation-delay:6s">
+  <img src="images/bg3.jpg" style="animation-delay:12s">
+  <img src="images/bg4.jpg" style="animation-delay:18s">
+  <img src="images/bg5.jpg" style="animation-delay:24s">
+  <img src="images/bg6.jpg" style="animation-delay:30s">
+  <img src="images/bg7.jpg" style="animation-delay:36s">
+  <img src="images/bg8.jpg" style="animation-delay:42s">
+  <img src="images/bg9.jpg" style="animation-delay:48s">
+  <img src="images/bg10.jpg" style="animation-delay:54s">
+</div>
+
 <div class="overlay"></div>
 
 <div class="container">
@@ -122,7 +135,6 @@ footer {
 </footer>
 
 <script>
-  
 function copyIP() {
   navigator.clipboard.writeText("play.dreamghosts.lol");
   alert("Server IP copied!");
