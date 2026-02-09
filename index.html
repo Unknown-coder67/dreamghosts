@@ -1,30 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>DreamGhosts</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>DreamGhosts | Since 2013</title>
 
 <style>
-body{
-background:#0f0f0f;
-color:white;
-font-family:Arial;
-text-align:center;
-padding-top:100px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-h1{
-color:#00ffcc;
-font-size:50px;
+body {
+  height: 100vh;
+  color: white;
+  overflow: hidden;
+}
+
+.bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  animation: fade 60s infinite;
+  z-index: -2;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.65);
+  z-index: -1;
+}
+
+@keyframes fade {
+  0%   { background-image: url("images/bg1.jpg"); }
+  10%  { background-image: url("images/bg2.jpg"); }
+  20%  { background-image: url("images/bg3.jpg"); }
+  30%  { background-image: url("images/bg4.jpg"); }
+  40%  { background-image: url("images/bg5.jpg"); }
+  50%  { background-image: url("images/bg6.jpg"); }
+  60%  { background-image: url("images/bg7.jpg"); }
+  70%  { background-image: url("images/bg8.jpg"); }
+  80%  { background-image: url("images/bg9.jpg"); }
+  90%  { background-image: url("images/bg10.jpg"); }
+  100% { background-image: url("images/bg1.jpg"); }
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+h1 {
+  font-size: 72px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+.subtitle {
+  opacity: 0.7;
+  margin-bottom: 25px;
+}
+
+.players {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.ip {
+  cursor: pointer;
+  font-size: 22px;
+  background: rgba(255,255,255,0.1);
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.ip:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+footer {
+  position: fixed;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.5;
 }
 </style>
 </head>
 
 <body>
 
-<h1>👻 DreamGhosts</h1>
-<p>Since 2013</p>
+<div class="bg"></div>
+<div class="overlay"></div>
 
-<h2>Join: play.dreamghosts.lol</h2>
+<div class="container">
+  <h1>👻 DreamGhosts</h1>
+  <div class="subtitle">Since 2013</div>
+
+  <div class="players" id="players">Checking server...</div>
+
+  <div class="ip" onclick="copyIP()">
+    play.dreamghosts.lol (click to copy)
+  </div>
+</div>
+
+<footer>
+  © 2026 DreamGhosts. All rights reserved.
+</footer>
+
+<script>
+  
+function copyIP() {
+  navigator.clipboard.writeText("play.dreamghosts.lol");
+  alert("Server IP copied!");
+}
+
+fetch("https://api.mcsrvstat.us/2/play.dreamghosts.lol")
+  .then(res => res.json())
+  .then(data => {
+    if (data.online) {
+      document.getElementById("players").innerText =
+        `Online: ${data.players.online} / ${data.players.max} players`;
+    } else {
+      document.getElementById("players").innerText = "Server Offline";
+    }
+  })
+  .catch(() => {
+    document.getElementById("players").innerText = "Unable to fetch status";
+  });
+</script>
 
 </body>
-</html> 
+</html>
