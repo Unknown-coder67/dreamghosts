@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DreamGhosts | Since 2012 – MTA → Minecraft</title>
+  <title>DreamGhosts – Since 2012</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,360 +13,292 @@
 
   <style>
     :root {
-      --bg-dark: #000000;
-      --text: #d8d8d8;
+      --bg: #0a0a0a;
+      --text: #e0e0e0;
       --text-dim: #a0a0a0;
-      --glow: 0 0 14px rgba(220,220,220,0.18);
+      --accent: #6e6e6e;
+      --glow: 0 0 12px rgba(220,220,220,0.12);
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
-      background: var(--bg-dark);
+      background: var(--bg);
       color: var(--text);
       font-family: 'Roboto Mono', monospace;
-      line-height: 1.6;
-      min-height: 340vh;
+      line-height: 1.7;
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
-    .parallax-section {
+    .parallax-hero {
       position: relative;
       height: 100vh;
       overflow: hidden;
       background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    .parallax-img-wrapper {
+    .hero-bg {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
-      position: relative;
-    }
-
-    .parallax-img {
-      width: 100%;
-      height: auto;
-      min-height: 100%;
       object-fit: cover;
-      object-position: center;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1.08);
-      transition: transform 1.2s ease-out;
-    }
-
-    .parallax-section.visible .parallax-img {
-      transform: translate(-50%, -50%) scale(1.00);
+      opacity: 0.6;
     }
 
     .overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.65) 45%, rgba(0,0,0,0.65) 55%, rgba(0,0,0,0.35));
+      background: linear-gradient(to bottom, rgba(0,0,0,0.65), rgba(0,0,0,0.9) 60%);
+      z-index: 1;
+    }
+
+    .content {
+      position: relative;
       z-index: 2;
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: absolute;
-      top: 6vh;
-      left: 5vw;
-      z-index: 10;
-      max-width: 90vw;
-      pointer-events: auto;
-    }
-
-    .hero-text {
-      font-size: 2.8rem;
-      font-weight: 400;
-      text-shadow: var(--glow), 0 2px 8px #000;
-      margin-bottom: 0.5rem;
-      letter-spacing: 1px;
-    }
-
-    .hero-text.small {
-      font-size: 1.35rem;
-      opacity: 0.92;
-      margin-bottom: 0.7rem;
-    }
-
-    .hero-text.ip {
-      font-size: 1.4rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: inline-block;
-    }
-
-    .hero-text.ip:hover {
-      transform: translateX(8px);
-      text-shadow: 0 0 20px rgba(255,255,255,0.4);
-    }
-
-    section { padding: 12rem 5%; }
-
-    .section-title {
-      font-size: 4rem;
-      text-align: center;
-      color: #c8c8c8;
-      margin-bottom: 7rem;
-      text-shadow: 0 0 15px rgba(200,200,200,0.15);
-    }
-
-    .timeline {
       max-width: 1100px;
       margin: 0 auto;
+      padding: 5rem 5% 8rem;
     }
 
-    .timeline-item {
-      margin: 7rem 0;
-      font-size: 1.45rem;
-      opacity: 0.92;
-      max-width: 65%;
+    h1, h2 {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 1.5px;
+      text-shadow: var(--glow);
     }
 
-    .timeline-item.left  { margin-left: 0; text-align: left; }
-    .timeline-item.right { margin-left: auto; text-align: right; }
+    h1 { font-size: 5.5rem; text-align: center; margin-bottom: 1.5rem; }
+    h2 { font-size: 3.2rem; margin: 6rem 0 2.5rem; color: #c0c0c0; }
 
-    .timeline-item h3 {
-      font-size: 2.4rem;
-      margin-bottom: 1.2rem;
-      color: #e8e8e8;
+    .intro, .era, .friends, .gallery-section, .now, .closing {
+      margin: 8rem 0;
     }
 
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 2.5rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .gallery-item {
-      position: relative;
-      overflow: hidden;
-      border-radius: 10px;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.9);
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.5s ease;
-    }
-
-    .gallery-item:hover img {
-      transform: scale(1.08);
-    }
-
-    .caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0,0,0,0.75);
-      color: #fff;
-      padding: 0.9rem;
-      text-align: center;
-      font-size: 1.15rem;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .gallery-item:hover .caption {
-      opacity: 1;
-    }
-
-    .join-content {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-      text-align: center;
-      max-width: 90vw;
-      color: #f0f0f0;
-    }
-
-    .join-content h2 {
-      color: #e0e0e0;
+    .era p, .intro p, .now p, .closing p {
+      font-size: 1.35rem;
+      max-width: 80ch;
       margin-bottom: 2rem;
+      color: var(--text-dim);
     }
 
-    .join-content p {
-      font-size: 1.5rem;
-      line-height: 1.7;
+    .screenshot {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      margin: 2.5rem auto;
+      display: block;
+    }
+
+    /* Friends list styling */
+    #ghosts-list {
+      list-style: none;
+      columns: 3;               /* 3 columns on desktop */
+      column-gap: 4rem;
+      font-size: 1.25rem;
+      line-height: 2.1;
+      padding: 0;
+    }
+
+    #ghosts-list li {
+      break-inside: avoid;
+      margin-bottom: 0.4rem;
+    }
+
+    .gallery {
+      column-count: 3;
+      column-gap: 1.5rem;
+      margin: 6rem 0;
+    }
+
+    .gallery img {
+      width: 100%;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      break-inside: avoid;
+      transition: transform 0.4s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.03);
+    }
+
+    .closing {
+      text-align: center;
+      font-size: 1.45rem;
+      opacity: 0.85;
+      padding: 6rem 5%;
     }
 
     footer {
       text-align: center;
-      padding: 6rem 1rem;
-      background: #000;
-      color: #888;
-      font-size: 1.1rem;
-    }
-
-    /* Faster fade-out when scrolling up */
-    .aos-animate[data-aos][data-aos^=fade][.aos-animate-out] {
-      transition-duration: 400ms !important;
+      padding: 4rem 1rem;
+      color: #555;
+      font-size: 0.95rem;
+      border-top: 1px solid #222;
     }
 
     @media (max-width: 900px) {
-      .hero-content { top: 5vh; left: 5vw; }
-      .hero-text { font-size: 2.2rem; }
-      .hero-text.small { font-size: 1.2rem; }
-      .hero-text.ip { font-size: 1.25rem; }
-      .section-title { font-size: 3.2rem; }
-      .timeline-item { max-width: 92%; text-align: center; }
-      .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+      h1 { font-size: 4rem; }
+      h2 { font-size: 2.6rem; }
+      #ghosts-list { columns: 2; } /* 2 columns on tablets */
+      .gallery { column-count: 2; }
+    }
+
+    @media (max-width: 600px) {
+      #ghosts-list { columns: 1; } /* single column on phones */
     }
   </style>
 </head>
 <body>
 
-  <div class="parallax-section" id="hero">
-    <div class="parallax-img-wrapper">
-      <img class="parallax-img" src="images/bg-hero.jpg" alt="Hero background">
-    </div>
+  <!-- Hero -->
+  <div class="parallax-hero">
+    <img class="hero-bg" src="images/hero-bg.jpg" alt="DreamGhosts memories">
     <div class="overlay"></div>
-    <div class="hero-content">
-      <div class="hero-text" data-aos="fade-up" data-aos-delay="0">DreamGhosts</div>
-      <div class="hero-text small" data-aos="fade-up" data-aos-delay="200">Since 2012 – MTA madness → Minecraft eternal haunting</div>
-      <div class="hero-text small" id="players" data-aos="fade-up" data-aos-delay="400">Ghost check in progress...</div>
-      <div class="hero-text ip" onclick="copyIP()" data-aos="fade-up" data-aos-delay="600">play.dreamghosts.lol</div>
-    </div>
-  </div>
-
-  <section>
-    <h2 class="section-title" data-aos="fade-up" data-aos-delay="0">Old Ghosts Never Die</h2>
-    <div class="timeline">
-      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="200">
-        <h3>2012–2018</h3>
-        <p>MTA:SA deathmatches, epic rage quits, 4 AM voice spam, stealing cars and laughing till dawn...</p>
-      </div>
-      <div class="timeline-item right" data-aos="fade-left" data-aos-delay="400">
-        <h3>2019–2025</h3>
-        <p>Life happened — uni, jobs, ghosting each other... but Minecraft pulled the squad back from the void.</p>
-      </div>
-      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="600">
-        <h3>2026 → ∞</h3>
-        <p>Still griefing bases, crystal PvP fails, shulker box scams. The haunting continues.</p>
-      </div>
-    </div>
-  </section>
-
-  <section style="background: #0a0a0a;">
-    <h2 class="section-title" data-aos="fade-up" data-aos-delay="0">Memories & Mayhem</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="200">
-        <img src="images/mta1.jpg" alt="MTA chaos 2013">
-        <div class="caption">MTA chaos 2013</div>
-      </div>
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="350">
-        <img src="images/mta2.jpg" alt="Fail race epic">
-        <div class="caption">Fail race epic</div>
-      </div>
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="500">
-        <img src="images/minecraft1.jpg" alt="First base vibes">
-        <div class="caption">First base vibes</div>
-      </div>
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="650">
-        <img src="images/minecraft2.jpg" alt="Nether portal disaster">
-        <div class="caption">Nether portal disaster</div>
-      </div>
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="800">
-        <img src="images/meme1.jpg" alt="Squad meme classic">
-        <div class="caption">Squad meme classic</div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="section-title" data-aos="fade-up" data-aos-delay="0">Random Squad Lore</h2>
-    <div class="timeline">
-      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="200">
-        <h3>Fact #1</h3>
-        <p>nonenile still owes EataRiD 3 stacks of diamonds from 2021. Compound interest: 666% per year. Pay up.</p>
-      </div>
-      <div class="timeline-item right" data-aos="fade-left" data-aos-delay="400">
-        <h3>Joke #1</h3>
-        <p>Why did 999xx get insta-kicked? Even creepers started feeling bad for exploding near him.</p>
-      </div>
-      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="600">
-        <h3>Fact #2</h3>
-        <p>Oldest screenshot: MTA:SA 1.3.5. We are actual digital fossils.</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="parallax-section">
-    <div class="parallax-img-wrapper">
-      <img class="parallax-img" src="images/bg-join.jpg" alt="Join background">
-    </div>
-    <div class="overlay"></div>
-    <div class="join-content">
-      <h2 class="section-title" data-aos="fade-up" data-aos-delay="0">Join the Eternal Haunt</h2>
-      <p data-aos="fade-up" data-aos-delay="200">
-        Zero rules. Grief at your own risk. Pure chaos & friendship since 2012.
+    <div class="content" style="padding-top: 22vh;">
+      <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhosts</h1>
+      <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; text-align:center; opacity:0.8;">
+        Since 2012 – a friendship that outlived every game
       </p>
     </div>
   </div>
 
-  <footer data-aos="fade-up" data-aos-delay="0">
-    © 2026 DreamGhosts – Ghosts never quit, they just /backdoor<br>
-    Built with dark vibes
+  <div class="content">
+
+    <!-- Who are we / Intro -->
+    <div class="intro" data-aos="fade-up">
+      <h2>Who are we?</h2>
+      <p>
+        DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other.
+      </p>
+    </div>
+
+    <!-- How it started -->
+    <div class="era" data-aos="fade-up">
+      <h2>How did we start?</h2>
+      <p>
+        Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
+      </p>
+      <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
+    </div>
+
+    <!-- What is MTA -->
+    <div class="era" data-aos="fade-up">
+      <h2>What is MTA:SA?</h2>
+      <p>
+        MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes.
+      </p>
+      <p>
+        One of our favorite modes was Destruction Derby (DD), where players fight using cars on maps built over the ocean. The goal is simple: knock other players off the platform and into the water to eliminate them, and be the last driver standing.
+      </p>
+      <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
+    </div>
+
+    <!-- Wall of Friends – now pure JS list -->
+    <div class="friends" data-aos="fade-up">
+      <h2>The Ghosts</h2>
+      <ul id="ghosts-list"></ul>
+    </div>
+
+    <!-- Gallery Memories -->
+    <div class="gallery-section" data-aos="fade-up">
+      <h2>Memories</h2>
+      <div class="gallery">
+        <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
+        <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
+        <img src="images/gallery-3.jpg" alt="Memory 3" data-aos="fade-up" data-aos-delay="400">
+        <!-- Add more <img src="images/gallery-4.jpg" ... > up to gallery-12.jpg or more -->
+      </div>
+    </div>
+
+    <!-- Where are we now -->
+    <div class="now" data-aos="fade-up">
+      <h2>Where are we now?</h2>
+      <p>
+        The crew is smaller these days — some moved countries, some have kids, some disappeared into adult life. But every few months someone logs into the Minecraft server, places a sign saying "pay your diamonds", and we all laugh like it's 2013 again. The server might be quiet most days, but the group chat never really died.
+      </p>
+    </div>
+
+    <!-- Final thank you -->
+    <div class="closing" data-aos="fade-up">
+      <p>
+        If you were part of this, thank you.<br>
+        These memories only exist because we shared them.<br>
+        And if you're reading this years from now… we were here.<br>
+        Still haunting, still laughing.
+      </p>
+    </div>
+
+  </div>
+
+  <footer>
+    DreamGhosts – just memories now
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({
-      duration: 800,
-      offset: 20,                       // very small → triggers as soon as bottom enters viewport
-      anchorPlacement: 'bottom-bottom', // start when bottom of element hits bottom of viewport
+      duration: 900,
+      offset: 80,
       once: false,
-      mirror: true,                     // allow fade out when scrolling up
+      mirror: false,
       easing: 'ease-out-cubic'
     });
 
-    // Faster fade-out when scrolling up
-    document.querySelectorAll('[data-aos][data-aos^=fade]').forEach(el => {
-      el.addEventListener('aos:out', () => {
-        el.style.transitionDuration = '400ms';
-      });
+    window.addEventListener('load', () => AOS.refreshHard());
+
+    // ────────────────────────────────────────────────
+    // WALL OF FRIENDS – EDIT ONLY HERE
+    // Add all ~300 names inside the array below.
+    // Order doesn't matter — they will be sorted alphabetically.
+    // ────────────────────────────────────────────────
+    const friends = [
+      "nonenile",
+      "EataRiD",
+      "iTRiCKS",
+      "Mrko1",
+      "999xx",
+      "FIY9AL",
+      "General",
+      "F5M",
+      "Swidrox",
+      "Antar",
+      "Genax",
+      "SmoK",
+      "Mica",
+      "F0XY",
+      "RiNO",
+      "Vuak",
+      // Add the rest of the names here, one per line like this:
+      // "AnotherName",
+      // "YetAnother",
+      // ... up to ~300
+    ];
+
+    // Sort alphabetically (optional – remove .sort() if you want custom order)
+    friends.sort((a, b) => a.localeCompare(b));
+
+    // Populate the list
+    const list = document.getElementById("ghosts-list");
+    friends.forEach(name => {
+      const li = document.createElement("li");
+      li.textContent = name;
+      list.appendChild(li);
     });
 
-    // Bidirectional zoom
-    const parallaxSections = document.querySelectorAll('.parallax-section');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        entry.target.classList.toggle('visible', entry.isIntersecting);
-      });
-    }, { threshold: 0.1 });
-
-    parallaxSections.forEach(section => observer.observe(section));
-
-    function copyIP() {
-      navigator.clipboard.writeText("play.dreamghosts.lol");
-      alert("IP copied → play.dreamghosts.lol");
-    }
-
-    fetch("https://api.mcsrvstat.us/2/play.dreamghosts.lol")
-      .then(res => res.json())
-      .then(data => {
-        const el = document.getElementById("players");
-        if (data.online) {
-          el.innerText = `Online: ${data.players.online} / ${data.players.max}`;
-        } else {
-          el.innerText = "Server offline";
-        }
-      })
-      .catch(() => {
-        document.getElementById("players").innerText = "Status unavailable";
-      });
+    // ────────────────────────────────────────────────
+    // Parallax effect (unchanged)
+    // ────────────────────────────────────────────────
+    const hero = document.querySelector('.parallax-hero');
+    window.addEventListener('scroll', () => {
+      const scroll = window.scrollY;
+      if (scroll < window.innerHeight) {
+        hero.querySelector('.hero-bg').style.transform = `translateY(${scroll * 0.3}px) scale(1.08)`;
+      }
+    });
   </script>
 </body>
 </html>
