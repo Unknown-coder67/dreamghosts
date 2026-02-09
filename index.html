@@ -63,22 +63,10 @@
       transform: translate(-50%, -50%) scale(1);
     }
 
-    .letterbox {
-      position: absolute;
-      inset: 0;
-      background: #000;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .letterbox.top, .letterbox.bottom {
-      height: 0; /* dynamically set via JS if needed, but using clip for force */
-    }
-
     .overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.85) 45%, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0.55));
+      background: linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.65) 45%, rgba(0,0,0,0.65) 55%, rgba(0,0,0,0.35));
       z-index: 2;
       pointer-events: none;
     }
@@ -244,7 +232,7 @@
       <div class="hero-text">DreamGhosts</div>
       <div class="hero-text small">Since 2012 – MTA madness → Minecraft eternal haunting</div>
       <div class="hero-text small" id="players">Ghost check in progress...</div>
-      <div class="hero-text ip" onclick="copyIP()">play.dreamghosts.lol (click to copy)</div>
+      <div class="hero-text ip" onclick="copyIP()">play.dreamghosts.lol</div>
     </div>
   </div>
 
@@ -315,9 +303,11 @@
       <img class="parallax-img" src="images/bg-join.jpg" alt="Join background">
     </div>
     <div class="overlay"></div>
-    <div class="join-content" data-aos="zoom-in" data-aos-anchor-placement="center-center">
-      <h2 class="section-title">Join the Eternal Haunt</h2>
-      <p>Zero rules. Grief at your own risk. Pure chaos & friendship since 2012.<br><br>Use the IP in the top-left: play.dreamghosts.lol</p>
+    <div class="join-content">
+      <h2 class="section-title" data-aos="fade-up" data-aos-duration="800" data-aos-anchor-placement="center-center">Join the Eternal Haunt</h2>
+      <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="800" data-aos-anchor-placement="center-center">
+        Zero rules. Grief at your own risk. Pure chaos & friendship since 2012.
+      </p>
     </div>
   </div>
 
@@ -330,14 +320,18 @@
   <script>
     AOS.init({
       duration: 1000,
-      offset: -300,
+      offset: -400,
       anchorPlacement: 'center-center',
       once: false,
       mirror: true,
       easing: 'ease-out-cubic'
     });
 
-    // Parallax + force letterbox feel
+    // Refresh AOS after load/resize to fix late/bottom triggers on long pages
+    window.addEventListener('load', () => AOS.refresh());
+    window.addEventListener('resize', () => AOS.refresh());
+
+    // Parallax scroll effect
     window.addEventListener('scroll', () => {
       document.querySelectorAll('.parallax-section').forEach(section => {
         const rect = section.getBoundingClientRect();
