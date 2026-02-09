@@ -320,19 +320,19 @@
   <script>
     AOS.init({
       duration: 900,
-      offset: 60,
+      offset: 80,
       anchorPlacement: 'center-center',
       once: false,
       mirror: false,
       easing: 'ease-out-cubic'
     });
 
-    // Force refresh after full load (critical for correct positions after images/layout settle)
+    // Critical: refresh after full load (images + layout done)
     window.addEventListener('load', () => {
-      AOS.refresh();
+      AOS.refreshHard();
     });
 
-    // Optional: extra safety refresh on resize/scroll end
+    // Extra safety: debounced refresh on resize/scroll end
     let refreshTimer;
     window.addEventListener('resize', () => {
       clearTimeout(refreshTimer);
@@ -344,7 +344,7 @@
       refreshTimer = setTimeout(() => AOS.refresh(), 150);
     });
 
-    // Bidirectional zoom (unchanged)
+    // Bidirectional zoom (zoom out when entering view, zoom in when leaving)
     const parallaxSections = document.querySelectorAll('.parallax-section');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
