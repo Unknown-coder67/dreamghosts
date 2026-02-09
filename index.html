@@ -1,252 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DreamGhosts | Since 2012 – MTA → Minecraft</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DreamGhosts | Since 2012 – MTA → Minecraft</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
-<style>
-:root{
-  --bg:#000;
-  --text:#d8d8d8;
-}
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+  <style>
+    :root {
+      --bg-dark: #000000;
+      --text: #d8d8d8;
+      --text-dim: #a0a0a0;
+      --glow: 0 0 14px rgba(220,220,220,0.18);
+    }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Roboto Mono', monospace;
-  overflow-x:hidden;
-  line-height:1.6;
-}
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-.parallax-section{
-  position:relative;
-  height:100vh;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Roboto Mono', monospace;
+      line-height: 1.6;
+      min-height: 340vh;
+      overflow-x: hidden;
+    }
 
-.parallax-img{
-  position:absolute;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transform:scale(1.15);
-  will-change:transform;
-}
+    .parallax-section {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-}
+    .parallax-img-wrapper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
 
-.hero-content,
-.join-content{
-  position:relative;
-  z-index:10;
-  text-align:center;
-  padding:20px;
-}
+    .parallax-img {
+      width: 100%;
+      height: auto;
+      min-height: 100%;
+      object-fit: cover;
+      object-position: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.08);
+      transition: transform 1.2s ease-out;
+    }
 
-.hero-text{
-  font-size:3rem;
-  margin-bottom:10px;
-}
+    .parallax-section.visible .parallax-img {
+      transform: translate(-50%, -50%) scale(1.00);
+    }
 
-.hero-text.small{
-  font-size:1.3rem;
-  opacity:.8;
-}
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.65) 45%, rgba(0,0,0,0.65) 55%, rgba(0,0,0,0.35));
+      z-index: 2;
+      pointer-events: none;
+    }
 
-.hero-text.ip{
-  cursor:pointer;
-  transition:.25s;
-}
+    .hero-content {
+      position: absolute;
+      top: 6vh;
+      left: 5vw;
+      z-index: 10;
+      max-width: 90vw;
+      pointer-events: auto;
+    }
 
-.hero-text.ip:hover{
-  transform:scale(1.05);
-}
+    .hero-text {
+      font-size: 2.8rem;
+      font-weight: 400;
+      text-shadow: var(--glow), 0 2px 8px #000;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
 
-section{
-  padding:12rem 5%;
-}
+    .hero-text.small {
+      font-size: 1.35rem;
+      opacity: 0.92;
+      margin-bottom: 0.7rem;
+    }
 
-.section-title{
-  font-size:3rem;
-  text-align:center;
-  margin-bottom:6rem;
-}
+    .hero-text.ip {
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: inline-block;
+    }
 
-.timeline{
-  max-width:1000px;
-  margin:auto;
-}
+    .hero-text.ip:hover {
+      transform: translateX(8px);
+      text-shadow: 0 0 20px rgba(255,255,255,0.4);
+    }
 
-.timeline-item{
-  margin:6rem 0;
-  font-size:1.3rem;
-  max-width:60%;
-}
+    section { padding: 12rem 5%; }
 
-.timeline-item.left{
-  margin-right:auto;
-  text-align:left;
-}
+    .section-title {
+      font-size: 4rem;
+      text-align: center;
+      color: #c8c8c8;
+      margin-bottom: 7rem;
+      text-shadow: 0 0 15px rgba(200,200,200,0.15);
+    }
 
-.timeline-item.right{
-  margin-left:auto;
-  text-align:right;
-}
+    .timeline {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-.gallery-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:2rem;
-}
+    .timeline-item {
+      margin: 7rem 0;
+      font-size: 1.45rem;
+      opacity: 0.92;
+      max-width: 65%;
+    }
 
-.gallery-item{
-  overflow:hidden;
-}
+    .timeline-item.left  { margin-left: 0; text-align: left; }
+    .timeline-item.right { margin-left: auto; text-align: right; }
 
-.gallery-item img{
-  width:100%;
-  transition:.5s;
-}
+    .timeline-item h3 {
+      font-size: 2.4rem;
+      margin-bottom: 1.2rem;
+      color: #e8e8e8;
+    }
 
-.gallery-item:hover img{
-  transform:scale(1.08);
-}
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
 
-footer{
-  padding:5rem;
-  text-align:center;
-  background:#000;
-  color:#777;
-}
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.9);
+    }
 
-@media(max-width:900px){
-  .hero-text{font-size:2.2rem;}
-  .timeline-item{
-    max-width:95%;
-    text-align:center !important;
-    margin-left:auto;
-    margin-right:auto;
-  }
-}
-</style>
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+
+    .caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 0.9rem;
+      text-align: center;
+      font-size: 1.15rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .gallery-item:hover .caption {
+      opacity: 1;
+    }
+
+    .join-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      text-align: center;
+      max-width: 90vw;
+      color: #f0f0f0;
+    }
+
+    .join-content h2 {
+      color: #e0e0e0;
+      margin-bottom: 2rem;
+    }
+
+    .join-content p {
+      font-size: 1.5rem;
+      line-height: 1.7;
+    }
+
+    footer {
+      text-align: center;
+      padding: 6rem 1rem;
+      background: #000;
+      color: #888;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-content { top: 5vh; left: 5vw; }
+      .hero-text { font-size: 2.2rem; }
+      .hero-text.small { font-size: 1.2rem; }
+      .hero-text.ip { font-size: 1.25rem; }
+      .section-title { font-size: 3.2rem; }
+      .timeline-item { max-width: 92%; text-align: center; }
+      .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="parallax-section">
-  <img class="parallax-img" src="images/bg-hero.jpg">
-  <div class="overlay"></div>
-
-  <div class="hero-content" data-aos="fade-up">
-    <div class="hero-text">👻 DreamGhosts</div>
-    <div class="hero-text small">Since 2012 – still haunting</div>
-    <div class="hero-text small" id="players">Checking server...</div>
-    <div class="hero-text ip" onclick="copyIP()">play.dreamghosts.lol</div>
+  <div class="parallax-section" id="hero">
+    <div class="parallax-img-wrapper">
+      <img class="parallax-img" src="images/bg-hero.jpg" alt="Hero background">
+    </div>
+    <div class="overlay"></div>
+    <div class="hero-content" data-aos="fade-right" data-aos-duration="1100" data-aos-anchor-placement="center-left">
+      <div class="hero-text">DreamGhosts</div>
+      <div class="hero-text small">Since 2012 – MTA madness → Minecraft eternal haunting</div>
+      <div class="hero-text small" id="players">Ghost check in progress...</div>
+      <div class="hero-text ip" onclick="copyIP()">play.dreamghosts.lol</div>
+    </div>
   </div>
-</div>
 
-<section>
-  <h2 class="section-title" data-aos="fade-up">Old Ghosts Never Die</h2>
+  <section>
+    <h2 class="section-title" data-aos="fade-down" data-aos-anchor-placement="center-center">Old Ghosts Never Die</h2>
+    <div class="timeline">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-anchor-placement="center-center">
+        <h3>2012–2018</h3>
+        <p>MTA:SA deathmatches, epic rage quits, 4 AM voice spam, stealing cars and laughing till dawn...</p>
+      </div>
+      <div class="timeline-item right" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="250" data-aos-anchor-placement="center-center">
+        <h3>2019–2025</h3>
+        <p>Life happened — uni, jobs, ghosting each other... but Minecraft pulled the squad back from the void.</p>
+      </div>
+      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-delay="500" data-aos-anchor-placement="center-center">
+        <h3>2026 → ∞</h3>
+        <p>Still griefing bases, crystal PvP fails, shulker box scams. The haunting continues.</p>
+      </div>
+    </div>
+  </section>
 
-  <div class="timeline">
-    <div class="timeline-item left" data-aos="fade-right">2012–2018 MTA chaos</div>
-    <div class="timeline-item right" data-aos="fade-left">2019–2025 Minecraft comeback</div>
-    <div class="timeline-item left" data-aos="fade-right">2026 → ∞ still griefing</div>
+  <section style="background: #0a0a0a;">
+    <h2 class="section-title" data-aos="zoom-in" data-aos-anchor-placement="center-center">Memories & Mayhem</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-anchor-placement="center-center">
+        <img src="images/mta1.jpg" alt="MTA chaos 2013">
+        <div class="caption">MTA chaos 2013</div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="150" data-aos-anchor-placement="center-center">
+        <img src="images/mta2.jpg" alt="Fail race epic">
+        <div class="caption">Fail race epic</div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="300" data-aos-anchor-placement="center-center">
+        <img src="images/minecraft1.jpg" alt="First base vibes">
+        <div class="caption">First base vibes</div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="450" data-aos-anchor-placement="center-center">
+        <img src="images/minecraft2.jpg" alt="Nether portal disaster">
+        <div class="caption">Nether portal disaster</div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="600" data-aos-anchor-placement="center-center">
+        <img src="images/meme1.jpg" alt="Squad meme classic">
+        <div class="caption">Squad meme classic</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lore-section">
+    <h2 class="section-title" data-aos="fade-down" data-aos-anchor-placement="center-center">Random Squad Lore</h2>
+    <div class="timeline">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-anchor-placement="center-center" data-aos-offset="-450">
+        <h3>Fact #1</h3>
+        <p>nonenile still owes EataRiD 3 stacks of diamonds from 2021. Compound interest: 666% per year. Pay up.</p>
+      </div>
+      <div class="timeline-item right" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="250" data-aos-anchor-placement="center-center" data-aos-offset="-450">
+        <h3>Joke #1</h3>
+        <p>Why did 999xx get insta-kicked? Even creepers started feeling bad for exploding near him.</p>
+      </div>
+      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-delay="500" data-aos-anchor-placement="center-center" data-aos-offset="-450">
+        <h3>Fact #2</h3>
+        <p>Oldest screenshot: MTA:SA 1.3.5. We are actual digital fossils.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="parallax-section" id="join-section">
+    <div class="parallax-img-wrapper">
+      <img class="parallax-img" src="images/bg-join.jpg" alt="Join background">
+    </div>
+    <div class="overlay"></div>
+    <div class="join-content">
+      <h2 class="section-title" data-aos="fade-up" data-aos-duration="800" data-aos-anchor-placement="center-center" data-aos-offset="-450">Join the Eternal Haunt</h2>
+      <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="800" data-aos-anchor-placement="center-center" data-aos-offset="-450">
+        Zero rules. Grief at your own risk. Pure chaos & friendship since 2012.
+      </p>
+    </div>
   </div>
-</section>
 
-<section>
-  <h2 class="section-title" data-aos="fade-up">Memories</h2>
+  <footer>
+    © 2026 DreamGhosts – Ghosts never quit, they just /backdoor<br>
+    Built with dark vibes
+  </footer>
 
-  <div class="gallery-grid">
-    <div class="gallery-item" data-aos="zoom-in"><img src="images/mta1.jpg"></div>
-    <div class="gallery-item" data-aos="zoom-in"><img src="images/mta2.jpg"></div>
-    <div class="gallery-item" data-aos="zoom-in"><img src="images/minecraft1.jpg"></div>
-    <div class="gallery-item" data-aos="zoom-in"><img src="images/minecraft2.jpg"></div>
-  </div>
-</section>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      offset: -450,
+      anchorPlacement: 'center-center',
+      once: false,
+      mirror: true,
+      easing: 'ease-out-cubic'
+    });
 
-<section>
-  <h2 class="section-title" data-aos="fade-up">Random Squad Lore</h2>
+    // Force AOS refresh on load and after resize/scroll (fixes late bottom triggers)
+    window.addEventListener('load', () => { AOS.refreshHard(); });
+    window.addEventListener('resize', () => { AOS.refresh(); });
+    let scrollTimer;
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => AOS.refresh(), 150);
+    });
 
-  <div class="timeline">
-    <div class="timeline-item left" data-aos="fade-right">Fact #1 – someone still owes diamonds</div>
-    <div class="timeline-item right" data-aos="fade-left">Joke #1 – creepers feel bad for us</div>
-    <div class="timeline-item left" data-aos="fade-right">Fact #2 – digital fossils since 2012</div>
-  </div>
-</section>
+    // Bidirectional zoom: zoom out when visible, zoom in when leaving
+    const parallaxSections = document.querySelectorAll('.parallax-section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.1 });
 
-<div class="parallax-section">
-  <img class="parallax-img" src="images/bg-join.jpg">
-  <div class="overlay"></div>
+    parallaxSections.forEach(section => observer.observe(section));
 
-  <div class="join-content" data-aos="fade-up">
-    <h2 class="section-title">Join the Haunt</h2>
-    <p>Zero rules. Pure chaos. Eternal squad vibes.</p>
-  </div>
-</div>
+    function copyIP() {
+      navigator.clipboard.writeText("play.dreamghosts.lol");
+      alert("IP copied → play.dreamghosts.lol");
+    }
 
-<footer>
-© 2026 DreamGhosts
-</footer>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-<script>
-AOS.init({
-  duration:700,
-  offset:80,
-  once:false,
-  mirror:true
-});
-
-window.addEventListener('load', () => AOS.refreshHard());
-window.addEventListener('resize', () => AOS.refreshHard());
-
-function copyIP(){
-  navigator.clipboard.writeText("play.dreamghosts.lol");
-  alert("IP copied!");
-}
-
-fetch("https://api.mcsrvstat.us/2/play.dreamghosts.lol")
-.then(r=>r.json())
-.then(d=>{
-  const el=document.getElementById("players");
-  el.innerText=d.online?`Online: ${d.players.online}/${d.players.max}`:"Offline";
-});
-
-const sections=document.querySelectorAll(".parallax-section");
-
-function parallax(){
-  sections.forEach(sec=>{
-    const img=sec.querySelector(".parallax-img");
-    const rect=sec.getBoundingClientRect();
-    const progress=1 - Math.abs(rect.top)/window.innerHeight;
-    const scale=1 + (progress*0.15);
-    img.style.transform=`scale(${scale})`;
-  });
-}
-
-window.addEventListener("scroll",parallax);
-parallax();
-</script>
-
+    fetch("https://api.mcsrvstat.us/2/play.dreamghosts.lol")
+      .then(res => res.json())
+      .then(data => {
+        const el = document.getElementById("players");
+        if (data.online) {
+          el.innerText = `Online: ${data.players.online} / ${data.players.max}`;
+        } else {
+          el.innerText = "Server offline";
+        }
+      })
+      .catch(() => {
+        document.getElementById("players").innerText = "Status unavailable";
+      });
+  </script>
 </body>
 </html>
