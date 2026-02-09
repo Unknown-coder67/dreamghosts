@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DreamGhosts | Since 2012 – MTA → Minecraft</title>
+  <title>DreamGhosts 👻 | Since 2012 – MTA → Minecraft</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -22,7 +22,7 @@
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
- 
+
     body {
       background: var(--bg-dark);
       color: var(--text);
@@ -43,10 +43,6 @@
       background-attachment: fixed;
       background-size: cover;
       background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
       overflow: hidden;
       will-change: transform;
     }
@@ -71,47 +67,53 @@
       to   { transform: scale(1); }
     }
 
-    .parallax-bg.js-zoom {
-      transition: transform 0.1s ease-out;
-    }
-
-    .content-wrap {
-      position: relative;
-      z-index: 2;
-      max-width: 1200px;
-      padding: 0 5%;
-      width: 100%;
+    .hero-content {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      z-index: 3;
+      text-align: left;
+      max-width: 400px;
     }
 
     .hero h1 {
-      font-size: clamp(5rem, 14vw, 12rem);
+      font-size: 3.8rem;
+      font-weight: 400; /* not bold */
       text-shadow: var(--glow);
+      margin-bottom: 0.4rem;
       animation: glow 5s ease-in-out infinite alternate;
     }
 
-    @keyframes glow {
-      from { text-shadow: 0 0 20px var(--ghost), 0 0 60px var(--ghost-dark); }
-      to   { text-shadow: 0 0 50px #d8b4fe, 0 0 120px #7c3aed; }
+    .hero .subtitle {
+      font-size: 1.4rem;
+      font-weight: 300; /* lighter */
+      opacity: 0.85;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero #players {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 1.2rem;
     }
 
     .ip-box {
       background: rgba(20,15,50,0.6);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(167,139,250,0.4);
-      border-radius: 20px;
-      padding: 1.8rem 3rem;
-      font-size: 1.8rem;
+      border-radius: 12px;
+      padding: 0.9rem 1.8rem;
+      font-size: 1.3rem;
       cursor: pointer;
-      transition: all 0.4s ease;
-      margin: 2.5rem auto;
-      max-width: 500px;
+      transition: all 0.3s ease;
+      display: inline-block;
       box-shadow: var(--glow);
     }
 
     .ip-box:hover {
-      transform: translateY(-10px) scale(1.05);
+      transform: translateY(-4px) scale(1.03);
       border-color: var(--ghost);
-      box-shadow: 0 25px 60px rgba(109,40,217,0.5);
+      box-shadow: 0 15px 40px rgba(109,40,217,0.4);
     }
 
     section { padding: 10rem 5%; }
@@ -187,83 +189,91 @@
     }
 
     @media (max-width: 900px) {
-      .timeline-item { max-width: 90%; margin: 4rem auto; }
-      .timeline-item.left, .timeline-item.right { text-align: center; margin-left: auto; margin-right: auto; }
+      .hero-content { top: 20px; left: 20px; }
+      .hero h1 { font-size: 2.8rem; }
+      .hero .subtitle { font-size: 1.1rem; }
+      .ip-box { font-size: 1.1rem; padding: 0.7rem 1.4rem; }
+      .timeline-item { max-width: 90%; margin: 4rem auto; text-align: center; }
       .timeline-item::before { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Hero with top-left elements -->
   <div class="parallax-bg zoom-layer" style="background-image: url('images/bg-hero.jpg');">
-    <div class="content-wrap">
-      <h1 data-aos="zoom-in" data-aos-duration="1400">👻 DreamGhosts</h1>
-      <p style="font-size:2.2rem; opacity:0.9; margin:1.5rem 0;" data-aos="fade-up" data-aos-delay="500">Since 2012 – MTA madness → Minecraft eternal haunting</p>
-
-      <div class="ip-box" onclick="copyIP()" data-aos="flip-up" data-aos-delay="900">
-        play.dreamghosts.lol<br><small>(click → copy IP)</small>
+    <div class="hero-content" data-aos="fade-right" data-aos-duration="1000" data-aos-anchor-placement="center-left">
+      <h1 class="hero">DreamGhosts</h1>
+      <p class="subtitle" data-aos="fade-right" data-aos-delay="200">Since 2012 – MTA madness → Minecraft eternal haunting</p>
+      <div id="players" data-aos="fade-right" data-aos-delay="400">Ghost check in progress...</div>
+      <div class="ip-box" onclick="copyIP()" data-aos="fade-right" data-aos-delay="600">
+        play.dreamghosts.lol (click)
       </div>
-
-      <div id="players" style="font-size:1.6rem; margin-top:2rem;" data-aos="fade-up" data-aos-delay="1200">Ghost check in progress...</div>
     </div>
   </div>
 
+  <!-- Timeline -->
   <section>
-    <h2 class="section-title" data-aos="fade-down">Old Ghosts Never Die</h2>
+    <h2 class="section-title" data-aos="fade-down" data-aos-anchor-placement="center-center">Old Ghosts Never Die</h2>
     <div class="timeline">
-      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1000">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1000" data-aos-anchor-placement="center-center">
         <h3>2012–2018</h3>
         <p>MTA:SA deathmatches, epic rage quits, 4 AM voice spam, stealing cars and laughing till dawn...</p>
       </div>
-      <div class="timeline-item right" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="400">
+      <div class="timeline-item right" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200" data-aos-anchor-placement="center-center">
         <h3>2019–2025</h3>
         <p>Life happened — uni, jobs, ghosting each other... but Minecraft pulled the squad back from the void.</p>
       </div>
-      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="800">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400" data-aos-anchor-placement="center-center">
         <h3>2026 → ∞</h3>
         <p>Still griefing bases, crystal PvP fails, shulker box scams. The haunting continues.</p>
       </div>
     </div>
   </section>
 
+  <!-- Gallery -->
   <section style="background: rgba(10,10,21,0.4);">
-    <h2 class="section-title" data-aos="zoom-in">Memories & Mayhem</h2>
+    <h2 class="section-title" data-aos="zoom-in" data-aos-anchor-placement="center-center">Memories & Mayhem</h2>
     <div class="gallery-grid">
-      <img src="images/mta1.jpg" alt="MTA chaos 2013" data-aos="zoom-in-up">
-      <img src="images/mta2.jpg" alt="Fail race epic" data-aos="zoom-in-up" data-aos-delay="200">
-      <img src="images/minecraft1.jpg" alt="First base vibes" data-aos="zoom-in-up" data-aos-delay="400">
-      <img src="images/minecraft2.jpg" alt="Nether portal disaster" data-aos="zoom-in-up" data-aos-delay="600">
-      <img src="images/meme1.jpg" alt="Squad meme classic" data-aos="zoom-in-up" data-aos-delay="800">
+      <img src="images/mta1.jpg" alt="MTA chaos 2013" data-aos="zoom-in-up" data-aos-anchor-placement="center-center">
+      <img src="images/mta2.jpg" alt="Fail race epic" data-aos="zoom-in-up" data-aos-delay="150" data-aos-anchor-placement="center-center">
+      <img src="images/minecraft1.jpg" alt="First base vibes" data-aos="zoom-in-up" data-aos-delay="300" data-aos-anchor-placement="center-center">
+      <img src="images/minecraft2.jpg" alt="Nether portal disaster" data-aos="zoom-in-up" data-aos-delay="450" data-aos-anchor-placement="center-center">
+      <img src="images/meme1.jpg" alt="Squad meme classic" data-aos="zoom-in-up" data-aos-delay="600" data-aos-anchor-placement="center-center">
     </div>
   </section>
 
+  <!-- Lore -->
   <section>
-    <h2 class="section-title" data-aos="fade-down">Random Squad Lore</h2>
+    <h2 class="section-title" data-aos="fade-down" data-aos-anchor-placement="center-center">Random Squad Lore</h2>
     <div class="timeline">
-      <div class="timeline-item left" data-aos="fade-right">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-anchor-placement="center-center">
         <h3>Fact #1</h3>
         <p>nonenile still owes EataRiD 3 stacks of diamonds from 2021. Compound interest: 666% per year. Pay up.</p>
       </div>
-      <div class="timeline-item right" data-aos="fade-left" data-aos-delay="300">
+      <div class="timeline-item right" data-aos="fade-left" data-aos-delay="200" data-aos-anchor-placement="center-center">
         <h3>Joke #1</h3>
         <p>Why did 999xx get insta-kicked? Even creepers started feeling bad for exploding near him.</p>
       </div>
-      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="600">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="400" data-aos-anchor-placement="center-center">
         <h3>Fact #2</h3>
         <p>Oldest screenshot: MTA:SA 1.3.5. We are actual digital fossils.</p>
       </div>
     </div>
   </section>
 
-  <div class="parallax-bg zoom-layer js-zoom" style="background-image: url('images/bg-join.jpg'); min-height: 90vh;">
-    <div class="content-wrap">
-      <h2 class="section-title" data-aos="zoom-in">Join the Eternal Haunt</h2>
-      <div class="ip-box" onclick="copyIP()" style="font-size:2.4rem; padding:2.5rem 4rem;">
-        play.dreamghosts.lol
+  <!-- Join -->
+  <div class="parallax-bg zoom-layer" style="background-image: url('images/bg-join.jpg');">
+    <div class="content-wrap" style="display:flex; align-items:center; justify-content:center; height:100%;">
+      <div style="text-align:center;">
+        <h2 class="section-title" data-aos="zoom-in" data-aos-anchor-placement="center-center">Join the Eternal Haunt</h2>
+        <div class="ip-box" onclick="copyIP()" style="font-size:1.8rem; padding:1.4rem 3rem; margin:1.5rem auto;">
+          play.dreamghosts.lol
+        </div>
+        <p data-aos="fade-up" data-aos-delay="300" data-aos-anchor-placement="center-center" style="font-size:1.4rem; opacity:0.9;">
+          Zero rules. Grief at your own risk. Pure chaos & friendship since 2012.
+        </p>
       </div>
-      <p data-aos="fade-up" data-aos-delay="500" style="font-size:1.6rem; margin-top:3rem;">
-        Zero rules. Grief at your own risk. Pure chaos & friendship since 2012.
-      </p>
     </div>
   </div>
 
@@ -275,35 +285,22 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({
-      duration: 1000,
+      duration: 900,
+      offset: -200,               // negative = trigger earlier (higher on screen)
+      anchorPlacement: 'center-center', // animate when element center hits viewport center
       once: false,
-      mirror: true,
-      easing: 'ease-out-cubic',
-      anchorPlacement: 'top-bottom'
+      mirror: true,               // reverse on scroll up
+      easing: 'ease-out-cubic'
     });
 
-
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-      const current = window.scrollY;
-      if (current > lastScroll + 20) {
-        document.body.classList.add('scroll-down');
-        document.body.classList.remove('scroll-up');
-      } else if (current < lastScroll - 20) {
-        document.body.classList.add('scroll-up');
-        document.body.classList.remove('scroll-down');
-        AOS.refresh();
-      }
-      lastScroll = current;
-    });
-
-    const zoomLayers = document.querySelectorAll('.js-zoom');
+    // Fallback zoom
+    const zoomLayers = document.querySelectorAll('.zoom-layer');
     window.addEventListener('scroll', () => {
       zoomLayers.forEach(el => {
         const rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight && rect.bottom > 0) {
           const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-          const scale = 1 + progress * 0.25;
+          const scale = 1 + progress * 0.2;
           el.style.transform = `scale(${scale})`;
         }
       });
