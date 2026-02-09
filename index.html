@@ -280,32 +280,32 @@
     </div>
   </section>
 
-  <section id="lore-section">
+  <section>
     <h2 class="section-title" data-aos="fade-down" data-aos-anchor-placement="center-center">Random Squad Lore</h2>
     <div class="timeline">
-      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-anchor-placement="center-center" data-aos-offset="-450">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-anchor-placement="center-center">
         <h3>Fact #1</h3>
         <p>nonenile still owes EataRiD 3 stacks of diamonds from 2021. Compound interest: 666% per year. Pay up.</p>
       </div>
-      <div class="timeline-item right" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="250" data-aos-anchor-placement="center-center" data-aos-offset="-450">
+      <div class="timeline-item right" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="250" data-aos-anchor-placement="center-center">
         <h3>Joke #1</h3>
         <p>Why did 999xx get insta-kicked? Even creepers started feeling bad for exploding near him.</p>
       </div>
-      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-delay="500" data-aos-anchor-placement="center-center" data-aos-offset="-450">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-delay="500" data-aos-anchor-placement="center-center">
         <h3>Fact #2</h3>
         <p>Oldest screenshot: MTA:SA 1.3.5. We are actual digital fossils.</p>
       </div>
     </div>
   </section>
 
-  <div class="parallax-section" id="join-section">
+  <div class="parallax-section">
     <div class="parallax-img-wrapper">
       <img class="parallax-img" src="images/bg-join.jpg" alt="Join background">
     </div>
     <div class="overlay"></div>
     <div class="join-content">
-      <h2 class="section-title" data-aos="fade-up" data-aos-duration="800" data-aos-anchor-placement="center-center" data-aos-offset="-450">Join the Eternal Haunt</h2>
-      <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="800" data-aos-anchor-placement="center-center" data-aos-offset="-450">
+      <h2 class="section-title" data-aos="fade-up" data-aos-duration="800" data-aos-anchor-placement="center-center">Join the Eternal Haunt</h2>
+      <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="800" data-aos-anchor-placement="center-center">
         Zero rules. Grief at your own risk. Pure chaos & friendship since 2012.
       </p>
     </div>
@@ -319,24 +319,32 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({
-      duration: 1000,
-      offset: -450,
+      duration: 900,
+      offset: 60,
       anchorPlacement: 'center-center',
       once: false,
-      mirror: true,
+      mirror: false,
       easing: 'ease-out-cubic'
     });
 
-    // Force AOS refresh on load and after resize/scroll (fixes late bottom triggers)
-    window.addEventListener('load', () => { AOS.refreshHard(); });
-    window.addEventListener('resize', () => { AOS.refresh(); });
-    let scrollTimer;
-    window.addEventListener('scroll', () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => AOS.refresh(), 150);
+    // Force refresh after full load (critical for correct positions after images/layout settle)
+    window.addEventListener('load', () => {
+      AOS.refresh();
     });
 
-    // Bidirectional zoom: zoom out when visible, zoom in when leaving
+    // Optional: extra safety refresh on resize/scroll end
+    let refreshTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => AOS.refresh(), 200);
+    });
+
+    window.addEventListener('scroll', () => {
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => AOS.refresh(), 150);
+    });
+
+    // Bidirectional zoom (unchanged)
     const parallaxSections = document.querySelectorAll('.parallax-section');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
