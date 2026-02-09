@@ -210,6 +210,11 @@
       font-size: 1.1rem;
     }
 
+    /* Faster fade-out when scrolling up */
+    .aos-animate[data-aos][data-aos^=fade][.aos-animate-out] {
+      transition-duration: 400ms !important;
+    }
+
     @media (max-width: 900px) {
       .hero-content { top: 5vh; left: 5vw; }
       .hero-text { font-size: 2.2rem; }
@@ -228,26 +233,26 @@
       <img class="parallax-img" src="images/bg-hero.jpg" alt="Hero background">
     </div>
     <div class="overlay"></div>
-    <div class="hero-content" data-aos="fade-right" data-aos-duration="1100" data-aos-anchor-placement="center-left">
-      <div class="hero-text">DreamGhosts</div>
-      <div class="hero-text small">Since 2012 – MTA madness → Minecraft eternal haunting</div>
-      <div class="hero-text small" id="players">Ghost check in progress...</div>
-      <div class="hero-text ip" onclick="copyIP()">play.dreamghosts.lol</div>
+    <div class="hero-content">
+      <div class="hero-text" data-aos="fade-up" data-aos-delay="0">DreamGhosts</div>
+      <div class="hero-text small" data-aos="fade-up" data-aos-delay="200">Since 2012 – MTA madness → Minecraft eternal haunting</div>
+      <div class="hero-text small" id="players" data-aos="fade-up" data-aos-delay="400">Ghost check in progress...</div>
+      <div class="hero-text ip" onclick="copyIP()" data-aos="fade-up" data-aos-delay="600">play.dreamghosts.lol</div>
     </div>
   </div>
 
   <section>
-    <h2 class="section-title" data-aos="fade-down" data-aos-anchor-placement="center-center">Old Ghosts Never Die</h2>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="0">Old Ghosts Never Die</h2>
     <div class="timeline">
-      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-anchor-placement="center-center">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="200">
         <h3>2012–2018</h3>
         <p>MTA:SA deathmatches, epic rage quits, 4 AM voice spam, stealing cars and laughing till dawn...</p>
       </div>
-      <div class="timeline-item right" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="250" data-aos-anchor-placement="center-center">
+      <div class="timeline-item right" data-aos="fade-left" data-aos-delay="400">
         <h3>2019–2025</h3>
         <p>Life happened — uni, jobs, ghosting each other... but Minecraft pulled the squad back from the void.</p>
       </div>
-      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-delay="500" data-aos-anchor-placement="center-center">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="600">
         <h3>2026 → ∞</h3>
         <p>Still griefing bases, crystal PvP fails, shulker box scams. The haunting continues.</p>
       </div>
@@ -255,25 +260,25 @@
   </section>
 
   <section style="background: #0a0a0a;">
-    <h2 class="section-title" data-aos="zoom-in" data-aos-anchor-placement="center-center">Memories & Mayhem</h2>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="0">Memories & Mayhem</h2>
     <div class="gallery-grid">
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-anchor-placement="center-center">
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="200">
         <img src="images/mta1.jpg" alt="MTA chaos 2013">
         <div class="caption">MTA chaos 2013</div>
       </div>
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="150" data-aos-anchor-placement="center-center">
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="350">
         <img src="images/mta2.jpg" alt="Fail race epic">
         <div class="caption">Fail race epic</div>
       </div>
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="300" data-aos-anchor-placement="center-center">
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="500">
         <img src="images/minecraft1.jpg" alt="First base vibes">
         <div class="caption">First base vibes</div>
       </div>
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="450" data-aos-anchor-placement="center-center">
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="650">
         <img src="images/minecraft2.jpg" alt="Nether portal disaster">
         <div class="caption">Nether portal disaster</div>
       </div>
-      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="600" data-aos-anchor-placement="center-center">
+      <div class="gallery-item" data-aos="zoom-in-up" data-aos-delay="800">
         <img src="images/meme1.jpg" alt="Squad meme classic">
         <div class="caption">Squad meme classic</div>
       </div>
@@ -281,17 +286,17 @@
   </section>
 
   <section>
-    <h2 class="section-title" data-aos="fade-down" data-aos-anchor-placement="center-center">Random Squad Lore</h2>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="0">Random Squad Lore</h2>
     <div class="timeline">
-      <div class="timeline-item left" data-aos="fade-right" data-aos-anchor-placement="center-center">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="200">
         <h3>Fact #1</h3>
         <p>nonenile still owes EataRiD 3 stacks of diamonds from 2021. Compound interest: 666% per year. Pay up.</p>
       </div>
-      <div class="timeline-item right" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="250" data-aos-anchor-placement="center-center">
+      <div class="timeline-item right" data-aos="fade-left" data-aos-delay="400">
         <h3>Joke #1</h3>
         <p>Why did 999xx get insta-kicked? Even creepers started feeling bad for exploding near him.</p>
       </div>
-      <div class="timeline-item left" data-aos="fade-right" data-aos-duration="1100" data-aos-delay="500" data-aos-anchor-placement="center-center">
+      <div class="timeline-item left" data-aos="fade-right" data-aos-delay="600">
         <h3>Fact #2</h3>
         <p>Oldest screenshot: MTA:SA 1.3.5. We are actual digital fossils.</p>
       </div>
@@ -304,14 +309,14 @@
     </div>
     <div class="overlay"></div>
     <div class="join-content">
-      <h2 class="section-title" data-aos="fade-up" data-aos-duration="800" data-aos-anchor-placement="center-center">Join the Eternal Haunt</h2>
-      <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="800" data-aos-anchor-placement="center-center">
+      <h2 class="section-title" data-aos="fade-up" data-aos-delay="0">Join the Eternal Haunt</h2>
+      <p data-aos="fade-up" data-aos-delay="200">
         Zero rules. Grief at your own risk. Pure chaos & friendship since 2012.
       </p>
     </div>
   </div>
 
-  <footer>
+  <footer data-aos="fade-up" data-aos-delay="0">
     © 2026 DreamGhosts – Ghosts never quit, they just /backdoor<br>
     Built with dark vibes
   </footer>
@@ -319,40 +324,26 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({
-      duration: 900,
-      offset: 80,
-      anchorPlacement: 'center-center',
+      duration: 800,
+      offset: 20,                       // very small → triggers as soon as bottom enters viewport
+      anchorPlacement: 'bottom-bottom', // start when bottom of element hits bottom of viewport
       once: false,
-      mirror: false,
+      mirror: true,                     // allow fade out when scrolling up
       easing: 'ease-out-cubic'
     });
 
-    // Critical: refresh after full load (images + layout done)
-    window.addEventListener('load', () => {
-      AOS.refreshHard();
+    // Faster fade-out when scrolling up
+    document.querySelectorAll('[data-aos][data-aos^=fade]').forEach(el => {
+      el.addEventListener('aos:out', () => {
+        el.style.transitionDuration = '400ms';
+      });
     });
 
-    // Extra safety: debounced refresh on resize/scroll end
-    let refreshTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(refreshTimer);
-      refreshTimer = setTimeout(() => AOS.refresh(), 200);
-    });
-
-    window.addEventListener('scroll', () => {
-      clearTimeout(refreshTimer);
-      refreshTimer = setTimeout(() => AOS.refresh(), 150);
-    });
-
-    // Bidirectional zoom (zoom out when entering view, zoom in when leaving)
+    // Bidirectional zoom
     const parallaxSections = document.querySelectorAll('.parallax-section');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        } else {
-          entry.target.classList.remove('visible');
-        }
+        entry.target.classList.toggle('visible', entry.isIntersecting);
       });
     }, { threshold: 0.1 });
 
