@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>DreamGhosts | Since 2012 – MTA → Minecraft</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -58,6 +57,7 @@ body{
   position:relative;
   z-index:10;
   text-align:center;
+  padding:20px;
 }
 
 .hero-text{
@@ -97,6 +97,17 @@ section{
 .timeline-item{
   margin:6rem 0;
   font-size:1.3rem;
+  max-width:60%;
+}
+
+.timeline-item.left{
+  margin-right:auto;
+  text-align:left;
+}
+
+.timeline-item.right{
+  margin-left:auto;
+  text-align:right;
 }
 
 .gallery-grid{
@@ -124,6 +135,16 @@ footer{
   background:#000;
   color:#777;
 }
+
+@media(max-width:900px){
+  .hero-text{font-size:2.2rem;}
+  .timeline-item{
+    max-width:95%;
+    text-align:center !important;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
 </style>
 </head>
 
@@ -132,6 +153,7 @@ footer{
 <div class="parallax-section">
   <img class="parallax-img" src="images/bg-hero.jpg">
   <div class="overlay"></div>
+
   <div class="hero-content" data-aos="fade-up">
     <div class="hero-text">👻 DreamGhosts</div>
     <div class="hero-text small">Since 2012 – still haunting</div>
@@ -142,15 +164,17 @@ footer{
 
 <section>
   <h2 class="section-title" data-aos="fade-up">Old Ghosts Never Die</h2>
+
   <div class="timeline">
-    <div class="timeline-item" data-aos="fade-right">2012–2018 MTA chaos</div>
-    <div class="timeline-item" data-aos="fade-left">2019–2025 Minecraft comeback</div>
-    <div class="timeline-item" data-aos="fade-right">2026 → ∞ still griefing</div>
+    <div class="timeline-item left" data-aos="fade-right">2012–2018 MTA chaos</div>
+    <div class="timeline-item right" data-aos="fade-left">2019–2025 Minecraft comeback</div>
+    <div class="timeline-item left" data-aos="fade-right">2026 → ∞ still griefing</div>
   </div>
 </section>
 
 <section>
   <h2 class="section-title" data-aos="fade-up">Memories</h2>
+
   <div class="gallery-grid">
     <div class="gallery-item" data-aos="zoom-in"><img src="images/mta1.jpg"></div>
     <div class="gallery-item" data-aos="zoom-in"><img src="images/mta2.jpg"></div>
@@ -159,12 +183,23 @@ footer{
   </div>
 </section>
 
+<section>
+  <h2 class="section-title" data-aos="fade-up">Random Squad Lore</h2>
+
+  <div class="timeline">
+    <div class="timeline-item left" data-aos="fade-right">Fact #1 – someone still owes diamonds</div>
+    <div class="timeline-item right" data-aos="fade-left">Joke #1 – creepers feel bad for us</div>
+    <div class="timeline-item left" data-aos="fade-right">Fact #2 – digital fossils since 2012</div>
+  </div>
+</section>
+
 <div class="parallax-section">
   <img class="parallax-img" src="images/bg-join.jpg">
   <div class="overlay"></div>
+
   <div class="join-content" data-aos="fade-up">
     <h2 class="section-title">Join the Haunt</h2>
-    <p>Zero rules. Pure chaos.</p>
+    <p>Zero rules. Pure chaos. Eternal squad vibes.</p>
   </div>
 </div>
 
@@ -173,6 +208,7 @@ footer{
 </footer>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 <script>
 AOS.init({
   duration:700,
@@ -202,7 +238,7 @@ function parallax(){
   sections.forEach(sec=>{
     const img=sec.querySelector(".parallax-img");
     const rect=sec.getBoundingClientRect();
-    const progress=1 - Math.abs(rect.top)/(window.innerHeight);
+    const progress=1 - Math.abs(rect.top)/window.innerHeight;
     const scale=1 + (progress*0.15);
     img.style.transform=`scale(${scale})`;
   });
