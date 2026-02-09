@@ -316,51 +316,60 @@
     Built with dark vibes
   </footer>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init({
-      duration: 1000,
-      offset: -400,
-      anchorPlacement: 'center-center',
-      once: false,
-      mirror: true,
-      easing: 'ease-out-cubic'
-    });
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({
+  duration: 900,
+  offset: 120,
+  once: false,
+  mirror: true,
+  easing: 'ease-out-cubic'
+});
 
-    // Refresh AOS after load/resize to fix late/bottom triggers on long pages
-    window.addEventListener('load', () => AOS.refresh());
-    window.addEventListener('resize', () => AOS.refresh());
+window.addEventListener('load', () => AOS.refresh());
+window.addEventListener('resize', () => AOS.refresh());
 
-    // Parallax scroll effect
-    window.addEventListener('scroll', () => {
-      document.querySelectorAll('.parallax-section').forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          section.classList.add('scrolled');
-        } else {
-          section.classList.remove('scrolled');
-        }
-      });
-    });
+const sections = document.querySelectorAll('.parallax-section');
 
-    function copyIP() {
-      navigator.clipboard.writeText("play.dreamghosts.lol");
-      alert("IP copied → play.dreamghosts.lol");
+function updateParallax() {
+  const vh = window.innerHeight;
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    const img = section.querySelector('.parallax-img');
+
+    const center = rect.top + rect.height / 2;
+    const distance = Math.abs(center - vh / 2);
+    const progress = Math.min(distance / (vh / 2), 1);
+
+    const scale = 1 + (1 - progress) * 0.05;
+
+    img.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  });
+}
+
+window.addEventListener('scroll', updateParallax);
+window.addEventListener('resize', updateParallax);
+updateParallax();
+
+function copyIP() {
+  navigator.clipboard.writeText("play.dreamghosts.lol");
+  alert("IP copied → play.dreamghosts.lol");
+}
+
+fetch("https://api.mcsrvstat.us/2/play.dreamghosts.lol")
+  .then(res => res.json())
+  .then(data => {
+    const el = document.getElementById("players");
+    if (data.online) {
+      el.innerText = `Online: ${data.players.online} / ${data.players.max}`;
+    } else {
+      el.innerText = "Server offline";
     }
-
-    fetch("https://api.mcsrvstat.us/2/play.dreamghosts.lol")
-      .then(res => res.json())
-      .then(data => {
-        const el = document.getElementById("players");
-        if (data.online) {
-          el.innerText = `Online: ${data.players.online} / ${data.players.max}`;
-        } else {
-          el.innerText = "Server offline";
-        }
-      })
-      .catch(() => {
-        document.getElementById("players").innerText = "Status unavailable";
-      });
-  </script>
+  })
+  .catch(() => {
+    document.getElementById("players").innerText = "Status unavailable";
+  });
+</script>
 </body>
 </html>
