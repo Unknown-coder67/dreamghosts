@@ -46,6 +46,7 @@
       object-fit: cover;
       opacity: 0.75;
       filter: brightness(1.15);
+      transition: transform 1.6s ease-out; /* smooth zoom duration – increase for slower */
     }
 
     .overlay {
@@ -58,7 +59,7 @@
     .content {
       position: relative;
       z-index: 2;
-      max-width: 1200px; /* slightly wider container */
+      max-width: 1200px;
       margin: 0 auto;
       padding: 5rem 5% 8rem;
     }
@@ -78,18 +79,19 @@
 
     .era p, .intro p, .now p {
       font-size: 1.35rem;
-      max-width: 90ch; /* wider text blocks */
+      max-width: 90ch;
       margin-bottom: 2rem;
       color: var(--text-dim);
     }
 
     .screenshot {
       width: 100%;
-      max-width: 1000px; /* wider screenshots */
+      max-width: 1000px;
       border-radius: 8px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       display: block;
+      transition: transform 1.6s ease-out; /* same smooth zoom as video */
     }
 
     /* Friends list styling */
@@ -126,18 +128,18 @@
       transform: scale(1.03);
     }
 
-    /* Closing – very wide, no early wrapping, no box */
+    /* Closing – very wide, no early wrapping */
     .closing {
       text-align: center;
       font-size: 1.45rem;
       opacity: 0.85;
       padding: 6rem 5%;
-      max-width: 1400px; /* extremely wide container */
+      max-width: 1400px;
       margin: 8rem auto;
     }
 
     .closing p {
-      max-width: 120ch; /* very wide lines – sentences stay long before wrapping */
+      max-width: 120ch;
       margin: 1.5rem auto;
       color: var(--text);
     }
@@ -164,18 +166,19 @@
 
     @media (max-width: 600px) {
       #ghosts-list { columns: 1; }
-      .hero-video { object-position: center center; }
-      .closing p { max-width: 100%; }
+      .hero-video, .screenshot { object-position: center center; }
     }
   </style>
 </head>
 <body>
 
   <!-- Hero – VIDEO playlist -->
-  <div class="parallax-hero">
+  <div class="parallax-hero" data-zoom-section>
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
-      <!-- Fallback image -->
-      <img src="images/hero-bg.jpg" alt="DreamGhosts memories fallback">
+      <source src="videos/hero-clip-1.mp4" type="video/mp4">
+      <source src="videos/hero-clip-2.mp4" type="video/mp4">
+      <!-- Fallback -->
+      <img src="images/hero-bg.jpg" alt="Fallback">
     </video>
     <div class="overlay"></div>
     <div class="content" style="padding-top: 22vh;">
@@ -188,7 +191,7 @@
 
   <div class="content">
 
-    <!-- Who are we / Intro -->
+    <!-- Intro -->
     <div class="intro" data-aos="fade-up">
       <h2>Who are we?</h2>
       <p>
@@ -202,7 +205,7 @@
       <p>
         Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
       </p>
-      <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
+      <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300" data-zoom-section>
     </div>
 
     <!-- What is MTA -->
@@ -214,7 +217,7 @@
       <p>
         One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
       </p>
-      <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
+      <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300" data-zoom-section>
     </div>
 
     <!-- Wall of Friends -->
@@ -230,7 +233,7 @@
         <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
         <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
         <img src="images/gallery-3.jpg" alt="Memory 3" data-aos="fade-up" data-aos-delay="400">
-        <!-- Add more <img src="images/gallery-4.jpg" ... > -->
+        <!-- Add more -->
       </div>
     </div>
 
@@ -245,7 +248,7 @@
       </p>
     </div>
 
-    <!-- Final thank you – very wide, no box, no early wrapping -->
+    <!-- Final thank you – very wide -->
     <div class="closing" data-aos="fade-up">
       <p>
         We wanted this space to thank everyone we ever met along the way.<br>
@@ -300,7 +303,7 @@
       "Vuak",
       "NoMercy",
       "Vutalic",
-      // Add all remaining names here
+      // Add remaining names
     ];
 
     friends.sort((a, b) => a.localeCompare(b));
@@ -313,42 +316,54 @@
     });
 
     // ────────────────────────────────────────────────
-    // VIDEO PLAYLIST – fixed sequential playback + loop
+    // SMOOTH BIDIRECTIONAL ZOOM FOR VIDEO & ALL SCREENSHOTS
+    // ────────────────────────────────────────────────
+    const zoomElements = document.querySelectorAll('.parallax-hero, .screenshot');
+
+    const zoomObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // In view → zoom out to normal size
+          entry.target.classList.add('in-view');
+        } else {
+          // Out of view → zoom in slightly
+          entry.target.classList.remove('in-view');
+        }
+      });
+    }, {
+      threshold: 0.1,           // start changing when 10% visible
+      rootMargin: '0px'         // adjust if you want earlier/later trigger
+    });
+
+    zoomElements.forEach(el => zoomObserver.observe(el));
+
+    // ────────────────────────────────────────────────
+    // VIDEO PLAYLIST – sequential + loop
     // ────────────────────────────────────────────────
     const video = document.getElementById("hero-video");
     const clips = [
       "videos/hero-clip-1.mp4",
-      "videos/hero-clip-2.mp4",
-      "videos/hero-clip-3.mp4"
-      // Add more clips here if you have them: "videos/hero-clip-4.mp4",
+      "videos/hero-clip-2.mp4"
+      // Add more: "videos/hero-clip-3.mp4",
     ];
 
     let currentClip = 0;
 
     function playNext() {
+      if (clips.length === 0) return;
       video.src = clips[currentClip];
       video.load();
-      video.play().catch(e => console.log("Autoplay prevented:", e));
-      currentClip = (currentClip + 1) % clips.length; // loop back to 0 when finished
+      video.play().catch(() => console.log("Autoplay blocked"));
+      currentClip = (currentClip + 1) % clips.length;
     }
 
     video.addEventListener("ended", playNext);
     video.addEventListener("error", () => {
-      console.log("Video error, trying next...");
+      console.log("Video failed, skipping...");
       playNext();
     });
 
-    // Start playback
-    playNext();
-
-    // Parallax scroll
-    const hero = document.querySelector('.parallax-hero');
-    window.addEventListener('scroll', () => {
-      const scroll = window.scrollY;
-      if (scroll < window.innerHeight) {
-        hero.querySelector('.hero-video').style.transform = `translateY(${scroll * 0.3}px) scale(1.08)`;
-      }
-    });
+    playNext(); // start
   </script>
 </body>
 </html>
