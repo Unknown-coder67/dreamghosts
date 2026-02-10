@@ -19,7 +19,8 @@
       --text-dim: #a0a0a0;
       --accent: #6e6e6e;
       --glow: 0 0 12px rgba(220,220,220,0.12);
-      --column-gap: 6rem;          /* ← adjustable column spacing in friends list */
+      --friends-column-gap: 6rem;     /* ← CHANGE THIS VALUE to adjust spacing between columns */
+      --friends-column-width: 180px;  /* ← CHANGE THIS VALUE to make columns wider/narrower */
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -34,6 +35,18 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
+
+    /* ────────────────────────────────────────────────
+       PER-SECTION LANDING POSITION WHEN CLICKING NAV
+    ──────────────────────────────────────────────── */
+    #hero { scroll-margin-top: 40vh; }
+    #intro { scroll-margin-top: 30vh; }
+    #start { scroll-margin-top: 30vh; }
+    #mta { scroll-margin-top: 30vh; }
+    #friends { scroll-margin-top: 33vh; }
+    #memories { scroll-margin-top: 30vh; }
+    #now { scroll-margin-top: 30vh; }
+    #closing { scroll-margin-top: 25vh; }
 
     .parallax-hero {
       position: relative;
@@ -79,7 +92,6 @@
       padding: 5rem 5% 8rem;
       display: flex;
       gap: 4rem;
-      min-height: 100vh; /* ensures content pushes footer down */
     }
 
     .main-content {
@@ -116,7 +128,9 @@
       transition: transform 0.2s ease-out;
     }
 
-    /* Friends list – horizontal drag scroll */
+    /* ────────────────────────────────────────────────
+       FRIENDS LIST – horizontal drag-scrollable grid
+    ──────────────────────────────────────────────── */
     .friends {
       position: relative;
       overflow: hidden;
@@ -134,23 +148,25 @@
 
     #ghosts-list-container::-webkit-scrollbar { display: none; }
 
+    #ghosts-list-container:active { cursor: grabbing; }
+
     #ghosts-list {
       list-style: none;
-      columns: 3;
-      column-gap: var(--column-gap);
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: repeat(20, auto); /* ← how many names per column – change this number */
+      grid-auto-columns: var(--friends-column-width);
+      gap: 0.4rem var(--friends-column-gap);
       font-size: 1.25rem;
       line-height: 2.1;
       padding: 0;
       margin: 0;
-      white-space: nowrap;
       width: max-content;
     }
 
     #ghosts-list li {
-      break-inside: avoid;
-      margin-bottom: 0.4rem;
-      display: inline-block;
-      width: 100%;
+      margin: 0;
+      padding: 0;
     }
 
     .gallery {
@@ -198,7 +214,7 @@
       position: sticky;
       top: 40vh;
       align-self: flex-start;
-      margin-left: -260px;
+      margin-left: -400px;
       width: 240px;
       z-index: 1000;
       display: flex;
@@ -206,6 +222,7 @@
       gap: 1.8rem;
       font-size: 1rem;
       color: var(--text-dim);
+      letter-spacing: -0.3px;
     }
 
     .section-nav a {
@@ -286,24 +303,33 @@
       <!-- Intro -->
       <div class="intro" id="intro" data-aos="fade-up">
         <h2>Who are we?</h2>
-        <p>DreamGhosts is simply a group of longtime friends who grew up together...</p>
+        <p>
+          DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other, and always will.
+        </p>
       </div>
 
       <!-- How it started -->
       <div class="era" id="start" data-aos="fade-up">
         <h2>How did we start?</h2>
-        <p>Each of us began our journey as a random newcomer...</p>
-        <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days">
+        <p>
+          Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
+        </p>
+        <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
       </div>
 
       <!-- What is MTA -->
       <div class="era" id="mta" data-aos="fade-up">
         <h2>What is MTA:SA?</h2>
-        <p>MTA:SA is a multiplayer modification for Grand Theft Auto: San Andreas...</p>
-        <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot">
+        <p>
+          MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes.
+        </p>
+        <p>
+          One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
+        </p>
+        <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
       </div>
 
-      <!-- Wall of Friends – horizontal drag scroll -->
+      <!-- Wall of Friends – drag-scrollable -->
       <div class="friends" id="friends" data-aos="fade-up">
         <h2>Those We Met Along the Way</h2>
         <div id="ghosts-list-container">
@@ -315,22 +341,36 @@
       <div class="gallery-section" id="memories" data-aos="fade-up">
         <h2>Memories</h2>
         <div class="gallery">
-          <img src="images/gallery-1.jpg" alt="Memory 1">
-          <img src="images/gallery-2.jpg" alt="Memory 2">
-          <img src="images/gallery-3.jpg" alt="Memory 3">
+          <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
+          <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
+          <img src="images/gallery-3.jpg" alt="Memory 3" data-aos="fade-up" data-aos-delay="400">
         </div>
       </div>
 
       <!-- Where are we now -->
       <div class="now" id="now" data-aos="fade-up">
         <h2>Where are we now?</h2>
-        <p>We’re still alive, thankfully...</p>
+        <p>
+          We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>
+          Every now and then we still gather, laugh, and relive those small beautiful moments together.<br>
+          Some of us may not show up on the FFS server as often anymore, but we still remember those memories, and our hearts remain close no matter the distance.<br>
+          Even if we’re not around as much, the connection never really faded.
+        </p>
       </div>
 
       <!-- Final thank you -->
       <div class="closing" id="closing" data-aos="fade-up">
-        <p>We wanted this space to thank everyone...</p>
-        <p>These memories only exist because we shared them...</p>
+        <p>
+          We wanted this space to thank everyone we ever met along the way.<br>
+          The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>
+          You gave us memories we will never forget, and we hope we gave you a few smiles too.<br>
+          If you were part of this, even for one day, thank you.
+        </p>
+        <p>
+          These memories only exist because we shared them.<br>
+          And if you're reading this years from now, we were here.<br>
+          Still haunting. Still laughing.
+        </p>
       </div>
 
     </div>
@@ -342,77 +382,131 @@
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 900, offset: 80, once: false, mirror: false, easing: 'ease-out-cubic' });
+    AOS.init({
+      duration: 900,
+      offset: 80,
+      once: false,
+      mirror: false,
+      easing: 'ease-out-cubic'
+    });
+
     window.addEventListener('load', () => AOS.refreshHard());
 
-    // WALL OF FRIENDS
-    const friends = ["nonenile","EataRiD","iTRiCKS","Mrko1","999xx","FIY9AL","General","F5M","Swidrox","Antar","Genax","SmoK","Mica","F0XY","RiNO","Vuak","NoMercy","Vutalic"];
-    friends.sort((a,b)=>a.localeCompare(b));
+    // ────────────────────────────────────────────────
+    // WALL OF FRIENDS – horizontal drag scroll
+    // ────────────────────────────────────────────────
+    const friends = [
+      "nonenile",
+      "EataRiD",
+      "iTRiCKS",
+      "Mrko1",
+      "999xx",
+      "FIY9AL",
+      "General",
+      "F5M",
+      "Swidrox",
+      "Antar",
+      "Genax",
+      "SmoK",
+      "Mica",
+      "F0XY",
+      "RiNO",
+      "Vuak",
+      "NoMercy",
+      "Vutalic",
+      // Add remaining names here
+    ];
+
+    friends.sort((a, b) => a.localeCompare(b));
+
     const list = document.getElementById("ghosts-list");
-    friends.forEach(n=>{
-      const li=document.createElement("li");
-      li.textContent=n;
+    friends.forEach(name => {
+      const li = document.createElement("li");
+      li.textContent = name;
       list.appendChild(li);
     });
 
-    // MOUSE + TOUCH DRAG SCROLL
+    // Mouse + touch drag to scroll
     const container = document.getElementById("ghosts-list-container");
-    let isDragging = false, startX, scrollLeft;
+    let isDragging = false;
+    let startX;
+    let scrollLeft;
 
-    container.addEventListener("mousedown", e => {
+    container.addEventListener("mousedown", (e) => {
       isDragging = true;
       startX = e.pageX - container.offsetLeft;
       scrollLeft = container.scrollLeft;
       container.style.cursor = "grabbing";
     });
 
-    ["mouseleave","mouseup"].forEach(ev => container.addEventListener(ev, () => {
+    container.addEventListener("mouseleave", () => {
       isDragging = false;
       container.style.cursor = "grab";
-    }));
+    });
 
-    container.addEventListener("mousemove", e => {
+    container.addEventListener("mouseup", () => {
+      isDragging = false;
+      container.style.cursor = "grab";
+    });
+
+    container.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
       e.preventDefault();
       const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 1.5;
+      const walk = (x - startX) * 1.5; // ← drag speed (higher = faster)
       container.scrollLeft = scrollLeft - walk;
     });
 
     // Touch support
-    container.addEventListener("touchstart", e => {
+    container.addEventListener("touchstart", (e) => {
       isDragging = true;
       startX = e.touches[0].pageX - container.offsetLeft;
       scrollLeft = container.scrollLeft;
     });
 
-    container.addEventListener("touchend", () => isDragging = false);
+    container.addEventListener("touchend", () => {
+      isDragging = false;
+    });
 
-    container.addEventListener("touchmove", e => {
+    container.addEventListener("touchmove", (e) => {
       if (!isDragging) return;
       const x = e.touches[0].pageX - container.offsetLeft;
       const walk = (x - startX) * 1.5;
       container.scrollLeft = scrollLeft - walk;
     });
 
+    // ────────────────────────────────────────────────
     // VIDEO PLAYLIST
+    // ────────────────────────────────────────────────
     const video = document.getElementById("hero-video");
-    const clips = ["videos/hero-clip-1.mp4","videos/hero-clip-2.mp4","videos/hero-clip-3.mp4"];
+    const clips = [
+      "videos/hero-clip-1.mp4",
+      "videos/hero-clip-2.mp4",
+      "videos/hero-clip-3.mp4"
+    ];
+
     let currentClip = 0;
 
     function playNext() {
+      if (clips.length === 0) return;
       video.src = clips[currentClip];
       video.load();
-      video.play().catch(()=>console.log("Autoplay blocked"));
+      video.play().catch(() => console.log("Autoplay blocked"));
       currentClip = (currentClip + 1) % clips.length;
     }
 
     video.addEventListener("ended", playNext);
-    video.addEventListener("error", playNext);
+    video.addEventListener("error", () => {
+      console.log("Video error, skipping...");
+      playNext();
+    });
+
     playNext();
 
+    // ────────────────────────────────────────────────
     // SMOOTH ZOOM + PARALLAX
-    const heroEl = document.querySelector('.parallax-hero');
+    // ────────────────────────────────────────────────
+    const hero = document.querySelector('.parallax-hero');
     const screenshots = document.querySelectorAll('.screenshot');
 
     function updateTransforms() {
@@ -423,9 +517,9 @@
         const progress = scroll / vh;
         const scale = 1.0 + progress * 0.20;
         const translate = progress * 60;
-        heroEl.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
+        hero.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
       } else {
-        heroEl.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
+        hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
       }
 
       screenshots.forEach(img => {
@@ -450,30 +544,55 @@
     window.addEventListener('resize', updateTransforms);
     updateTransforms();
 
-    // SCROLL SPY
+    // ────────────────────────────────────────────────
+    // PERFECT SCROLL SPY WITH INTERSECTION OBSERVER
+    // ────────────────────────────────────────────────
     const navLinks = document.querySelectorAll('.section-nav a');
-    const sectionMap = {hero:0, intro:1, start:2, mta:3, friends:4, memories:5, now:6, closing:7};
+
+    const sectionMap = {
+      hero: 0,
+      intro: 1,
+      start: 2,
+      mta: 3,
+      friends: 4,
+      memories: 5,
+      now: 6,
+      closing: 7
+    };
+
     const sections = Object.keys(sectionMap).map(id => document.getElementById(id));
 
-    const observer = new IntersectionObserver(entries => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
+
         const id = entry.target.id;
         const index = sectionMap[id];
+
         navLinks.forEach(l => l.classList.remove('active'));
+
         if (id === "hero") {
           navLinks[0].classList.add('active');
           return;
         }
+
         navLinks[index].classList.add('active');
       });
-    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+    }, {
+      rootMargin: "-45% 0px -45% 0px",
+      threshold: 0
+    });
 
-    sections.forEach(s => s && observer.observe(s));
+    sections.forEach(section => {
+      if (section) observer.observe(section);
+    });
 
+    // Re-sync after clicking nav
     document.querySelectorAll('.section-nav a').forEach(link => {
       link.addEventListener('click', () => {
-        setTimeout(() => navLinks.forEach(l => l.classList.remove('active')), 300);
+        setTimeout(() => {
+          navLinks.forEach(l => l.classList.remove('active'));
+        }, 300);
       });
     });
   </script>
