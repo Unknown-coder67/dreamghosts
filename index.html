@@ -120,12 +120,14 @@
   max-width: 1000px;
   margin: 2.5rem auto;
 
-  padding: 80px; /* ← invisible growth space */
+  position: relative;
 }
 
 .screenshot {
-  width: calc(100% + 160px); /* 2 × padding */
-  margin: -80px;
+  position: relative;
+
+  width: 140%;          /* ← start bigger than wrapper */
+  left: -20%;           /* center it */
 
   height: auto;
   display: block;
