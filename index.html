@@ -44,13 +44,14 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.6;              /* same feel as your old image – adjust 0.4–0.8 if needed */
+      opacity: 0.75;               /* brighter base opacity */
+      filter: brightness(1.15);    /* subtle brightness boost */
     }
 
     .overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.65), rgba(0,0,0,0.9) 60%);
+      background: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.55));
       z-index: 1;
     }
 
@@ -75,7 +76,7 @@
       margin: 8rem 0;
     }
 
-    .era p, .intro p, .now p, .closing p {
+    .era p, .intro p, .now p {
       font-size: 1.35rem;
       max-width: 80ch;
       margin-bottom: 2rem;
@@ -94,7 +95,7 @@
     /* Friends list styling */
     #ghosts-list {
       list-style: none;
-      columns: 3;               /* 3 columns on desktop */
+      columns: 3;
       column-gap: 4rem;
       font-size: 1.25rem;
       line-height: 2.1;
@@ -125,11 +126,24 @@
       transform: scale(1.03);
     }
 
+    /* Closing section – wider rectangular box */
     .closing {
       text-align: center;
       font-size: 1.45rem;
       opacity: 0.85;
       padding: 6rem 5%;
+      max-width: 1000px;           /* wider than other sections */
+      margin: 8rem auto;
+      background: rgba(20,20,20,0.4); /* subtle dark box background */
+      border-radius: 12px;
+      border: 1px solid #333;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+
+    .closing p {
+      max-width: 90ch;             /* very wide readable lines */
+      margin: 1.5rem auto;
+      color: var(--text);
     }
 
     footer {
@@ -143,31 +157,23 @@
     @media (max-width: 900px) {
       h1 { font-size: 4rem; }
       h2 { font-size: 2.6rem; }
-      #ghosts-list { columns: 2; } /* 2 columns on tablets */
+      #ghosts-list { columns: 2; }
       .gallery { column-count: 2; }
+      .closing { padding: 4rem 8%; max-width: 90%; }
     }
 
     @media (max-width: 600px) {
-      #ghosts-list { columns: 1; } /* single column on phones */
-      .hero-video {
-        object-position: center center; /* better centering on mobile */
-      }
+      #ghosts-list { columns: 1; }
+      .hero-video { object-position: center center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Hero – now with VIDEO background playlist -->
+  <!-- Hero – VIDEO playlist -->
   <div class="parallax-hero">
-    <video class="hero-video" autoplay muted loop playsinline>
-      <!-- Add your clips here – they play in order, then loop back to first -->
-      <source src="videos/hero-clip-1.mp4" type="video/mp4">
-      <source src="videos/hero-clip-2.mp4" type="video/mp4">
-      <source src="videos/hero-clip-3.mp4" type="video/mp4">
-      <!-- Add more clips if you have them, e.g.: -->
-      <!-- <source src="videos/hero-clip-4.mp4" type="video/mp4"> -->
-      
-      <!-- Fallback static image if video fails to load -->
+    <video id="hero-video" class="hero-video" autoplay muted playsinline>
+      <!-- Fallback image -->
       <img src="images/hero-bg.jpg" alt="DreamGhosts memories fallback">
     </video>
     <div class="overlay"></div>
@@ -210,7 +216,7 @@
       <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
     </div>
 
-    <!-- Wall of Friends – now pure JS list -->
+    <!-- Wall of Friends -->
     <div class="friends" data-aos="fade-up">
       <h2>Those We Met Along the Way</h2>
       <ul id="ghosts-list"></ul>
@@ -223,7 +229,7 @@
         <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
         <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
         <img src="images/gallery-3.jpg" alt="Memory 3" data-aos="fade-up" data-aos-delay="400">
-        <!-- Add more <img src="images/gallery-4.jpg" ... > up to gallery-12.jpg or more -->
+        <!-- Add more <img src="images/gallery-4.jpg" ... > -->
       </div>
     </div>
 
@@ -238,7 +244,7 @@
       </p>
     </div>
 
-    <!-- Final thank you -->
+    <!-- Final thank you – wider rectangular box -->
     <div class="closing" data-aos="fade-up">
       <p>
         We wanted this space to thank everyone we ever met along the way.<br>
@@ -273,8 +279,6 @@
 
     // ────────────────────────────────────────────────
     // WALL OF FRIENDS – EDIT ONLY HERE
-    // Add all ~300 names inside the array below.
-    // Order doesn't matter — they will be sorted alphabetically.
     // ────────────────────────────────────────────────
     const friends = [
       "nonenile",
@@ -295,16 +299,11 @@
       "Vuak",
       "NoMercy",
       "Vutalic",
-      // Add the rest of the names here, one per line like this:
-      // "AnotherName",
-      // "YetAnother",
-      // ... up to ~300
+      // Add the rest of the names here
     ];
 
-    // Sort alphabetically (optional – remove .sort() if you want custom order)
     friends.sort((a, b) => a.localeCompare(b));
 
-    // Populate the list
     const list = document.getElementById("ghosts-list");
     friends.forEach(name => {
       const li = document.createElement("li");
@@ -313,8 +312,34 @@
     });
 
     // ────────────────────────────────────────────────
-    // Parallax effect (now works with video too)
+    // VIDEO PLAYLIST – plays clips in order, then loops
     // ────────────────────────────────────────────────
+    const video = document.getElementById("hero-video");
+    const clips = [
+      "videos/hero-clip-1.mp4",
+      "videos/hero-clip-2.mp4",
+      // Add more clips here if you have them, e.g.:
+      // "videos/hero-clip-3.mp4",
+    ];
+
+    let currentClip = 0;
+
+    function playNext() {
+      if (currentClip < clips.length) {
+        video.src = clips[currentClip];
+        video.load();
+        video.play().catch(() => {}); // ignore autoplay errors
+        currentClip++;
+      } else {
+        currentClip = 0; // loop back to first clip
+        playNext();
+      }
+    }
+
+    video.addEventListener("ended", playNext);
+    playNext(); // start with first clip
+
+    // Parallax scroll effect
     const hero = document.querySelector('.parallax-hero');
     window.addEventListener('scroll', () => {
       const scroll = window.scrollY;
