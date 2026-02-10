@@ -152,9 +152,7 @@
       border-top: 1px solid #222;
     }
 
-    /* ────────────────────────────────────────────────
-       LEFT VERTICAL SECTION NAVIGATION
-    ──────────────────────────────────────────────── */
+    /* Left Navigation */
     .section-nav {
       position: fixed;
       top: 50%;
@@ -199,15 +197,11 @@
     }
 
     @media (max-width: 900px) {
-      .section-nav {
-        display: none; /* hide on mobile to avoid clutter */
-      }
+      .section-nav { display: none; }
     }
 
     @media (max-width: 1200px) {
-      .section-nav {
-        left: 15px;
-      }
+      .section-nav { left: 15px; }
     }
   </style>
 </head>
@@ -225,7 +219,7 @@
     <a href="#closing"><span class="icon">👻</span> Final thank you</a>
   </nav>
 
-  <!-- Hero – VIDEO playlist -->
+  <!-- Hero -->
   <div class="parallax-hero" id="hero">
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
       <source src="videos/hero-clip-1.mp4" type="video/mp4">
@@ -286,7 +280,6 @@
         <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
         <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
         <img src="images/gallery-3.jpg" alt="Memory 3" data-aos="fade-up" data-aos-delay="400">
-        <!-- Add more -->
       </div>
     </div>
 
@@ -406,7 +399,6 @@
       const scroll = window.scrollY;
       const vh = window.innerHeight;
 
-      // Hero video
       if (scroll < vh) {
         const progress = scroll / vh;
         const scale = 1.0 + progress * 0.20;
@@ -416,7 +408,6 @@
         hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
       }
 
-      // Screenshots
       screenshots.forEach(img => {
         const rect = img.getBoundingClientRect();
         const imgTop = rect.top + scroll;
@@ -440,7 +431,7 @@
     updateTransforms();
 
     // ────────────────────────────────────────────────
-    // LEFT NAVIGATION – scroll spy
+    // LEFT NAVIGATION – FIXED SCROLL SPY WITH DYNAMIC OFFSET
     // ────────────────────────────────────────────────
     const navLinks = document.querySelectorAll('.section-nav a');
     const sections = [
@@ -455,25 +446,38 @@
     ];
 
     function updateActiveNav() {
-      const scrollPos = window.scrollY + 150; // offset so it activates a bit earlier
+      const scrollPos = window.scrollY + window.innerHeight * 0.35; // dynamic offset – 35% of screen height
+
+      let current = -1;
+
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
+        if (!section) continue;
+
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+
+        if (scrollPos >= top && scrollPos < top + height) {
+          current = i;
+          break; // stop at first matching section
+        }
+      }
 
       navLinks.forEach((link, index) => {
-        const section = sections[index];
-        if (section) {
-          const top = section.offsetTop;
-          const height = section.offsetHeight;
-
-          if (scrollPos >= top && scrollPos < top + height) {
-            link.classList.add('active');
-          } else {
-            link.classList.remove('active');
-          }
+        if (index === current) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
         }
       });
     }
 
     window.addEventListener('scroll', updateActiveNav);
-    updateActiveNav(); // initial
+    window.addEventListener('resize', updateActiveNav);
+    window.addEventListener('load', () => {
+      setTimeout(updateActiveNav, 300); // small delay after load/AOS
+    });
+    updateActiveNav(); // initial call
   </script>
 </body>
 </html>
