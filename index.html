@@ -110,7 +110,7 @@
     }
 
     /* ────────────────────────────────────────────────
-       FADING ZOOM FOR SCREENSHOTS
+       FADING ZOOM → HARD CLIP + SOLID BACKGROUND
     ──────────────────────────────────────────────── */
     .screenshot-wrapper {
       position: relative;
@@ -119,7 +119,8 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       max-width: 1000px;
-      background: var(--bg);
+      background: var(--bg); /* solid dark background – edges disappear into it */
+      will-change: transform;
     }
 
     .screenshot {
@@ -128,20 +129,6 @@
       display: block;
       transition: transform 0.2s ease-out;
       will-change: transform;
-    }
-
-    .screenshot-wrapper::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, transparent 30%, var(--bg) 100%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-    }
-
-    .screenshot-wrapper.zoom-active::after {
-      opacity: 1;
     }
 
     /* Friends list – horizontal drag-scroll */
@@ -405,7 +392,7 @@
     window.addEventListener('load', () => AOS.refreshHard());
 
     // ────────────────────────────────────────────────
-    // WALL OF FRIENDS – horizontal drag scroll
+    // WALL OF FRIENDS – horizontal drag-scroll grid
     // ────────────────────────────────────────────────
     const friends = [
       "nonenile", "EataRiD", "iTRiCKS", "Mrko1", "999xx", "FIY9AL", "General", "F5M", "Swidrox", "Antar",
@@ -484,17 +471,13 @@
     }
 
     video.addEventListener("ended", playNext);
-    video.addEventListener("error", () => {
-      console.log("Video error, skipping...");
-      playNext();
-    });
-
+    video.addEventListener("error", playNext);
     playNext();
 
     // ────────────────────────────────────────────────
-    // SMOOTH ZOOM + PARALLAX + FADING EDGES
+    // SMOOTH ZOOM + PARALLAX + HARD CLIP ON IMAGES
     // ────────────────────────────────────────────────
-    const hero = document.querySelector('.parallax-hero');
+    const heroEl = document.querySelector('.parallax-hero');
     const screenshots = document.querySelectorAll('.screenshot');
 
     function updateTransforms() {
@@ -505,9 +488,9 @@
         const progress = scroll / vh;
         const scale = 1.0 + progress * 0.20;
         const translate = progress * 60;
-        hero.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
+        heroEl.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
       } else {
-        hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
+        heroEl.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
       }
 
       screenshots.forEach(img => {
@@ -518,18 +501,13 @@
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
           const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh / 2) / vh));
-          const scale = 1.0 + progress * 0.35; // max zoom – adjust 0.35 to make stronger/weaker
+          const scale = 1.0 + progress * 0.60; // ← max zoom – adjust 0.60 to control how big it gets before clipping
           const translate = progress * 40;
           img.style.transform = `scale(${scale}) translateY(${translate}px)`;
-
-          // Fade edges more when zoomed
-          wrapper.classList.toggle('zoom-active', progress > 0.3); // start fade at 30% zoom
         } else if (imgTop > scroll + vh) {
-          img.style.transform = `scale(1.35) translateY(40px)`;
-          wrapper.classList.remove('zoom-active');
+          img.style.transform = `scale(1.60) translateY(40px)`; // pre-zoomed for next scroll
         } else {
           img.style.transform = `scale(1.0) translateY(0)`;
-          wrapper.classList.remove('zoom-active');
         }
       });
     }
