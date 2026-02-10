@@ -112,20 +112,21 @@
     /* ────────────────────────────────────────────────
        HARD CLIP ZOOM – grows big then disappears behind solid bg
     ──────────────────────────────────────────────── */
-    .screenshot-wrapper {
-      overflow: hidden;
-      border-radius: 8px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      margin: 2.5rem auto;
-      max-width: 1000px;
-      background: var(--bg); /* solid dark – edges vanish into it */
-    }
+  .screenshot-wrapper {
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    margin: 2.5rem auto;
+    max-width: 1000px;
+    background: transparent;
+  }
 
-    .screenshot {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+  .screenshot {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
 
     /* Friends list – horizontal drag-scroll */
     .friends { overflow: hidden; }
