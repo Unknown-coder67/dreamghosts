@@ -46,12 +46,7 @@
       object-fit: cover;
       opacity: 0.75;
       filter: brightness(1.15);
-      transition: transform 1.2s ease-out; /* smooth zoom + parallax duration */
-      transform: scale(1.0) translateY(0); /* starting state */
-    }
-
-    .hero-video.zoomed {
-      transform: scale(1.20) translateY(30px); /* zoom in + slight downward shift when scrolled away */
+      transition: transform 1.2s ease-out; /* smooth zoom + parallax – change time for faster/slower */
     }
 
     .overlay {
@@ -96,12 +91,7 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       display: block;
-      transition: transform 1.2s ease-out;
-      transform: scale(1.0) translateY(0);
-    }
-
-    .screenshot.zoomed {
-      transform: scale(1.20) translateY(20px); /* zoom + downward shift */
+      transition: transform 1.2s ease-out; /* same smooth effect as video */
     }
 
     /* Friends list styling */
@@ -175,7 +165,6 @@
 
     @media (max-width: 600px) {
       #ghosts-list { columns: 1; }
-      .hero-video, .screenshot { object-position: center center; }
     }
   </style>
 </head>
@@ -186,12 +175,13 @@
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
       <source src="videos/hero-clip-1.mp4" type="video/mp4">
       <source src="videos/hero-clip-2.mp4" type="video/mp4">
-      <source src="videos/hero-clip-3.mp4" type="video/mp4">
+       <source src="videos/hero-clip-2.mp4" type="video/mp4">
+      <!-- Add more clips here if needed -->
       <img src="images/hero-bg.jpg" alt="Fallback">
     </video>
     <div class="overlay"></div>
     <div class="content" style="padding-top: 22vh;">
-      <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhostsDDDDDDD</h1>
+      <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhosts</h1>
       <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; text-align:center; opacity:0.8;">
         Since 2012 – a friendship that outlived every game
       </p>
@@ -325,34 +315,13 @@
     });
 
     // ────────────────────────────────────────────────
-    // SMOOTH BIDIRECTIONAL ZOOM + PARALLAX FOR VIDEO & SCREENSHOTS
-    // ────────────────────────────────────────────────
-    const zoomSections = document.querySelectorAll('.parallax-hero, .screenshot');
-
-    const zoomObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        const el = entry.target;
-        if (entry.isIntersecting) {
-          el.classList.remove('zoomed'); // normal size + no shift
-        } else {
-          el.classList.add('zoomed');    // zoom in + slight downward shift
-        }
-      });
-    }, {
-      threshold: 0.2,   // trigger when 20% visible (adjust 0.1–0.3 for earlier/later)
-      rootMargin: '0px'
-    });
-
-    zoomSections.forEach(section => zoomObserver.observe(section));
-
-    // ────────────────────────────────────────────────
     // VIDEO PLAYLIST – sequential + loop
     // ────────────────────────────────────────────────
     const video = document.getElementById("hero-video");
     const clips = [
       "videos/hero-clip-1.mp4",
       "videos/hero-clip-2.mp4"
-      // Add more clips here if needed
+      // Add more clips here if you have them
     ];
 
     let currentClip = 0;
@@ -371,7 +340,54 @@
       playNext();
     });
 
-    playNext(); // start playback
+    playNext(); // start
+
+    // ────────────────────────────────────────────────
+    // SMOOTH ZOOM + PARALLAX (stronger & visible)
+    // ────────────────────────────────────────────────
+    const hero = document.querySelector('.parallax-hero');
+    const screenshots = document.querySelectorAll('.screenshot');
+
+    function updateTransforms() {
+      const scroll = window.scrollY;
+      const vh = window.innerHeight;
+
+      // Hero video
+      if (scroll < vh) {
+        const progress = scroll / vh;
+        const scale = 1.0 + progress * 0.20; // zoom in as scrolled down
+        const translate = progress * 60;      // downward shift
+        hero.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
+      } else {
+        // fully scrolled past → max zoom + shift
+        hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
+      }
+
+      // Screenshots (same logic)
+      screenshots.forEach(img => {
+        const rect = img.getBoundingClientRect();
+        const imgTop = rect.top + scroll;
+        const imgBottom = imgTop + rect.height;
+
+        if (imgBottom > scroll && imgTop < scroll + vh) {
+          // in view → normal
+          const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh/2) / vh));
+          const scale = 1.0 + progress * 0.20;
+          const translate = progress * 40;
+          img.style.transform = `scale(${scale}) translateY(${translate}px)`;
+        } else if (imgTop > scroll + vh) {
+          // below viewport → zoomed in
+          img.style.transform = `scale(1.20) translateY(40px)`;
+        } else {
+          // above viewport → normal
+          img.style.transform = `scale(1.0) translateY(0)`;
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateTransforms);
+    window.addEventListener('resize', updateTransforms);
+    updateTransforms(); // initial call
   </script>
 </body>
 </html>
