@@ -19,8 +19,8 @@
       --text-dim: #a0a0a0;
       --accent: #6e6e6e;
       --glow: 0 0 12px rgba(220,220,220,0.12);
-      --friends-column-gap: 5rem;      /* ← CHANGE THIS to adjust spacing between columns (e.g. 3rem, 6rem, 8rem) */
-      --friends-column-width: 220px;   /* ← CHANGE THIS to adjust how wide each name column is */
+      --friends-column-gap: 5rem;
+      --friends-column-width: 220px;
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -36,7 +36,7 @@
       overflow-x: hidden;
     }
 
-    /* PER-SECTION LANDING POSITION */
+    /* PER-SECTION LANDING */
     #hero     { scroll-margin-top: 40vh; }
     #intro    { scroll-margin-top: 30vh; }
     #start    { scroll-margin-top: 30vh; }
@@ -109,26 +109,43 @@
       line-height: 1.8;
     }
 
-    .screenshot, .gallery img {
-      max-width: 100%;
-      height: auto;
+    /* ────────────────────────────────────────────────
+       FADING ZOOM FOR SCREENSHOTS
+    ──────────────────────────────────────────────── */
+    .screenshot-wrapper {
+      position: relative;
+      overflow: hidden;
       border-radius: 8px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      display: block;
       margin: 2.5rem auto;
+      max-width: 1000px;
+      background: var(--bg);
+    }
+
+    .screenshot {
+      width: 100%;
+      height: auto;
+      display: block;
       transition: transform 0.2s ease-out;
+      will-change: transform;
     }
 
-    .screenshot:hover, .gallery img:hover {
-      transform: scale(1.02);
+    .screenshot-wrapper::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 30%, var(--bg) 80%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.8s ease;
     }
 
-    /* ────────────────────────────────────────────────
-       FRIENDS LIST – horizontal drag-scrollable grid
-    ──────────────────────────────────────────────── */
-    .friends {
-      overflow: hidden;
+    .screenshot-wrapper.zoom-active::after {
+      opacity: 1;
     }
+
+    /* Friends list – horizontal drag-scroll */
+    .friends { overflow: hidden; }
 
     #ghosts-list-container {
       overflow-x: auto;
@@ -148,7 +165,7 @@
       list-style: none;
       display: grid;
       grid-auto-flow: column;
-      grid-template-rows: repeat(20, auto);   /* ← CHANGE THIS NUMBER: how many names tall each column is (e.g. 15, 25, 30) */
+      grid-template-rows: repeat(20, auto);
       grid-auto-columns: var(--friends-column-width);
       gap: 0.6rem var(--friends-column-gap);
       font-size: 1.25rem;
@@ -158,16 +175,24 @@
       width: max-content;
     }
 
-    #ghosts-list li {
-      margin: 0;
-      white-space: nowrap;
-    }
+    #ghosts-list li { margin: 0; white-space: nowrap; }
 
     .gallery {
       column-count: 3;
       column-gap: 1.5rem;
       margin: 6rem 0;
     }
+
+    .gallery img {
+      width: 100%;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      break-inside: avoid;
+      transition: transform 0.4s ease;
+    }
+
+    .gallery img:hover { transform: scale(1.03); }
 
     .closing {
       text-align: center;
@@ -297,7 +322,9 @@
         <p>
           Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
         </p>
-        <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
+        <div class="screenshot-wrapper">
+          <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="0">
+        </div>
       </div>
 
       <!-- What is MTA -->
@@ -309,10 +336,12 @@
         <p>
           One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
         </p>
-        <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
+        <div class="screenshot-wrapper">
+          <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="0">
+        </div>
       </div>
 
-      <!-- Wall of Friends – drag-scrollable grid -->
+      <!-- Wall of Friends -->
       <div class="friends" id="friends" data-aos="fade-up">
         <h2>Those We Met Along the Way</h2>
         <div id="ghosts-list-container">
@@ -376,12 +405,12 @@
     window.addEventListener('load', () => AOS.refreshHard());
 
     // ────────────────────────────────────────────────
-    // WALL OF FRIENDS – horizontal drag-scroll grid
+    // WALL OF FRIENDS – horizontal drag scroll
     // ────────────────────────────────────────────────
     const friends = [
       "nonenile", "EataRiD", "iTRiCKS", "Mrko1", "999xx", "FIY9AL", "General", "F5M", "Swidrox", "Antar",
       "Genax", "SmoK", "Mica", "F0XY", "RiNO", "Vuak", "NoMercy", "Vutalic"
-      // Add your remaining ~280 names here
+      // Add remaining names here
     ];
 
     friends.sort((a, b) => a.localeCompare(b));
@@ -393,7 +422,7 @@
       list.appendChild(li);
     });
 
-    // Mouse + touch drag to scroll
+    // Mouse + touch drag
     const container = document.getElementById("ghosts-list-container");
     let isDragging = false;
     let startX;
@@ -415,11 +444,10 @@
       if (!isDragging) return;
       e.preventDefault();
       const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 1.5; // drag speed – increase for faster
+      const walk = (x - startX) * 1.5;
       container.scrollLeft = scrollLeft - walk;
     });
 
-    // Touch support
     container.addEventListener("touchstart", (e) => {
       isDragging = true;
       startX = e.touches[0].pageX - container.offsetLeft;
@@ -456,11 +484,15 @@
     }
 
     video.addEventListener("ended", playNext);
-    video.addEventListener("error", playNext);
+    video.addEventListener("error", () => {
+      console.log("Video error, skipping...");
+      playNext();
+    });
+
     playNext();
 
     // ────────────────────────────────────────────────
-    // SMOOTH ZOOM + PARALLAX
+    // SMOOTH ZOOM + PARALLAX + FADING EDGES
     // ────────────────────────────────────────────────
     const hero = document.querySelector('.parallax-hero');
     const screenshots = document.querySelectorAll('.screenshot');
@@ -479,19 +511,25 @@
       }
 
       screenshots.forEach(img => {
+        const wrapper = img.parentElement;
         const rect = img.getBoundingClientRect();
         const imgTop = rect.top + scroll;
         const imgBottom = imgTop + rect.height;
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
-          const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh/2) / vh));
-          const scale = 1.0 + progress * 0.20;
+          const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh / 2) / vh));
+          const scale = 1.0 + progress * 0.35; // max zoom – adjust 0.35 to make stronger/weaker
           const translate = progress * 40;
           img.style.transform = `scale(${scale}) translateY(${translate}px)`;
+
+          // Fade edges more when zoomed
+          wrapper.classList.toggle('zoom-active', progress > 0.3); // start fade at 30% zoom
         } else if (imgTop > scroll + vh) {
-          img.style.transform = `scale(1.20) translateY(40px)`;
+          img.style.transform = `scale(1.35) translateY(40px)`;
+          wrapper.classList.remove('zoom-active');
         } else {
           img.style.transform = `scale(1.0) translateY(0)`;
+          wrapper.classList.remove('zoom-active');
         }
       });
     }
