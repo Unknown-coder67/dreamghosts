@@ -110,31 +110,21 @@
     }
 
     /* ────────────────────────────────────────────────
-       HARD CLIP ZOOM – grows big then disappears behind solid bg
+       HARD CLIP ZOOM – delayed start
     ──────────────────────────────────────────────── */
-.screenshot-wrapper {
-  overflow: hidden;
-  border-radius: 8px;
-  background: var(--bg);
+    .screenshot-wrapper {
+      overflow: hidden;
+      border-radius: 8px;
+      margin: 2.5rem auto;
+      max-width: 1000px;
+      background: var(--bg);
+    }
 
-  max-width: 1000px;
-  margin: 2.5rem auto;
-
-  position: relative;
-}
-
-.screenshot {
-  position: relative;
-
-  width: 140%;          /* ← start bigger than wrapper */
-  left: -20%;           /* center it */
-
-  height: auto;
-  display: block;
-
-  transform-origin: center;
-  will-change: transform;
-}
+    .screenshot {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
 
     /* Friends list – horizontal drag-scroll */
     .friends { overflow: hidden; }
@@ -480,7 +470,7 @@
     playNext();
 
     // ────────────────────────────────────────────────
-    // SMOOTH ZOOM + PARALLAX + HARD CLIP ON IMAGES
+    // SMOOTH ZOOM + PARALLAX + DELAYED ZOOM START
     // ────────────────────────────────────────────────
     const heroEl = document.querySelector('.parallax-hero');
     const screenshots = document.querySelectorAll('.screenshot');
@@ -505,12 +495,18 @@
         const imgBottom = imgTop + rect.height;
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
-          const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh / 2) / vh));
-          const scale = 1.0 + progress * 0.80; // ← bigger zoom before clipping starts (adjust 0.80)
+          // Delay zoom start: only begin when image is past ~35% of screen height
+          const triggerOffset = vh * 0.35; // ← CHANGE THIS VALUE to control delay
+          // Higher = zoom starts later (e.g. 0.5 = after halfway down screen)
+          // Lower = zoom starts sooner (e.g. 0.2 = earlier)
+          const effectiveProgress = Math.max(0, (scroll - imgTop + triggerOffset) / vh);
+          const progress = Math.min(1, effectiveProgress);
+
+          const scale = 1.0 + progress * 0.80; // zoom strength – adjust 0.80
           const translate = progress * 40;
           img.style.transform = `scale(${scale}) translateY(${translate}px)`;
         } else if (imgTop > scroll + vh) {
-          img.style.transform = `scale(1.80) translateY(40px)`; // pre-zoomed
+          img.style.transform = `scale(1.80) translateY(40px)`;
         } else {
           img.style.transform = `scale(1.0) translateY(0)`;
         }
