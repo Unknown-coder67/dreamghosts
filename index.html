@@ -157,7 +157,7 @@
     }
 
     /* ────────────────────────────────────────────────
-       LEFT VERTICAL SECTION NAVIGATION
+       LEFT VERTICAL SECTION NAVIGATION – always visible
     ──────────────────────────────────────────────── */
     .section-nav {
       position: fixed;
@@ -170,22 +170,13 @@
       gap: 1.5rem;
       font-size: 1rem;
       color: var(--text-dim);
-      pointer-events: none;
-      opacity: 1;
-      visibility: hidden;
-      transition: opacity 0.4s ease;
-    }
-
-    .section-nav.visible {
-      opacity: 1;
-      visibility: visible;
+      pointer-events: auto;
     }
 
     .section-nav a {
       color: var(--text-dim);
       text-decoration: none;
       transition: all 0.4s ease;
-      pointer-events: auto;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -220,7 +211,9 @@
   </style>
 </head>
 <body>
-    <nav class="section-nav">
+
+  <!-- Left Navigation Bar – always present and visible -->
+  <nav class="section-nav">
     <a href="#hero"><span class="icon">👻</span> DreamGhosts</a>
     <a href="#intro"><span class="icon">👻</span> Who are we?</a>
     <a href="#start"><span class="icon">👻</span> How did we start?</a>
@@ -230,6 +223,7 @@
     <a href="#now"><span class="icon">👻</span> Where are we now?</a>
     <a href="#closing"><span class="icon">👻</span> Final thank you</a>
   </nav>
+
   <!-- Hero -->
   <div class="parallax-hero" id="hero">
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
@@ -442,9 +436,8 @@
     updateTransforms();
 
     // ────────────────────────────────────────────────
-    // LEFT NAVIGATION – FIXED SCROLL SPY + STOP AT LAST MIDDLE
+    // LEFT NAVIGATION – SIMPLE SCROLL SPY (always visible)
     // ────────────────────────────────────────────────
-    const nav = document.querySelector('.section-nav');
     const navLinks = document.querySelectorAll('.section-nav a');
     const sections = [
       document.querySelector('#hero'),
@@ -457,12 +450,16 @@
       document.querySelector('#closing')
     ];
 
-    function updateActiveNav() {
-      const scrollPos = window.scrollY + window.innerHeight * 0.10; // your tuned offset
-      const lastSection = sections[7];
-      const lastMiddle = lastSection ? lastSection.offsetTop + (lastSection.offsetHeight * 0.5) : Infinity;
+    // Debug check
+    console.log("Nav links found:", navLinks.length);
+    if (navLinks.length !== 8) {
+      console.error("Nav has wrong number of links – expected 8");
+    }
 
-      let current = 0; // default to first
+    function updateActiveNav() {
+      const scrollPos = window.scrollY + window.innerHeight * 0.10;
+
+      let current = 0;
 
       for (let i = 0; i < sections.length; i++) {
         const section = sections[i];
@@ -477,23 +474,17 @@
         }
       }
 
-      // If past middle of last, lock on last
-      if (scrollPos >= lastMiddle) {
-        current = 7;
-      }
-
       navLinks.forEach((link, index) => {
-        link.classList.toggle('active', index === current);
+        if (link) {
+          link.classList.toggle('active', index === current);
+        }
       });
-
-      // Show nav from "Who are we?" (index 1) onward – never hide
-      const showNav = current >= 1;
     }
 
     window.addEventListener('scroll', updateActiveNav);
     window.addEventListener('resize', updateActiveNav);
     window.addEventListener('load', () => {
-      setTimeout(updateActiveNav, 500);
+      setTimeout(updateActiveNav, 1000);
     });
     updateActiveNav();
   </script>
