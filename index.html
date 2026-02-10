@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Roboto+Mono:wght@300;400;500&family=Cairo:wght@400;500;700&display=swap" rel="stylesheet">
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -30,8 +30,82 @@
       line-height: 1.7;
       min-height: 100vh;
       overflow-x: hidden;
+      direction: ltr;
+      text-align: left;
     }
 
+    body.ar {
+      font-family: 'Cairo', sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    /* Language Bar */
+    .lang-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 20px; /* normal height */
+      background: rgba(40,40,40,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      transition: height 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 30px;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .lang-bar:hover {
+      height: 35px; /* expanded on hover */
+    }
+
+    .lang-selector {
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+
+    .lang-current {
+      padding: 0 12px;
+    }
+
+    .lang-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(40,40,40,0.95);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      min-width: 120px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .lang-bar:hover .lang-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .lang-option:hover {
+      background: #555;
+    }
+
+    /* Rest of your styles (unchanged) */
     .parallax-hero {
       position: relative;
       height: 100vh;
@@ -47,7 +121,7 @@
       object-fit: cover;
       opacity: 0.75;
       filter: brightness(1.15);
-      transition: transform 0.2s ease-out; /* smooth zoom + parallax – change time for faster/slower */
+      transition: transform 0.2s ease-out;
     }
 
     .overlay {
@@ -71,6 +145,10 @@
       text-shadow: var(--glow);
     }
 
+    body.ar h1, body.ar h2 {
+      font-family: 'Cairo', sans-serif;
+    }
+
     h1 { font-size: 5.5rem; text-align: center; margin-bottom: 1.5rem; }
     h2 { font-size: 3.2rem; margin: 6rem 0 2.5rem; color: #c0c0c0; }
 
@@ -85,6 +163,10 @@
       color: var(--text-dim);
     }
 
+    body.ar .era p, body.ar .intro p, body.ar .now p {
+      font-size: 1.4rem;
+    }
+
     .screenshot {
       width: 100%;
       max-width: 1000px;
@@ -92,7 +174,7 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       display: block;
-      transition: transform 0.2s ease-out; /* same smooth effect as video */
+      transition: transform 0.2s ease-out;
     }
 
     /* Friends list styling */
@@ -171,19 +253,29 @@
 </head>
 <body>
 
+  <!-- Language Bar -->
+  <div class="lang-bar">
+    <div class="lang-selector">
+      <span class="lang-current" id="lang-current">EN</span>
+      <div class="lang-dropdown" id="lang-dropdown">
+        <div class="lang-option" data-lang="en">English</div>
+        <div class="lang-option" data-lang="ar">العربية</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Hero – VIDEO playlist -->
   <div class="parallax-hero">
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
       <source src="videos/hero-clip-1.mp4" type="video/mp4">
       <source src="videos/hero-clip-2.mp4" type="video/mp4">
       <source src="videos/hero-clip-3.mp4" type="video/mp4">
-      <!-- Add more clips here if needed -->
       <img src="images/hero-bg.jpg" alt="Fallback">
     </video>
     <div class="overlay"></div>
     <div class="content" style="padding-top: 22vh;">
-      <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhosts</h1>
-      <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; text-align:center; opacity:0.8;">
+      <h1 data-aos="fade-up" data-aos-duration="1400" data-en="DreamGhosts" data-ar="دريم غوستس">DreamGhosts</h1>
+      <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; text-align:center; opacity:0.8;" data-en="Since 2012 – a friendship that outlived every game" data-ar="منذ 2012 – صداقة تفوقت على كل لعبة">
         Since 2012 – a friendship that outlived every game
       </p>
     </div>
@@ -193,16 +285,16 @@
 
     <!-- Intro -->
     <div class="intro" data-aos="fade-up">
-      <h2>Who are we?</h2>
-      <p>
+      <h2 data-en="Who are we?" data-ar="من نحن؟">Who are we?</h2>
+      <p data-en="DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other, and always will." data-ar="دريم قوست هي ببساطة مجموعة من الأصدقاء القدامى الذين نشأوا معًا. ما بدأ كضحكات في وقت متأخر من الليل تحول تدريجيًا إلى أكثر من عقد من الذكريات الجميلة، النكات الداخلية، ورابطة لم تتلاشَ حقًا. حتى عندما سحبتنا الحياة في اتجاهات مختلفة، كنا دائمًا نجد طريقنا مرة أخرى إلى بعضنا البعض، وسيظل الأمر كذلك.">
         DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other, and always will.
       </p>
     </div>
 
     <!-- How it started -->
     <div class="era" data-aos="fade-up">
-      <h2>How did we start?</h2>
-      <p>
+      <h2 data-en="How did we start?" data-ar="كيف بدأنا؟">How did we start?</h2>
+      <p data-en="Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years." data-ar="بدأ كل منا رحلته كوافد جديد عشوائي، فقط يستكشف اللعبة ويبذل قصارى جهده لإثبات نفسه. كان الجميع يريد الفوز، والتميز، وإظهار أنه ينتمي. في النهاية، التقى اثنان منا وقررا التعاون، نعمل معًا لإسقاط اللاعبين الآخرين وفوز المباريات في ديري الدمار. من هناك، نما المجموعة ببطء أكبر وأكبر، حتى وصلنا إلى أكثر من 100 عضو على مر السنين.">
         Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
       </p>
       <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
@@ -210,11 +302,11 @@
 
     <!-- What is MTA -->
     <div class="era" data-aos="fade-up">
-      <h2>What is MTA:SA?</h2>
-      <p>
+      <h2 data-en="What is MTA:SA?" data-ar="ما هو MTA:SA؟">What is MTA:SA?</h2>
+      <p data-en="MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes." data-ar="MTA:SA (Multi Theft Auto: San Andreas) هو تعديل متعدد اللاعبين للعبة Grand Theft Auto: San Andreas يسمح للاعبين بإنشاء خوادم مخصصة وأنماط لعب. يمكن للناس بناء خرائطهم الخاصة، وسكريبتاتهم، وتجارب مثل السباقات، الموت ماتش، وأنماط فريدة تمامًا.">
         MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes.
       </p>
-      <p>
+      <p data-en="One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing." data-ar="كان أحد أنماطنا المفضلة في بداية رحلتنا هو DD (Derby التدمير)، حيث يقاتل اللاعبون باستخدام السيارات على خرائط مبنية فوق المحيط. كان الهدف بسيطًا: إسقاط اللاعبين الآخرين خارج المنصة وفي الماء ويكون آخر سائق واقفًا.">
         One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
       </p>
       <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
@@ -222,13 +314,13 @@
 
     <!-- Wall of Friends -->
     <div class="friends" data-aos="fade-up">
-      <h2>Those We Met Along the Way</h2>
+      <h2 data-en="Those We Met Along the Way" data-ar="الذين التقينا بهم في الطريق">Those We Met Along the Way</h2>
       <ul id="ghosts-list"></ul>
     </div>
 
     <!-- Gallery Memories -->
     <div class="gallery-section" data-aos="fade-up">
-      <h2>Memories</h2>
+      <h2 data-en="Memories" data-ar="الذكريات">Memories</h2>
       <div class="gallery">
         <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
         <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
@@ -239,33 +331,25 @@
 
     <!-- Where are we now -->
     <div class="now" data-aos="fade-up">
-      <h2>Where are we now?</h2>
-      <p>
-        We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>
-        Every now and then we still gather, laugh, and relive those small beautiful moments together.<br>
-        Some of us may not show up on the FFS server as often anymore, but we still remember those memories, and our hearts remain close no matter the distance.<br>
-        Even if we’re not around as much, the connection never really faded.
+      <h2 data-en="Where are we now?" data-ar="أين نحن الآن؟">Where are we now?</h2>
+      <p data-en="We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>Every now and then we still gather, laugh, and relive those small beautiful moments together.<br>Some of us may not show up on the FFS server as often anymore, but we still remember those memories, and our hearts remain close no matter the distance.<br>Even if we’re not around as much, the connection never really faded." data-ar="ما زلنا على قيد الحياة، ولله الحمد. لكن الوقت مضى، ونحن كذلك. بعضنا ترك للدراسة، وبعضنا تزوج وبنى عائلات، وآخرون انشغلوا بالعمل والمسؤوليات.<br>من حين لآخر ما زلنا نجتمع، نضحك، ونعيد عيش تلك اللحظات الجميلة الصغيرة معًا.<br>قد لا يظهر بعضنا على خادم FFS كثيرًا بعد الآن، لكننا ما زلنا نتذكر تلك الذكريات، وقلوبنا تبقى قريبة مهما كانت المسافة.<br>حتى لو لم نكن موجودين كثيرًا، فالرابط لم يتلاشَ حقًا.">
+        We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>Every now and then we still gather, laugh, and relive those small beautiful moments together.<br>Some of us may not show up on the FFS server as often anymore, but we still remember those memories, and our hearts remain close no matter the distance.<br>Even if we’re not around as much, the connection never really faded.
       </p>
     </div>
 
     <!-- Final thank you -->
     <div class="closing" data-aos="fade-up">
-      <p>
-        We wanted this space to thank everyone we ever met along the way.<br>
-        The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>
-        You gave us memories we will never forget, and we hope we gave you a few smiles too.<br>
-        If you were part of this, even for one day, thank you.
+      <p data-en="We wanted this space to thank everyone we ever met along the way.<br>The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>You gave us memories we will never forget, and we hope we gave you a few smiles too.<br>If you were part of this, even for one day, thank you." data-ar="أردنا هذا المكان لنشكر كل من التقينا به في الطريق.<br>الذين جعلونا نضحك، الذين سهرنا معهم طويلاً، الذين شاركونا الانتصارات والهزائم والنكات الداخلية التي لا تُحصى.<br>أعطيتمونا ذكريات لن ننساها أبدًا، ونأمل أن نكون قد أعطيناكم بعض الابتسامات أيضًا.<br>إذا كنت جزءًا من هذا، حتى لو ليوم واحد، شكرًا لك.">
+        We wanted this space to thank everyone we ever met along the way.<br>The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>You gave us memories we will never forget, and we hope we gave you a few smiles too.<br>If you were part of this, even for one day, thank you.
       </p>
-      <p>
-        These memories only exist because we shared them.<br>
-        And if you're reading this years from now, we were here.<br>
-        Still haunting. Still laughing.
+      <p data-en="These memories only exist because we shared them.<br>And if you're reading this years from now, we were here.<br>Still haunting. Still laughing." data-ar="هذه الذكريات موجودة فقط لأننا شاركناها.<br>وإذا كنت تقرأ هذا بعد سنوات من الآن، كنا هنا.<br>ما زلنا نطارد. ما زلنا نضحك.">
+        These memories only exist because we shared them.<br>And if you're reading this years from now, we were here.<br>Still haunting. Still laughing.
       </p>
     </div>
 
   </div>
 
-  <footer>
+  <footer data-en="© DreamGhosts • just memories now" data-ar="© دريم قوست • مجرد ذكريات الآن">
     © DreamGhosts • just memories now
   </footer>
 
@@ -280,6 +364,56 @@
     });
 
     window.addEventListener('load', () => AOS.refreshHard());
+
+    // ────────────────────────────────────────────────
+    // LANGUAGE SWITCHER
+    // ────────────────────────────────────────────────
+    const html = document.getElementById('html-root');
+    const langCurrent = document.getElementById('lang-current');
+    const langDropdown = document.getElementById('lang-dropdown');
+    let currentLang = 'en';
+
+    // All translatable elements
+    const translatable = document.querySelectorAll('[data-en][data-ar]');
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      html.lang = lang;
+      html.className = lang;
+
+      langCurrent.textContent = lang.toUpperCase();
+
+      translatable.forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+
+      // Save preference
+      localStorage.setItem('dreamghosts-lang', lang);
+    }
+
+    // Load saved language or default to English
+    const savedLang = localStorage.getItem('dreamghosts-lang') || 'en';
+    setLanguage(savedLang);
+
+    // Click to show dropdown
+    langCurrent.addEventListener('click', () => {
+      langDropdown.style.display = langDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Click option to change language
+    langDropdown.querySelectorAll('.lang-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        setLanguage(opt.dataset.lang);
+        langDropdown.style.display = 'none';
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', e => {
+      if (!langCurrent.contains(e.target) && !langDropdown.contains(e.target)) {
+        langDropdown.style.display = 'none';
+      }
+    });
 
     // ────────────────────────────────────────────────
     // WALL OF FRIENDS
@@ -316,14 +450,14 @@
     });
 
     // ────────────────────────────────────────────────
-    // VIDEO PLAYLIST – sequential + loop
+    // VIDEO PLAYLIST
     // ────────────────────────────────────────────────
     const video = document.getElementById("hero-video");
     const clips = [
       "videos/hero-clip-1.mp4",
       "videos/hero-clip-2.mp4",
       "videos/hero-clip-3.mp4"
-      // Add more clips here if you have them
+      // Add more clips here if needed
     ];
 
     let currentClip = 0;
@@ -342,10 +476,10 @@
       playNext();
     });
 
-    playNext(); // start
+    playNext();
 
     // ────────────────────────────────────────────────
-    // SMOOTH ZOOM + PARALLAX (stronger & visible)
+    // SMOOTH ZOOM + PARALLAX
     // ────────────────────────────────────────────────
     const hero = document.querySelector('.parallax-hero');
     const screenshots = document.querySelectorAll('.screenshot');
@@ -357,31 +491,27 @@
       // Hero video
       if (scroll < vh) {
         const progress = scroll / vh;
-        const scale = 1.0 + progress * 0.20; // zoom in as scrolled down
-        const translate = progress * 60;      // downward shift
+        const scale = 1.0 + progress * 0.20;
+        const translate = progress * 60;
         hero.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
       } else {
-        // fully scrolled past → max zoom + shift
         hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
       }
 
-      // Screenshots (same logic)
+      // Screenshots
       screenshots.forEach(img => {
         const rect = img.getBoundingClientRect();
         const imgTop = rect.top + scroll;
         const imgBottom = imgTop + rect.height;
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
-          // in view → normal
           const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh/2) / vh));
           const scale = 1.0 + progress * 0.20;
           const translate = progress * 40;
           img.style.transform = `scale(${scale}) translateY(${translate}px)`;
         } else if (imgTop > scroll + vh) {
-          // below viewport → zoomed in
           img.style.transform = `scale(1.20) translateY(40px)`;
         } else {
-          // above viewport → normal
           img.style.transform = `scale(1.0) translateY(0)`;
         }
       });
@@ -389,7 +519,7 @@
 
     window.addEventListener('scroll', updateTransforms);
     window.addEventListener('resize', updateTransforms);
-    updateTransforms(); // initial call
+    updateTransforms();
   </script>
 </body>
 </html>
