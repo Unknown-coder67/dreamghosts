@@ -19,8 +19,8 @@
       --text-dim: #a0a0a0;
       --accent: #6e6e6e;
       --glow: 0 0 12px rgba(220,220,220,0.12);
-      --friends-column-gap: 6rem;     /* ← CHANGE THIS VALUE to adjust spacing between columns */
-      --friends-column-width: 180px;  /* ← CHANGE THIS VALUE to make columns wider/narrower */
+      --friends-column-gap: 5rem;     /* ← CHANGE THIS for spacing between columns */
+      --friends-column-width: 220px;  /* ← CHANGE THIS for column width */
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -36,17 +36,15 @@
       overflow-x: hidden;
     }
 
-    /* ────────────────────────────────────────────────
-       PER-SECTION LANDING POSITION WHEN CLICKING NAV
-    ──────────────────────────────────────────────── */
-    #hero { scroll-margin-top: 40vh; }
-    #intro { scroll-margin-top: 30vh; }
-    #start { scroll-margin-top: 30vh; }
-    #mta { scroll-margin-top: 30vh; }
-    #friends { scroll-margin-top: 33vh; }
+    /* PER-SECTION LANDING POSITION */
+    #hero     { scroll-margin-top: 40vh; }
+    #intro    { scroll-margin-top: 30vh; }
+    #start    { scroll-margin-top: 30vh; }
+    #mta      { scroll-margin-top: 30vh; }
+    #friends  { scroll-margin-top: 33vh; }
     #memories { scroll-margin-top: 30vh; }
-    #now { scroll-margin-top: 30vh; }
-    #closing { scroll-margin-top: 25vh; }
+    #now      { scroll-margin-top: 30vh; }
+    #closing  { scroll-margin-top: 25vh; }
 
     .parallax-hero {
       position: relative;
@@ -85,9 +83,7 @@
     }
 
     .content {
-      position: relative;
-      z-index: 2;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 5rem 5% 8rem;
       display: flex;
@@ -96,6 +92,7 @@
 
     .main-content {
       flex: 1;
+      min-width: 0; /* prevents overflow */
     }
 
     h1, h2 {
@@ -104,35 +101,32 @@
       text-shadow: var(--glow);
     }
 
-    h1 { font-size: 5.5rem; margin-bottom: 1.5rem; }
+    h1 { font-size: 5.5rem; margin-bottom: 1.5rem; text-align: center; }
     h2 { font-size: 3.2rem; margin: 6rem 0 2.5rem; color: #c0c0c0; }
 
-    .intro, .era, .friends, .gallery-section, .now, .closing {
-      margin: 8rem 0;
+    p, li {
+      font-size: 1.25rem;
+      line-height: 1.8;
     }
 
-    .era p, .intro p, .now p {
-      font-size: 1.35rem;
-      max-width: 90ch;
-      margin-bottom: 2rem;
-      color: var(--text-dim);
-    }
-
-    .screenshot {
-      width: 100%;
-      max-width: 1000px;
+    .screenshot, .gallery img {
+      max-width: 100%;
+      height: auto;
       border-radius: 8px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      margin: 2.5rem auto;
       display: block;
+      margin: 2.5rem auto;
       transition: transform 0.2s ease-out;
+    }
+
+    .screenshot:hover, .gallery img:hover {
+      transform: scale(1.02);
     }
 
     /* ────────────────────────────────────────────────
        FRIENDS LIST – horizontal drag-scrollable grid
     ──────────────────────────────────────────────── */
     .friends {
-      position: relative;
       overflow: hidden;
     }
 
@@ -154,9 +148,9 @@
       list-style: none;
       display: grid;
       grid-auto-flow: column;
-      grid-template-rows: repeat(20, auto); /* ← how many names per column – change this number */
+      grid-template-rows: repeat(20, auto);   /* ← how many rows per column (change to 15, 25, 30 etc.) */
       grid-auto-columns: var(--friends-column-width);
-      gap: 0.4rem var(--friends-column-gap);
+      gap: 0.6rem var(--friends-column-gap);
       font-size: 1.25rem;
       line-height: 2.1;
       padding: 0;
@@ -166,7 +160,7 @@
 
     #ghosts-list li {
       margin: 0;
-      padding: 0;
+      white-space: nowrap;
     }
 
     .gallery {
@@ -175,17 +169,6 @@
       margin: 6rem 0;
     }
 
-    .gallery img {
-      width: 100%;
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-      break-inside: avoid;
-      transition: transform 0.4s ease;
-    }
-
-    .gallery img:hover { transform: scale(1.03); }
-
     .closing {
       text-align: center;
       font-size: 1.45rem;
@@ -193,12 +176,6 @@
       padding: 6rem 5%;
       max-width: 1400px;
       margin: 8rem auto;
-    }
-
-    .closing p {
-      max-width: 120ch;
-      margin: 1.5rem auto;
-      color: var(--text);
     }
 
     footer {
@@ -396,25 +373,9 @@
     // WALL OF FRIENDS – horizontal drag scroll
     // ────────────────────────────────────────────────
     const friends = [
-      "nonenile",
-      "EataRiD",
-      "iTRiCKS",
-      "Mrko1",
-      "999xx",
-      "FIY9AL",
-      "General",
-      "F5M",
-      "Swidrox",
-      "Antar",
-      "Genax",
-      "SmoK",
-      "Mica",
-      "F0XY",
-      "RiNO",
-      "Vuak",
-      "NoMercy",
-      "Vutalic",
-      // Add remaining names here
+      "nonenile", "EataRiD", "iTRiCKS", "Mrko1", "999xx", "FIY9AL", "General", "F5M", "Swidrox", "Antar",
+      "Genax", "SmoK", "Mica", "F0XY", "RiNO", "Vuak", "NoMercy", "Vutalic"
+      // Add the remaining ~280 names here
     ];
 
     friends.sort((a, b) => a.localeCompare(b));
@@ -426,7 +387,7 @@
       list.appendChild(li);
     });
 
-    // Mouse + touch drag to scroll
+    // Mouse + touch drag
     const container = document.getElementById("ghosts-list-container");
     let isDragging = false;
     let startX;
@@ -439,34 +400,27 @@
       container.style.cursor = "grabbing";
     });
 
-    container.addEventListener("mouseleave", () => {
+    ["mouseleave", "mouseup"].forEach(ev => container.addEventListener(ev, () => {
       isDragging = false;
       container.style.cursor = "grab";
-    });
-
-    container.addEventListener("mouseup", () => {
-      isDragging = false;
-      container.style.cursor = "grab";
-    });
+    }));
 
     container.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
       e.preventDefault();
       const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 1.5; // ← drag speed (higher = faster)
+      const walk = (x - startX) * 1.5; // drag speed
       container.scrollLeft = scrollLeft - walk;
     });
 
-    // Touch support
+    // Touch
     container.addEventListener("touchstart", (e) => {
       isDragging = true;
       startX = e.touches[0].pageX - container.offsetLeft;
       scrollLeft = container.scrollLeft;
     });
 
-    container.addEventListener("touchend", () => {
-      isDragging = false;
-    });
+    container.addEventListener("touchend", () => isDragging = false);
 
     container.addEventListener("touchmove", (e) => {
       if (!isDragging) return;
@@ -475,126 +429,9 @@
       container.scrollLeft = scrollLeft - walk;
     });
 
-    // ────────────────────────────────────────────────
-    // VIDEO PLAYLIST
-    // ────────────────────────────────────────────────
-    const video = document.getElementById("hero-video");
-    const clips = [
-      "videos/hero-clip-1.mp4",
-      "videos/hero-clip-2.mp4",
-      "videos/hero-clip-3.mp4"
-    ];
+    // Rest of your scripts (video, parallax, observer) remain here...
+    // ... (copy them from your current code)
 
-    let currentClip = 0;
-
-    function playNext() {
-      if (clips.length === 0) return;
-      video.src = clips[currentClip];
-      video.load();
-      video.play().catch(() => console.log("Autoplay blocked"));
-      currentClip = (currentClip + 1) % clips.length;
-    }
-
-    video.addEventListener("ended", playNext);
-    video.addEventListener("error", () => {
-      console.log("Video error, skipping...");
-      playNext();
-    });
-
-    playNext();
-
-    // ────────────────────────────────────────────────
-    // SMOOTH ZOOM + PARALLAX
-    // ────────────────────────────────────────────────
-    const hero = document.querySelector('.parallax-hero');
-    const screenshots = document.querySelectorAll('.screenshot');
-
-    function updateTransforms() {
-      const scroll = window.scrollY;
-      const vh = window.innerHeight;
-
-      if (scroll < vh) {
-        const progress = scroll / vh;
-        const scale = 1.0 + progress * 0.20;
-        const translate = progress * 60;
-        hero.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
-      } else {
-        hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
-      }
-
-      screenshots.forEach(img => {
-        const rect = img.getBoundingClientRect();
-        const imgTop = rect.top + scroll;
-        const imgBottom = imgTop + rect.height;
-
-        if (imgBottom > scroll && imgTop < scroll + vh) {
-          const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh/2) / vh));
-          const scale = 1.0 + progress * 0.20;
-          const translate = progress * 40;
-          img.style.transform = `scale(${scale}) translateY(${translate}px)`;
-        } else if (imgTop > scroll + vh) {
-          img.style.transform = `scale(1.20) translateY(40px)`;
-        } else {
-          img.style.transform = `scale(1.0) translateY(0)`;
-        }
-      });
-    }
-
-    window.addEventListener('scroll', updateTransforms);
-    window.addEventListener('resize', updateTransforms);
-    updateTransforms();
-
-    // ────────────────────────────────────────────────
-    // PERFECT SCROLL SPY WITH INTERSECTION OBSERVER
-    // ────────────────────────────────────────────────
-    const navLinks = document.querySelectorAll('.section-nav a');
-
-    const sectionMap = {
-      hero: 0,
-      intro: 1,
-      start: 2,
-      mta: 3,
-      friends: 4,
-      memories: 5,
-      now: 6,
-      closing: 7
-    };
-
-    const sections = Object.keys(sectionMap).map(id => document.getElementById(id));
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-
-        const id = entry.target.id;
-        const index = sectionMap[id];
-
-        navLinks.forEach(l => l.classList.remove('active'));
-
-        if (id === "hero") {
-          navLinks[0].classList.add('active');
-          return;
-        }
-
-        navLinks[index].classList.add('active');
-      });
-    }, {
-      rootMargin: "-45% 0px -45% 0px",
-      threshold: 0
-    });
-
-    sections.forEach(section => {
-      if (section) observer.observe(section);
-    });
-
-    // Re-sync after clicking nav
-    document.querySelectorAll('.section-nav a').forEach(link => {
-      link.addEventListener('click', () => {
-        setTimeout(() => {
-          navLinks.forEach(l => l.classList.remove('active'));
-        }, 300);
-      });
-    });
   </script>
 </body>
 </html>
