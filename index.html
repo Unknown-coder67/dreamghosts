@@ -19,8 +19,8 @@
       --text-dim: #a0a0a0;
       --accent: #6e6e6e;
       --glow: 0 0 12px rgba(220,220,220,0.12);
-      --friends-column-gap: 5rem;     /* ← CHANGE THIS for spacing between columns */
-      --friends-column-width: 220px;  /* ← CHANGE THIS for column width */
+      --friends-column-gap: 5rem;      /* ← CHANGE THIS to adjust spacing between columns (e.g. 3rem, 6rem, 8rem) */
+      --friends-column-width: 220px;   /* ← CHANGE THIS to adjust how wide each name column is */
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -92,7 +92,7 @@
 
     .main-content {
       flex: 1;
-      min-width: 0; /* prevents overflow */
+      min-width: 0;
     }
 
     h1, h2 {
@@ -148,7 +148,7 @@
       list-style: none;
       display: grid;
       grid-auto-flow: column;
-      grid-template-rows: repeat(20, auto);   /* ← how many rows per column (change to 15, 25, 30 etc.) */
+      grid-template-rows: repeat(20, auto);   /* ← CHANGE THIS NUMBER: how many names tall each column is (e.g. 15, 25, 30) */
       grid-auto-columns: var(--friends-column-width);
       gap: 0.6rem var(--friends-column-gap);
       font-size: 1.25rem;
@@ -178,6 +178,12 @@
       margin: 8rem auto;
     }
 
+    .closing p {
+      max-width: 120ch;
+      margin: 1.5rem auto;
+      color: var(--text);
+    }
+
     footer {
       text-align: center;
       padding: 4rem 1rem;
@@ -191,7 +197,7 @@
       position: sticky;
       top: 40vh;
       align-self: flex-start;
-      margin-left: -400px;
+      margin-left: -300px;
       width: 240px;
       z-index: 1000;
       display: flex;
@@ -306,7 +312,7 @@
         <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
       </div>
 
-      <!-- Wall of Friends – drag-scrollable -->
+      <!-- Wall of Friends – drag-scrollable grid -->
       <div class="friends" id="friends" data-aos="fade-up">
         <h2>Those We Met Along the Way</h2>
         <div id="ghosts-list-container">
@@ -370,12 +376,12 @@
     window.addEventListener('load', () => AOS.refreshHard());
 
     // ────────────────────────────────────────────────
-    // WALL OF FRIENDS – horizontal drag scroll
+    // WALL OF FRIENDS – horizontal drag-scroll grid
     // ────────────────────────────────────────────────
     const friends = [
       "nonenile", "EataRiD", "iTRiCKS", "Mrko1", "999xx", "FIY9AL", "General", "F5M", "Swidrox", "Antar",
       "Genax", "SmoK", "Mica", "F0XY", "RiNO", "Vuak", "NoMercy", "Vutalic"
-      // Add the remaining ~280 names here
+      // Add your remaining ~280 names here
     ];
 
     friends.sort((a, b) => a.localeCompare(b));
@@ -387,7 +393,7 @@
       list.appendChild(li);
     });
 
-    // Mouse + touch drag
+    // Mouse + touch drag to scroll
     const container = document.getElementById("ghosts-list-container");
     let isDragging = false;
     let startX;
@@ -409,11 +415,11 @@
       if (!isDragging) return;
       e.preventDefault();
       const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 1.5; // drag speed
+      const walk = (x - startX) * 1.5; // drag speed – increase for faster
       container.scrollLeft = scrollLeft - walk;
     });
 
-    // Touch
+    // Touch support
     container.addEventListener("touchstart", (e) => {
       isDragging = true;
       startX = e.touches[0].pageX - container.offsetLeft;
@@ -429,9 +435,121 @@
       container.scrollLeft = scrollLeft - walk;
     });
 
-    // Rest of your scripts (video, parallax, observer) remain here...
-    // ... (copy them from your current code)
+    // ────────────────────────────────────────────────
+    // VIDEO PLAYLIST
+    // ────────────────────────────────────────────────
+    const video = document.getElementById("hero-video");
+    const clips = [
+      "videos/hero-clip-1.mp4",
+      "videos/hero-clip-2.mp4",
+      "videos/hero-clip-3.mp4"
+    ];
 
+    let currentClip = 0;
+
+    function playNext() {
+      if (clips.length === 0) return;
+      video.src = clips[currentClip];
+      video.load();
+      video.play().catch(() => console.log("Autoplay blocked"));
+      currentClip = (currentClip + 1) % clips.length;
+    }
+
+    video.addEventListener("ended", playNext);
+    video.addEventListener("error", playNext);
+    playNext();
+
+    // ────────────────────────────────────────────────
+    // SMOOTH ZOOM + PARALLAX
+    // ────────────────────────────────────────────────
+    const hero = document.querySelector('.parallax-hero');
+    const screenshots = document.querySelectorAll('.screenshot');
+
+    function updateTransforms() {
+      const scroll = window.scrollY;
+      const vh = window.innerHeight;
+
+      if (scroll < vh) {
+        const progress = scroll / vh;
+        const scale = 1.0 + progress * 0.20;
+        const translate = progress * 60;
+        hero.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
+      } else {
+        hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
+      }
+
+      screenshots.forEach(img => {
+        const rect = img.getBoundingClientRect();
+        const imgTop = rect.top + scroll;
+        const imgBottom = imgTop + rect.height;
+
+        if (imgBottom > scroll && imgTop < scroll + vh) {
+          const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh/2) / vh));
+          const scale = 1.0 + progress * 0.20;
+          const translate = progress * 40;
+          img.style.transform = `scale(${scale}) translateY(${translate}px)`;
+        } else if (imgTop > scroll + vh) {
+          img.style.transform = `scale(1.20) translateY(40px)`;
+        } else {
+          img.style.transform = `scale(1.0) translateY(0)`;
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateTransforms);
+    window.addEventListener('resize', updateTransforms);
+    updateTransforms();
+
+    // ────────────────────────────────────────────────
+    // PERFECT SCROLL SPY WITH INTERSECTION OBSERVER
+    // ────────────────────────────────────────────────
+    const navLinks = document.querySelectorAll('.section-nav a');
+
+    const sectionMap = {
+      hero: 0,
+      intro: 1,
+      start: 2,
+      mta: 3,
+      friends: 4,
+      memories: 5,
+      now: 6,
+      closing: 7
+    };
+
+    const sections = Object.keys(sectionMap).map(id => document.getElementById(id));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+
+        const id = entry.target.id;
+        const index = sectionMap[id];
+
+        navLinks.forEach(l => l.classList.remove('active'));
+
+        if (id === "hero") {
+          navLinks[0].classList.add('active');
+          return;
+        }
+
+        navLinks[index].classList.add('active');
+      });
+    }, {
+      rootMargin: "-45% 0px -45% 0px",
+      threshold: 0
+    });
+
+    sections.forEach(section => {
+      if (section) observer.observe(section);
+    });
+
+    document.querySelectorAll('.section-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        setTimeout(() => {
+          navLinks.forEach(l => l.classList.remove('active'));
+        }, 300);
+      });
+    });
   </script>
 </body>
 </html>
