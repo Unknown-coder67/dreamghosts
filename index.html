@@ -124,7 +124,7 @@
       width: 100%;
       height: auto;
       display: block;
-      transition: none; /* ← KEY: remove delay → instant zoom response */
+      transition: none; /* instant zoom response */
     }
 
     /* Friends list – horizontal drag-scroll */
@@ -200,7 +200,9 @@
       border-top: 1px solid #222;
     }
 
-    /* Left Navigation */
+    /* ────────────────────────────────────────────────
+       LEFT NAVIGATION WITH CUSTOM PNG ICON
+    ──────────────────────────────────────────────── */
     .section-nav {
       position: sticky;
       top: 40vh;
@@ -236,40 +238,30 @@
       text-underline-offset: 5px;
     }
 
-        .section-nav .icon {
-          font-size: 1.4rem;
-          opacity: 0.7;
-        }
-
-        .section-nav a.active .icon {
-          opacity: 1;
-        }
-
-        @media (max-width: 900px) {
-          .section-nav { display: none; }
-          .content { flex-direction: column; gap: 0; }
-        }
-
-        @media (max-width: 1200px) {
-          .section-nav { margin-left: -200px; width: 180px; font-size: 0.95rem; }
-        }
-
-        .section-nav .icon {
-      width: 24px;           /* adjust size */
+    .section-nav .icon {
+      width: 24px;                /* adjust size if needed */
       height: 24px;
       vertical-align: middle;
-      margin-right: 8px;     /* space between icon and text */
+      margin-right: 8px;          /* space between icon and text */
       opacity: 0.7;
-      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4)); /* glow effect */
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4)); /* soft glow */
       transition: all 0.4s ease;
     }
 
     .section-nav a:hover .icon,
     .section-nav a.active .icon {
       opacity: 1;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); /* stronger glow on hover/active */
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); /* stronger glow */
     }
-    
+
+    @media (max-width: 900px) {
+      .section-nav { display: none; }
+      .content { flex-direction: column; gap: 0; }
+    }
+
+    @media (max-width: 1200px) {
+      .section-nav { margin-left: -200px; width: 180px; font-size: 0.95rem; }
+    }
   </style>
 </head>
 <body>
@@ -299,7 +291,7 @@
 
   <div class="content">
 
-    <!-- Sticky Nav -->
+    <!-- Sticky Nav – using custom PNG icon -->
     <nav class="section-nav">
       <a href="#hero"><img src="images/nav-ghost.png" class="icon" alt=""> DreamGhosts</a>
       <a href="#intro"><img src="images/nav-ghost.png" class="icon" alt=""> Who are we?</a>
@@ -679,7 +671,6 @@
       const scroll = window.scrollY;
       const vh = window.innerHeight;
 
-      // Calculate scroll velocity (pixels per frame)
       velocity = scroll - lastScroll;
       lastScroll = scroll;
 
@@ -699,14 +690,12 @@
         const imgBottom = imgTop + rect.height;
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
-          // Delay zoom start: begin only when image is past ~10% of screen height
-          const triggerOffset = vh * 0.10; // ← small delay (change to 0.25–0.40 for later start)
+          const triggerOffset = vh * 0.10;
           const effectiveProgress = Math.max(0, (scroll - imgTop + triggerOffset) / vh);
           const progress = Math.min(1, effectiveProgress);
 
-          // Base zoom + velocity boost (makes it feel faster when scrolling quickly)
-          const baseScale = 1.0 + progress * 1.20; // ← stronger base zoom (adjust 1.20)
-          const velocityBoost = Math.abs(velocity) > 50 ? 0.4 : 0; // extra scale when fast scroll
+          const baseScale = 1.0 + progress * 1.20;
+          const velocityBoost = Math.abs(velocity) > 50 ? 0.4 : 0;
           const scale = baseScale + velocityBoost;
 
           const translate = progress * 40;
