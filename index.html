@@ -46,7 +46,7 @@
       object-fit: cover;
       opacity: 0.75;
       filter: brightness(1.15);
-      transition: transform 1.2s ease-out; /* smooth zoom + parallax – change time for faster/slower */
+      transition: transform 0.6s ease-out; /* smooth zoom + parallax – change time for faster/slower */
     }
 
     .overlay {
@@ -91,7 +91,7 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       display: block;
-      transition: transform 1.2s ease-out; /* same smooth effect as video */
+      transition: transform 0.6s ease-out; /* same smooth effect as video */
     }
 
     /* Friends list styling */
@@ -175,7 +175,7 @@
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
       <source src="videos/hero-clip-1.mp4" type="video/mp4">
       <source src="videos/hero-clip-2.mp4" type="video/mp4">
-       <source src="videos/hero-clip-2.mp4" type="video/mp4">
+      <source src="videos/hero-clip-3.mp4" type="video/mp4">
       <!-- Add more clips here if needed -->
       <img src="images/hero-bg.jpg" alt="Fallback">
     </video>
@@ -320,7 +320,8 @@
     const video = document.getElementById("hero-video");
     const clips = [
       "videos/hero-clip-1.mp4",
-      "videos/hero-clip-2.mp4"
+      "videos/hero-clip-2.mp4",
+      "videos/hero-clip-3.mp4"
       // Add more clips here if you have them
     ];
 
