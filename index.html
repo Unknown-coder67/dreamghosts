@@ -110,25 +110,21 @@
     }
 
     /* ────────────────────────────────────────────────
-       FADING ZOOM → HARD CLIP + SOLID BACKGROUND
+       HARD CLIP ZOOM – grows big then disappears behind solid bg
     ──────────────────────────────────────────────── */
     .screenshot-wrapper {
-      position: relative;
       overflow: hidden;
       border-radius: 8px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       max-width: 1000px;
-      background: var(--bg); /* solid dark background – edges disappear into it */
-      will-change: transform;
+      background: var(--bg); /* solid dark – edges vanish into it */
     }
 
     .screenshot {
       width: 100%;
       height: auto;
       display: block;
-      transition: transform 0.2s ease-out;
-      will-change: transform;
     }
 
     /* Friends list – horizontal drag-scroll */
@@ -501,11 +497,11 @@
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
           const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh / 2) / vh));
-          const scale = 1.0 + progress * 0.60; // ← max zoom – adjust 0.60 to control how big it gets before clipping
+          const scale = 1.0 + progress * 0.80; // ← bigger zoom before clipping starts (adjust 0.80)
           const translate = progress * 40;
           img.style.transform = `scale(${scale}) translateY(${translate}px)`;
         } else if (imgTop > scroll + vh) {
-          img.style.transform = `scale(1.60) translateY(40px)`; // pre-zoomed for next scroll
+          img.style.transform = `scale(1.80) translateY(40px)`; // pre-zoomed
         } else {
           img.style.transform = `scale(1.0) translateY(0)`;
         }
