@@ -152,9 +152,7 @@
       border-top: 1px solid #222;
     }
 
-    /* ────────────────────────────────────────────────
-       LEFT VERTICAL SECTION NAVIGATION – only from "Who are we?" onward
-    ──────────────────────────────────────────────── */
+    /* Left Navigation */
     .section-nav {
       position: fixed;
       top: 50%;
@@ -217,7 +215,7 @@
 </head>
 <body>
 
-  <!-- Left Section Navigation – hidden until "Who are we?" -->
+  <!-- Left Section Navigation -->
   <nav class="section-nav">
     <a href="#hero"><span class="icon">👻</span> DreamGhosts</a>
     <a href="#intro"><span class="icon">👻</span> Who are we?</a>
@@ -441,24 +439,25 @@
     updateTransforms();
 
     // ────────────────────────────────────────────────
-    // LEFT NAVIGATION – SCROLL SPY + VISIBILITY CONTROL
+    // LEFT NAVIGATION – FIXED SCROLL SPY + STICKY AT LAST SECTION
     // ────────────────────────────────────────────────
     const nav = document.querySelector('.section-nav');
     const navLinks = document.querySelectorAll('.section-nav a');
     const sections = [
-      document.querySelector('#hero'),     // 0
-      document.querySelector('#intro'),    // 1 – start showing nav here
-      document.querySelector('#start'),    // 2
-      document.querySelector('#mta'),      // 3
-      document.querySelector('#friends'),  // 4
-      document.querySelector('#memories'), // 5
-      document.querySelector('#now'),      // 6
-      document.querySelector('#closing')   // 7 – stop moving nav after middle of this
+      document.querySelector('#hero'),     // 0 – DreamGhosts (always clickable, but nav hidden here)
+      document.querySelector('#intro'),    // 1 – start showing nav
+      document.querySelector('#start'),
+      document.querySelector('#mta'),
+      document.querySelector('#friends'),
+      document.querySelector('#memories'),
+      document.querySelector('#now'),
+      document.querySelector('#closing')   // 7 – last, nav sticks here after middle
     ];
 
     function updateActiveNav() {
-      const scrollPos = window.scrollY + window.innerHeight * 0.10; // your tuned value
-      const lastSectionBottom = sections[7]?.offsetTop + sections[7]?.offsetHeight || Infinity;
+      const scrollPos = window.scrollY + window.innerHeight * 0.10; // your preferred offset
+      const lastSection = sections[7];
+      const lastMiddle = lastSection ? lastSection.offsetTop + (lastSection.offsetHeight * 0.5) : Infinity;
 
       let current = -1;
 
@@ -476,20 +475,25 @@
         }
       }
 
+      // If past middle of last section, force it to stay on last
+      if (scrollPos >= lastMiddle) {
+        current = 7;
+      }
+
       // Update active link
       navLinks.forEach((link, index) => {
         link.classList.toggle('active', index === current);
       });
 
-      // Show nav only from "Who are we?" (index 1) to middle of "Final thank you" (index 7)
-      const showNav = current >= 1 && scrollPos < lastSectionBottom - (sections[7].offsetHeight * 0.5);
+      // Show nav from "Who are we?" (index 1) onward
+      const showNav = current >= 1;
       nav.classList.toggle('visible', showNav);
     }
 
     window.addEventListener('scroll', updateActiveNav);
     window.addEventListener('resize', updateActiveNav);
     window.addEventListener('load', () => {
-      setTimeout(updateActiveNav, 500); // wait for AOS/images
+      setTimeout(updateActiveNav, 500);
     });
     updateActiveNav();
   </script>
