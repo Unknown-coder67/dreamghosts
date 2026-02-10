@@ -180,8 +180,8 @@
       position: sticky;
       top: 40vh;
       align-self: flex-start;
-      margin-left: -260px;          /* ← adjust this to move nav left/right */
-      width: 240px;                 /* ← adjust this to make space for long titles */
+      margin-left: -450px;          /* ← adjust to move nav left/right */
+      width: 240px;                 /* ← wider for long titles to fit on one line */
       z-index: 1000;
       display: flex;
       flex-direction: column;
@@ -459,69 +459,70 @@
     updateTransforms();
 
     // ────────────────────────────────────────────────
-    // LEFT NAVIGATION – STICKY + SCROLL SPY (no random DreamGhosts)
+    // PERFECT SCROLL SPY WITH INTERSECTION OBSERVER
     // ────────────────────────────────────────────────
     const navLinks = document.querySelectorAll('.section-nav a');
-    const sections = [
-      document.querySelector('#hero'),     // 0 – DreamGhosts (only active at very top)
-      document.querySelector('#intro'),    // 1
-      document.querySelector('#start'),
-      document.querySelector('#mta'),
-      document.querySelector('#friends'),
-      document.querySelector('#memories'),
-      document.querySelector('#now'),
-      document.querySelector('#closing')   // 7 – last
-    ];
 
-    function updateActiveNav() {
-      const scrollPos = window.scrollY + window.innerHeight * 0.50; // ← middle trigger
-      // ↑↑↑ Change 0.50 here to control highlight timing (0.40 = earlier, 0.60 = later)
+    const sectionMap = {
+      hero: 0,
+      intro: 1,
+      start: 2,
+      mta: 3,
+      friends: 4,
+      memories: 5,
+      now: 6,
+      closing: 7
+    };
 
-      let current = -1; // -1 = nothing active
+    const sections = Object.keys(sectionMap).map(id => document.getElementById(id));
 
-      // Only highlight if we're past hero
-      if (window.scrollY >= sections[1]?.offsetTop - 100) {
-        for (let i = 1; i < sections.length; i++) { // start from 1 (skip hero)
-          const section = sections[i];
-          if (!section) continue;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
 
-          const top = section.offsetTop;
-          const bottom = top + section.offsetHeight;
+        const id = entry.target.id;
+        const index = sectionMap[id];
 
-          if (scrollPos >= top && scrollPos < bottom) {
-            current = i;
-            break;
-          }
+        navLinks.forEach(l => l.classList.remove('active'));
+
+        // DreamGhosts ONLY active while hero visible
+        if (id === "hero") {
+          navLinks[0].classList.add('active');
+          return;
         }
 
-        // If past middle of last section, lock on last
-        const lastMiddle = sections[7]?.offsetTop + (sections[7]?.offsetHeight * 0.5) || Infinity;
-        if (scrollPos >= lastMiddle) {
-          current = 7;
-        }
-      }
-
-      // Update active (nothing if current === -1)
-      navLinks.forEach((link, index) => {
-        if (link) {
-          link.classList.toggle('active', index === current);
-        }
+        // Normal sections
+        navLinks[index].classList.add('active');
       });
-    }
+    }, {
+      rootMargin: "-45% 0px -45% 0px", // trigger when section is in middle of screen
+      threshold: 0
+    });
 
-    // Re-run after clicking nav (sync highlight immediately)
+    sections.forEach(section => {
+      if (section) observer.observe(section);
+    });
+
+    // Re-sync after clicking nav (in case smooth scroll lands slightly off)
     document.querySelectorAll('.section-nav a').forEach(link => {
       link.addEventListener('click', () => {
-        setTimeout(updateActiveNav, 100); // small delay after scroll
+        setTimeout(() => {
+          // Force re-check after scroll settles
+          const scrollPos = window.scrollY + window.innerHeight / 2;
+          let found = false;
+          sections.forEach((section, i) => {
+            if (!section || found) return;
+            const top = section.offsetTop;
+            const bottom = top + section.offsetHeight;
+            if (scrollPos >= top && scrollPos < bottom) {
+              navLinks.forEach(l => l.classList.remove('active'));
+              navLinks[i].classList.add('active');
+              found = true;
+            }
+          });
+        }, 300); // small delay after smooth scroll
       });
     });
-
-    window.addEventListener('scroll', updateActiveNav);
-    window.addEventListener('resize', updateActiveNav);
-    window.addEventListener('load', () => {
-      setTimeout(updateActiveNav, 1000);
-    });
-    updateActiveNav();
   </script>
 </body>
 </html>
