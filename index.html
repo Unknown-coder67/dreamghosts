@@ -124,7 +124,7 @@
       width: 100%;
       height: auto;
       display: block;
-      transition: none; /* instant zoom response */
+      transition: none;
     }
 
     /* Friends list – horizontal drag-scroll */
@@ -201,7 +201,7 @@
     }
 
     /* ────────────────────────────────────────────────
-       LEFT NAVIGATION WITH CUSTOM PNG ICON
+       LEFT NAVIGATION – CUSTOM SVG ICONS
     ──────────────────────────────────────────────── */
     .section-nav {
       position: sticky;
@@ -227,6 +227,35 @@
       gap: 12px;
       opacity: 0.6;
       white-space: nowrap;
+      position: relative;
+      padding-left: 36px; /* space for icon */
+    }
+
+    .section-nav a .icon {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      opacity: 0.7;
+      transition: all 0.4s ease;
+    }
+
+    /* Default (not active) – first SVG */
+    .section-nav a .icon::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 10 10'><path stroke='%23fff' d='M.707 5 5 .707 9.293 5 5 9.293z'/><path stroke='%23fff' d='M4.707 5.086 5 4.793l.293.293L5 5.379z'/></svg>");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    /* Active – second SVG */
+    .section-nav a.active .icon::before {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none'><path stroke='%23fff' d='m9 .824 8 8-8 8-8-8z' opacity='0.3'/><path stroke='%23fff' d='m9 .824 4 4 4 4-4 4-4 4-4-4'/><path fill='%23fff' d='m9 3.824 5 5-5 5-5-5z'/></svg>");
     }
 
     .section-nav a:hover,
@@ -238,20 +267,9 @@
       text-underline-offset: 5px;
     }
 
-    .section-nav .icon {
-      width: 24px;                /* adjust size if needed */
-      height: 24px;
-      vertical-align: middle;
-      margin-right: 8px;          /* space between icon and text */
-      opacity: 1;
-      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)); /* soft glow */
-      transition: all 0.4s ease;
-    }
-
     .section-nav a:hover .icon,
     .section-nav a.active .icon {
       opacity: 1;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); /* stronger glow */
     }
 
     @media (max-width: 900px) {
@@ -291,16 +309,16 @@
 
   <div class="content">
 
-    <!-- Sticky Nav – using custom PNG icon -->
+    <!-- Sticky Nav – using custom SVGs -->
     <nav class="section-nav">
-      <a href="#hero"><img src="images/nav-ghost.png" class="icon" alt=""> DreamGhosts</a>
-      <a href="#intro"><img src="images/nav-ghost.png" class="icon" alt=""> Who are we?</a>
-      <a href="#start"><img src="images/nav-ghost.png" class="icon" alt=""> How did we start?</a>
-      <a href="#mta"><img src="images/nav-ghost.png" class="icon" alt=""> What is MTA:SA?</a>
-      <a href="#friends"><img src="images/nav-ghost.png" class="icon" alt=""> Those We Met Along the Way</a>
-      <a href="#memories"><img src="images/nav-ghost.png" class="icon" alt=""> Memories</a>
-      <a href="#now"><img src="images/nav-ghost.png" class="icon" alt=""> Where are we now?</a>
-      <a href="#closing"><img src="images/nav-ghost.png" class="icon" alt=""> Final thank you</a>
+      <a href="#hero"><span class="icon"></span> DreamGhosts</a>
+      <a href="#intro"><span class="icon"></span> Who are we?</a>
+      <a href="#start"><span class="icon"></span> How did we start?</a>
+      <a href="#mta"><span class="icon"></span> What is MTA:SA?</a>
+      <a href="#friends"><span class="icon"></span> Those We Met Along the Way</a>
+      <a href="#memories"><span class="icon"></span> Memories</a>
+      <a href="#now"><span class="icon"></span> Where are we now?</a>
+      <a href="#closing"><span class="icon"></span> Final thank you</a>
     </nav>
 
     <!-- Main content -->
