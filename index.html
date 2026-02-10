@@ -38,13 +38,13 @@
       background: #000;
     }
 
-    .hero-bg {
+    .hero-video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.6;
+      opacity: 0.6;              /* same feel as your old image – adjust 0.4–0.8 if needed */
     }
 
     .overlay {
@@ -149,14 +149,27 @@
 
     @media (max-width: 600px) {
       #ghosts-list { columns: 1; } /* single column on phones */
+      .hero-video {
+        object-position: center center; /* better centering on mobile */
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Hero -->
+  <!-- Hero – now with VIDEO background playlist -->
   <div class="parallax-hero">
-    <img class="hero-bg" src="images/hero-bg.jpg" alt="DreamGhosts memories">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <!-- Add your clips here – they play in order, then loop back to first -->
+      <source src="videos/hero-clip-1.mp4" type="video/mp4">
+      <source src="videos/hero-clip-2.mp4" type="video/mp4">
+      <source src="videos/hero-clip-3.mp4" type="video/mp4">
+      <!-- Add more clips if you have them, e.g.: -->
+      <!-- <source src="videos/hero-clip-4.mp4" type="video/mp4"> -->
+      
+      <!-- Fallback static image if video fails to load -->
+      <img src="images/hero-bg.jpg" alt="DreamGhosts memories fallback">
+    </video>
     <div class="overlay"></div>
     <div class="content" style="padding-top: 22vh;">
       <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhosts</h1>
@@ -172,7 +185,7 @@
     <div class="intro" data-aos="fade-up">
       <h2>Who are we?</h2>
       <p>
-        DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other.
+        DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other, and always will.
       </p>
     </div>
 
@@ -192,14 +205,14 @@
         MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes.
       </p>
       <p>
-        One of our favorite modes was Destruction Derby (DD), where players fight using cars on maps built over the ocean. The goal is simple: knock other players off the platform and into the water to eliminate them, and be the last driver standing.
+        One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
       </p>
       <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
     </div>
 
     <!-- Wall of Friends – now pure JS list -->
     <div class="friends" data-aos="fade-up">
-      <h2>The Ghosts</h2>
+      <h2>Those We Met Along the Way</h2>
       <ul id="ghosts-list"></ul>
     </div>
 
@@ -218,24 +231,32 @@
     <div class="now" data-aos="fade-up">
       <h2>Where are we now?</h2>
       <p>
-        The crew is smaller these days — some moved countries, some have kids, some disappeared into adult life. But every few months someone logs into the Minecraft server, places a sign saying "pay your diamonds", and we all laugh like it's 2013 again. The server might be quiet most days, but the group chat never really died.
+        We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>
+        Every now and then we still gather, laugh, and relive those small beautiful moments together.<br>
+        Some of us may not show up on the FFS server as often anymore, but we still remember those memories, and our hearts remain close no matter the distance.<br>
+        Even if we’re not around as much, the connection never really faded.
       </p>
     </div>
 
     <!-- Final thank you -->
     <div class="closing" data-aos="fade-up">
       <p>
-        If you were part of this, thank you.<br>
+        We wanted this space to thank everyone we ever met along the way.<br>
+        The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>
+        You gave us memories we will never forget, and we hope we gave you a few smiles too.<br>
+        If you were part of this, even for one day, thank you.
+      </p>
+      <p>
         These memories only exist because we shared them.<br>
-        And if you're reading this years from now… we were here.<br>
-        Still haunting, still laughing.
+        And if you're reading this years from now, we were here.<br>
+        Still haunting. Still laughing.
       </p>
     </div>
 
   </div>
 
   <footer>
-    DreamGhosts – just memories now
+    © DreamGhosts • just memories now
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -272,6 +293,8 @@
       "F0XY",
       "RiNO",
       "Vuak",
+      "NoMercy",
+      "Vutalic",
       // Add the rest of the names here, one per line like this:
       // "AnotherName",
       // "YetAnother",
@@ -290,13 +313,13 @@
     });
 
     // ────────────────────────────────────────────────
-    // Parallax effect (unchanged)
+    // Parallax effect (now works with video too)
     // ────────────────────────────────────────────────
     const hero = document.querySelector('.parallax-hero');
     window.addEventListener('scroll', () => {
       const scroll = window.scrollY;
       if (scroll < window.innerHeight) {
-        hero.querySelector('.hero-bg').style.transform = `translateY(${scroll * 0.3}px) scale(1.08)`;
+        hero.querySelector('.hero-video').style.transform = `translateY(${scroll * 0.3}px) scale(1.08)`;
       }
     });
   </script>
