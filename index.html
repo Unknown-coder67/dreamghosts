@@ -23,10 +23,6 @@
 
     * { margin:0; padding:0; box-sizing:border-box; }
 
-    html {
-      scroll-behavior: smooth; /* smooth scroll on nav clicks */
-    }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -34,10 +30,6 @@
       line-height: 1.7;
       min-height: 100vh;
       overflow-x: hidden;
-    }
-
-    [id] {
-      scroll-margin-top: 35vh; /* centers titles nicely when jumping via nav */
     }
 
     .parallax-hero {
@@ -49,10 +41,14 @@
 
     .hero-video {
       position: absolute;
-      inset: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
       opacity: 0.75;
       filter: brightness(1.15);
       transition: transform 0.2s ease-out;
@@ -161,33 +157,35 @@
     }
 
     /* ────────────────────────────────────────────────
-       LEFT VERTICAL NAVIGATION – sticky inside content
+       LEFT VERTICAL SECTION NAVIGATION
     ──────────────────────────────────────────────── */
-    .section-nav-wrapper {
-      position: relative;
-      display: flex;
-    }
-
     .section-nav {
-      position: sticky;
-      top: 50vh;
+      position: fixed;
+      top: 50%;
+      left: 30px;
       transform: translateY(-50%);
-      align-self: flex-start;
-      margin-left: -220px; /* distance from left edge – adjust to taste */
-      width: 200px;
       z-index: 1000;
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
       font-size: 1rem;
       color: var(--text-dim);
-      pointer-events: auto;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease;
+    }
+
+    .section-nav.visible {
+      opacity: 1;
+      visibility: visible;
     }
 
     .section-nav a {
       color: var(--text-dim);
       text-decoration: none;
       transition: all 0.4s ease;
+      pointer-events: auto;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -212,120 +210,105 @@
       opacity: 1;
     }
 
-    @media (max-width: 1200px) {
-      .section-nav { margin-left: -180px; width: 160px; font-size: 0.95rem; }
-    }
-
     @media (max-width: 900px) {
       .section-nav { display: none; }
+    }
+
+    @media (max-width: 1200px) {
+      .section-nav { left: 15px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="section-nav-wrapper">
-    <!-- Left Navigation – sticky inside content -->
-    <nav class="section-nav">
-      <a href="#hero"><span class="icon">👻</span> DreamGhosts</a>
-      <a href="#intro"><span class="icon">👻</span> Who are we?</a>
-      <a href="#start"><span class="icon">👻</span> How did we start?</a>
-      <a href="#mta"><span class="icon">👻</span> What is MTA:SA?</a>
-      <a href="#friends"><span class="icon">👻</span> Those We Met Along the Way</a>
-      <a href="#memories"><span class="icon">👻</span> Memories</a>
-      <a href="#now"><span class="icon">👻</span> Where are we now?</a>
-      <a href="#closing"><span class="icon">👻</span> Final thank you</a>
-    </nav>
+  <!-- Hero -->
+  <div class="parallax-hero" id="hero">
+    <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
+      <source src="videos/hero-clip-1.mp4" type="video/mp4">
+      <source src="videos/hero-clip-2.mp4" type="video/mp4">
+      <source src="videos/hero-clip-3.mp4" type="video/mp4">
+      <img src="images/hero-bg.jpg" alt="Fallback">
+    </video>
+    <div class="overlay"></div>
+    <div class="content" style="padding-top: 22vh;">
+      <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhosts</h1>
+      <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; text-align:center; opacity:0.8;">
+        Since 2012 – a friendship that outlived every game
+      </p>
+    </div>
+  </div>
 
-    <!-- Hero -->
-    <div class="parallax-hero" id="hero">
-      <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
-        <source src="videos/hero-clip-1.mp4" type="video/mp4">
-        <source src="videos/hero-clip-2.mp4" type="video/mp4">
-        <source src="videos/hero-clip-3.mp4" type="video/mp4">
-        <img src="images/hero-bg.jpg" alt="Fallback">
-      </video>
-      <div class="overlay"></div>
-      <div class="content" style="padding-top: 22vh;">
-        <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhosts</h1>
-        <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; text-align:center; opacity:0.8;">
-          Since 2012 – a friendship that outlived every game
-        </p>
+  <div class="content">
+
+    <!-- Intro -->
+    <div class="intro" id="intro" data-aos="fade-up">
+      <h2>Who are we?</h2>
+      <p>
+        DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other, and always will.
+      </p>
+    </div>
+
+    <!-- How it started -->
+    <div class="era" id="start" data-aos="fade-up">
+      <h2>How did we start?</h2>
+      <p>
+        Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
+      </p>
+      <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
+    </div>
+
+    <!-- What is MTA -->
+    <div class="era" id="mta" data-aos="fade-up">
+      <h2>What is MTA:SA?</h2>
+      <p>
+        MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes.
+      </p>
+      <p>
+        One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
+      </p>
+      <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
+    </div>
+
+    <!-- Wall of Friends -->
+    <div class="friends" id="friends" data-aos="fade-up">
+      <h2>Those We Met Along the Way</h2>
+      <ul id="ghosts-list"></ul>
+    </div>
+
+    <!-- Gallery Memories -->
+    <div class="gallery-section" id="memories" data-aos="fade-up">
+      <h2>Memories</h2>
+      <div class="gallery">
+        <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
+        <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
+        <img src="images/gallery-3.jpg" alt="Memory 3" data-aos="fade-up" data-aos-delay="400">
       </div>
     </div>
 
-    <div class="content">
+    <!-- Where are we now -->
+    <div class="now" id="now" data-aos="fade-up">
+      <h2>Where are we now?</h2>
+      <p>
+        We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>
+        Every now and then we still gather, laugh, and relive those small beautiful moments together.<br>
+        Some of us may not show up on the FFS server as often anymore, but we still remember those memories, and our hearts remain close no matter the distance.<br>
+        Even if we’re not around as much, the connection never really faded.
+      </p>
+    </div>
 
-      <!-- Intro -->
-      <div class="intro" id="intro" data-aos="fade-up">
-        <h2>Who are we?</h2>
-        <p>
-          DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other, and always will.
-        </p>
-      </div>
-
-      <!-- How it started -->
-      <div class="era" id="start" data-aos="fade-up">
-        <h2>How did we start?</h2>
-        <p>
-          Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
-        </p>
-        <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
-      </div>
-
-      <!-- What is MTA -->
-      <div class="era" id="mta" data-aos="fade-up">
-        <h2>What is MTA:SA?</h2>
-        <p>
-          MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes.
-        </p>
-        <p>
-          One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
-        </p>
-        <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
-      </div>
-
-      <!-- Wall of Friends -->
-      <div class="friends" id="friends" data-aos="fade-up">
-        <h2>Those We Met Along the Way</h2>
-        <ul id="ghosts-list"></ul>
-      </div>
-
-      <!-- Gallery Memories -->
-      <div class="gallery-section" id="memories" data-aos="fade-up">
-        <h2>Memories</h2>
-        <div class="gallery">
-          <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
-          <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
-          <img src="images/gallery-3.jpg" alt="Memory 3" data-aos="fade-up" data-aos-delay="400">
-        </div>
-      </div>
-
-      <!-- Where are we now -->
-      <div class="now" id="now" data-aos="fade-up">
-        <h2>Where are we now?</h2>
-        <p>
-          We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>
-          Every now and then we still gather, laugh, and relive those small beautiful moments together.<br>
-          Some of us may not show up on the FFS server as often anymore, but we still remember those memories, and our hearts remain close no matter the distance.<br>
-          Even if we’re not around as much, the connection never really faded.
-        </p>
-      </div>
-
-      <!-- Final thank you -->
-      <div class="closing" id="closing" data-aos="fade-up">
-        <p>
-          We wanted this space to thank everyone we ever met along the way.<br>
-          The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>
-          You gave us memories we will never forget, and we hope we gave you a few smiles too.<br>
-          If you were part of this, even for one day, thank you.
-        </p>
-        <p>
-          These memories only exist because we shared them.<br>
-          And if you're reading this years from now, we were here.<br>
-          Still haunting. Still laughing.
-        </p>
-      </div>
-
+    <!-- Final thank you -->
+    <div class="closing" id="closing" data-aos="fade-up">
+      <p>
+        We wanted this space to thank everyone we ever met along the way.<br>
+        The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>
+        You gave us memories we will never forget, and we hope we gave you a few smiles too.<br>
+        If you were part of this, even for one day, thank you.
+      </p>
+      <p>
+        These memories only exist because we shared them.<br>
+        And if you're reading this years from now, we were here.<br>
+        Still haunting. Still laughing.
+      </p>
     </div>
 
   </div>
@@ -450,8 +433,9 @@
     updateTransforms();
 
     // ────────────────────────────────────────────────
-    // LEFT NAVIGATION – STICKY + SCROLL SPY SYNC
+    // LEFT NAVIGATION – FIXED SCROLL SPY + STOP AT LAST MIDDLE
     // ────────────────────────────────────────────────
+    const nav = document.querySelector('.section-nav');
     const navLinks = document.querySelectorAll('.section-nav a');
     const sections = [
       document.querySelector('#hero'),
@@ -465,26 +449,37 @@
     ];
 
     function updateActiveNav() {
-      const scrollPos = window.scrollY + window.innerHeight * 0.10; // your preferred offset
+      const scrollPos = window.scrollY + window.innerHeight * 0.10; // your tuned offset
+      const lastSection = sections[7];
+      const lastMiddle = lastSection ? lastSection.offsetTop + (lastSection.offsetHeight * 0.5) : Infinity;
 
-      let current = 0;
+      let current = 0; // default to first
 
       for (let i = 0; i < sections.length; i++) {
         const section = sections[i];
         if (!section) continue;
 
         const top = section.offsetTop;
-        const height = section.offsetHeight;
+        const bottom = top + section.offsetHeight;
 
-        if (scrollPos >= top && scrollPos < top + height) {
+        if (scrollPos >= top && scrollPos < bottom) {
           current = i;
           break;
         }
       }
 
+      // If past middle of last, lock on last
+      if (scrollPos >= lastMiddle) {
+        current = 7;
+      }
+
       navLinks.forEach((link, index) => {
         link.classList.toggle('active', index === current);
       });
+
+      // Show nav from "Who are we?" (index 1) onward – never hide
+      const showNav = current >= 1;
+      nav.classList.toggle('visible', showNav);
     }
 
     window.addEventListener('scroll', updateActiveNav);
