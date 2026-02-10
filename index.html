@@ -152,7 +152,9 @@
       border-top: 1px solid #222;
     }
 
-    /* Left Navigation */
+    /* ────────────────────────────────────────────────
+       LEFT VERTICAL SECTION NAVIGATION – only from "Who are we?" onward
+    ──────────────────────────────────────────────── */
     .section-nav {
       position: fixed;
       top: 50%;
@@ -165,6 +167,14 @@
       font-size: 1rem;
       color: var(--text-dim);
       pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease;
+    }
+
+    .section-nav.visible {
+      opacity: 1;
+      visibility: visible;
     }
 
     .section-nav a {
@@ -207,9 +217,9 @@
 </head>
 <body>
 
-  <!-- Left Section Navigation -->
+  <!-- Left Section Navigation – hidden until "Who are we?" -->
   <nav class="section-nav">
-    <a href="#hero" class="active"><span class="icon">👻</span> DreamGhosts</a>
+    <a href="#hero"><span class="icon">👻</span> DreamGhosts</a>
     <a href="#intro"><span class="icon">👻</span> Who are we?</a>
     <a href="#start"><span class="icon">👻</span> How did we start?</a>
     <a href="#mta"><span class="icon">👻</span> What is MTA:SA?</a>
@@ -431,53 +441,57 @@
     updateTransforms();
 
     // ────────────────────────────────────────────────
-    // LEFT NAVIGATION – FIXED SCROLL SPY WITH DYNAMIC OFFSET
+    // LEFT NAVIGATION – SCROLL SPY + VISIBILITY CONTROL
     // ────────────────────────────────────────────────
+    const nav = document.querySelector('.section-nav');
     const navLinks = document.querySelectorAll('.section-nav a');
     const sections = [
-      document.querySelector('#hero'),
-      document.querySelector('#intro'),
-      document.querySelector('#start'),
-      document.querySelector('#mta'),
-      document.querySelector('#friends'),
-      document.querySelector('#memories'),
-      document.querySelector('#now'),
-      document.querySelector('#closing')
+      document.querySelector('#hero'),     // 0
+      document.querySelector('#intro'),    // 1 – start showing nav here
+      document.querySelector('#start'),    // 2
+      document.querySelector('#mta'),      // 3
+      document.querySelector('#friends'),  // 4
+      document.querySelector('#memories'), // 5
+      document.querySelector('#now'),      // 6
+      document.querySelector('#closing')   // 7 – stop moving nav after middle of this
     ];
 
     function updateActiveNav() {
-      const scrollPos = window.scrollY + window.innerHeight * 0.10; // dynamic offset – 35% of screen height
+      const scrollPos = window.scrollY + window.innerHeight * 0.10; // your tuned value
+      const lastSectionBottom = sections[7]?.offsetTop + sections[7]?.offsetHeight || Infinity;
 
       let current = -1;
 
+      // Find current section
       for (let i = 0; i < sections.length; i++) {
         const section = sections[i];
         if (!section) continue;
 
         const top = section.offsetTop;
-        const height = section.offsetHeight;
+        const bottom = top + section.offsetHeight;
 
-        if (scrollPos >= top && scrollPos < top + height) {
+        if (scrollPos >= top && scrollPos < bottom) {
           current = i;
-          break; // stop at first matching section
+          break;
         }
       }
 
+      // Update active link
       navLinks.forEach((link, index) => {
-        if (index === current) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
+        link.classList.toggle('active', index === current);
       });
+
+      // Show nav only from "Who are we?" (index 1) to middle of "Final thank you" (index 7)
+      const showNav = current >= 1 && scrollPos < lastSectionBottom - (sections[7].offsetHeight * 0.5);
+      nav.classList.toggle('visible', showNav);
     }
 
     window.addEventListener('scroll', updateActiveNav);
     window.addEventListener('resize', updateActiveNav);
     window.addEventListener('load', () => {
-      setTimeout(updateActiveNav, 300); // small delay after load/AOS
+      setTimeout(updateActiveNav, 500); // wait for AOS/images
     });
-    updateActiveNav(); // initial call
+    updateActiveNav();
   </script>
 </body>
 </html>
