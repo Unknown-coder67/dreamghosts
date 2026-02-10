@@ -36,8 +36,42 @@
       overflow-x: hidden;
     }
 
-    [id] {
-      scroll-margin-top: 50vh; /* ← FIX: lands section in middle of screen on nav click */
+    /* ────────────────────────────────────────────────
+       PER-SECTION LANDING POSITION WHEN CLICKING NAV
+       (scroll-margin-top = how much space above the section when scrolled to)
+       Higher value = lands higher on screen (title closer to top)
+       Lower value = lands lower (more content visible from top)
+    ──────────────────────────────────────────────── */
+    #hero {
+      scroll-margin-top: 40vh;    /* Hero – a bit higher since full-screen */
+    }
+
+    #intro {
+      scroll-margin-top: 50vh;    /* ← change this value for "Who are we?" */
+    }
+
+    #start {
+      scroll-margin-top: 50vh;    /* ← change this value for "How did we start?" */
+    }
+
+    #mta {
+      scroll-margin-top: 50vh;    /* ← change this value for "What is MTA:SA?" */
+    }
+
+    #friends {
+      scroll-margin-top: 50vh;    /* ← change this value for "Those We Met..." */
+    }
+
+    #memories {
+      scroll-margin-top: 50vh;    /* ← change this value for "Memories" */
+    }
+
+    #now {
+      scroll-margin-top: 50vh;    /* ← change this value for "Where are we now?" */
+    }
+
+    #closing {
+      scroll-margin-top: 30vh;    /* ← lower landing for "Final thank you" – adjust here (smaller = even lower) */
     }
 
     .parallax-hero {
@@ -184,7 +218,7 @@
       position: sticky;
       top: 40vh;
       align-self: flex-start;
-      margin-left: -260px;          /* ← adjust to move nav left/right */
+      margin-left: -400px;          /* ← adjust to move nav left/right */
       width: 240px;                 /* ← wider for long titles to fit on one line */
       z-index: 1000;
       display: flex;
@@ -192,6 +226,7 @@
       gap: 1.8rem;
       font-size: 1rem;
       color: var(--text-dim);
+      letter-spacing: -0.3px;
     }
 
     .section-nav a {
@@ -505,13 +540,13 @@
       if (section) observer.observe(section);
     });
 
-    // Re-sync after clicking nav (in case smooth scroll lands slightly off)
+    // Re-sync after clicking nav
     document.querySelectorAll('.section-nav a').forEach(link => {
       link.addEventListener('click', () => {
         setTimeout(() => {
           navLinks.forEach(l => l.classList.remove('active'));
           // Observer will handle correct highlight
-        }, 300); // delay after scroll settles
+        }, 300);
       });
     });
   </script>
