@@ -44,21 +44,21 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.75;               /* brighter base opacity */
-      filter: brightness(1.15);    /* subtle brightness boost */
+      opacity: 0.75;
+      filter: brightness(1.15);
     }
 
     .overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.55));
+      background: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.65));
       z-index: 1;
     }
 
     .content {
       position: relative;
       z-index: 2;
-      max-width: 1100px;
+      max-width: 1200px; /* slightly wider container */
       margin: 0 auto;
       padding: 5rem 5% 8rem;
     }
@@ -78,14 +78,14 @@
 
     .era p, .intro p, .now p {
       font-size: 1.35rem;
-      max-width: 80ch;
+      max-width: 90ch; /* wider text blocks */
       margin-bottom: 2rem;
       color: var(--text-dim);
     }
 
     .screenshot {
       width: 100%;
-      max-width: 900px;
+      max-width: 1000px; /* wider screenshots */
       border-radius: 8px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
@@ -126,22 +126,18 @@
       transform: scale(1.03);
     }
 
-    /* Closing section – wider rectangular box */
+    /* Closing – very wide, no early wrapping, no box */
     .closing {
       text-align: center;
       font-size: 1.45rem;
       opacity: 0.85;
       padding: 6rem 5%;
-      max-width: 1000px;           /* wider than other sections */
+      max-width: 1400px; /* extremely wide container */
       margin: 8rem auto;
-      background: rgba(20,20,20,0.4); /* subtle dark box background */
-      border-radius: 12px;
-      border: 1px solid #333;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
 
     .closing p {
-      max-width: 90ch;             /* very wide readable lines */
+      max-width: 120ch; /* very wide lines – sentences stay long before wrapping */
       margin: 1.5rem auto;
       color: var(--text);
     }
@@ -154,17 +150,22 @@
       border-top: 1px solid #222;
     }
 
+    @media (max-width: 1200px) {
+      .closing p { max-width: 100ch; }
+    }
+
     @media (max-width: 900px) {
       h1 { font-size: 4rem; }
       h2 { font-size: 2.6rem; }
       #ghosts-list { columns: 2; }
       .gallery { column-count: 2; }
-      .closing { padding: 4rem 8%; max-width: 90%; }
+      .closing p { max-width: 80ch; }
     }
 
     @media (max-width: 600px) {
       #ghosts-list { columns: 1; }
       .hero-video { object-position: center center; }
+      .closing p { max-width: 100%; }
     }
   </style>
 </head>
@@ -172,7 +173,7 @@
 
   <!-- Hero – VIDEO playlist -->
   <div class="parallax-hero">
-    <video id="hero-video" class="hero-video" autoplay muted playsinline>
+    <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
       <!-- Fallback image -->
       <img src="images/hero-bg.jpg" alt="DreamGhosts memories fallback">
     </video>
@@ -244,7 +245,7 @@
       </p>
     </div>
 
-    <!-- Final thank you – wider rectangular box -->
+    <!-- Final thank you – very wide, no box, no early wrapping -->
     <div class="closing" data-aos="fade-up">
       <p>
         We wanted this space to thank everyone we ever met along the way.<br>
@@ -278,7 +279,7 @@
     window.addEventListener('load', () => AOS.refreshHard());
 
     // ────────────────────────────────────────────────
-    // WALL OF FRIENDS – EDIT ONLY HERE
+    // WALL OF FRIENDS
     // ────────────────────────────────────────────────
     const friends = [
       "nonenile",
@@ -299,7 +300,7 @@
       "Vuak",
       "NoMercy",
       "Vutalic",
-      // Add the rest of the names here
+      // Add all remaining names here
     ];
 
     friends.sort((a, b) => a.localeCompare(b));
@@ -312,34 +313,34 @@
     });
 
     // ────────────────────────────────────────────────
-    // VIDEO PLAYLIST – plays clips in order, then loops
+    // VIDEO PLAYLIST – fixed sequential playback + loop
     // ────────────────────────────────────────────────
     const video = document.getElementById("hero-video");
     const clips = [
       "videos/hero-clip-1.mp4",
-      "videos/hero-clip-2.mp4",
-      // Add more clips here if you have them, e.g.:
-      // "videos/hero-clip-3.mp4",
+      "videos/hero-clip-2.mp4"
+      // Add more clips here if you have them: "videos/hero-clip-3.mp4",
     ];
 
     let currentClip = 0;
 
     function playNext() {
-      if (currentClip < clips.length) {
-        video.src = clips[currentClip];
-        video.load();
-        video.play().catch(() => {}); // ignore autoplay errors
-        currentClip++;
-      } else {
-        currentClip = 0; // loop back to first clip
-        playNext();
-      }
+      video.src = clips[currentClip];
+      video.load();
+      video.play().catch(e => console.log("Autoplay prevented:", e));
+      currentClip = (currentClip + 1) % clips.length; // loop back to 0 when finished
     }
 
     video.addEventListener("ended", playNext);
-    playNext(); // start with first clip
+    video.addEventListener("error", () => {
+      console.log("Video error, trying next...");
+      playNext();
+    });
 
-    // Parallax scroll effect
+    // Start playback
+    playNext();
+
+    // Parallax scroll
     const hero = document.querySelector('.parallax-hero');
     window.addEventListener('scroll', () => {
       const scroll = window.scrollY;
