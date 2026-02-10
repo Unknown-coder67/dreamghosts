@@ -47,7 +47,7 @@
       object-fit: cover;
       opacity: 0.75;
       filter: brightness(1.15);
-      transition: transform 0.2s ease-out; /* smooth zoom + parallax – change time for faster/slower */
+      transition: transform 0.2s ease-out;
     }
 
     .overlay {
@@ -92,7 +92,7 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       display: block;
-      transition: transform 0.2s ease-out; /* same smooth effect as video */
+      transition: transform 0.2s ease-out;
     }
 
     /* Friends list styling */
@@ -152,32 +152,85 @@
       border-top: 1px solid #222;
     }
 
-    @media (max-width: 1200px) {
-      .closing p { max-width: 100ch; }
+    /* ────────────────────────────────────────────────
+       LEFT VERTICAL SECTION NAVIGATION
+    ──────────────────────────────────────────────── */
+    .section-nav {
+      position: fixed;
+      top: 50%;
+      left: 30px;
+      transform: translateY(-50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      font-size: 1rem;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .section-nav a {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: all 0.4s ease;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.6;
+    }
+
+    .section-nav a:hover,
+    .section-nav a.active {
+      color: white;
+      opacity: 1;
+      font-size: 1.15rem;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .section-nav .icon {
+      font-size: 1.3rem;
+      opacity: 0.7;
+    }
+
+    .section-nav a.active .icon {
+      opacity: 1;
     }
 
     @media (max-width: 900px) {
-      h1 { font-size: 4rem; }
-      h2 { font-size: 2.6rem; }
-      #ghosts-list { columns: 2; }
-      .gallery { column-count: 2; }
-      .closing p { max-width: 80ch; }
+      .section-nav {
+        display: none; /* hide on mobile to avoid clutter */
+      }
     }
 
-    @media (max-width: 600px) {
-      #ghosts-list { columns: 1; }
+    @media (max-width: 1200px) {
+      .section-nav {
+        left: 15px;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Left Section Navigation -->
+  <nav class="section-nav">
+    <a href="#hero" class="active"><span class="icon">👻</span> DreamGhosts</a>
+    <a href="#intro"><span class="icon">👻</span> Who are we?</a>
+    <a href="#start"><span class="icon">👻</span> How did we start?</a>
+    <a href="#mta"><span class="icon">👻</span> What is MTA:SA?</a>
+    <a href="#friends"><span class="icon">👻</span> Those We Met Along the Way</a>
+    <a href="#memories"><span class="icon">👻</span> Memories</a>
+    <a href="#now"><span class="icon">👻</span> Where are we now?</a>
+    <a href="#closing"><span class="icon">👻</span> Final thank you</a>
+  </nav>
+
   <!-- Hero – VIDEO playlist -->
-  <div class="parallax-hero">
+  <div class="parallax-hero" id="hero">
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
       <source src="videos/hero-clip-1.mp4" type="video/mp4">
       <source src="videos/hero-clip-2.mp4" type="video/mp4">
       <source src="videos/hero-clip-3.mp4" type="video/mp4">
-      <!-- Add more clips here if needed -->
       <img src="images/hero-bg.jpg" alt="Fallback">
     </video>
     <div class="overlay"></div>
@@ -192,7 +245,7 @@
   <div class="content">
 
     <!-- Intro -->
-    <div class="intro" data-aos="fade-up">
+    <div class="intro" id="intro" data-aos="fade-up">
       <h2>Who are we?</h2>
       <p>
         DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other, and always will.
@@ -200,7 +253,7 @@
     </div>
 
     <!-- How it started -->
-    <div class="era" data-aos="fade-up">
+    <div class="era" id="start" data-aos="fade-up">
       <h2>How did we start?</h2>
       <p>
         Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
@@ -209,7 +262,7 @@
     </div>
 
     <!-- What is MTA -->
-    <div class="era" data-aos="fade-up">
+    <div class="era" id="mta" data-aos="fade-up">
       <h2>What is MTA:SA?</h2>
       <p>
         MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes.
@@ -221,13 +274,13 @@
     </div>
 
     <!-- Wall of Friends -->
-    <div class="friends" data-aos="fade-up">
+    <div class="friends" id="friends" data-aos="fade-up">
       <h2>Those We Met Along the Way</h2>
       <ul id="ghosts-list"></ul>
     </div>
 
     <!-- Gallery Memories -->
-    <div class="gallery-section" data-aos="fade-up">
+    <div class="gallery-section" id="memories" data-aos="fade-up">
       <h2>Memories</h2>
       <div class="gallery">
         <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
@@ -238,7 +291,7 @@
     </div>
 
     <!-- Where are we now -->
-    <div class="now" data-aos="fade-up">
+    <div class="now" id="now" data-aos="fade-up">
       <h2>Where are we now?</h2>
       <p>
         We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>
@@ -249,7 +302,7 @@
     </div>
 
     <!-- Final thank you -->
-    <div class="closing" data-aos="fade-up">
+    <div class="closing" id="closing" data-aos="fade-up">
       <p>
         We wanted this space to thank everyone we ever met along the way.<br>
         The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>
@@ -316,14 +369,13 @@
     });
 
     // ────────────────────────────────────────────────
-    // VIDEO PLAYLIST – sequential + loop
+    // VIDEO PLAYLIST
     // ────────────────────────────────────────────────
     const video = document.getElementById("hero-video");
     const clips = [
       "videos/hero-clip-1.mp4",
       "videos/hero-clip-2.mp4",
       "videos/hero-clip-3.mp4"
-      // Add more clips here if you have them
     ];
 
     let currentClip = 0;
@@ -342,10 +394,10 @@
       playNext();
     });
 
-    playNext(); // start
+    playNext();
 
     // ────────────────────────────────────────────────
-    // SMOOTH ZOOM + PARALLAX (stronger & visible)
+    // SMOOTH ZOOM + PARALLAX
     // ────────────────────────────────────────────────
     const hero = document.querySelector('.parallax-hero');
     const screenshots = document.querySelectorAll('.screenshot');
@@ -357,31 +409,27 @@
       // Hero video
       if (scroll < vh) {
         const progress = scroll / vh;
-        const scale = 1.0 + progress * 0.20; // zoom in as scrolled down
-        const translate = progress * 60;      // downward shift
+        const scale = 1.0 + progress * 0.20;
+        const translate = progress * 60;
         hero.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
       } else {
-        // fully scrolled past → max zoom + shift
         hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
       }
 
-      // Screenshots (same logic)
+      // Screenshots
       screenshots.forEach(img => {
         const rect = img.getBoundingClientRect();
         const imgTop = rect.top + scroll;
         const imgBottom = imgTop + rect.height;
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
-          // in view → normal
           const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh/2) / vh));
           const scale = 1.0 + progress * 0.20;
           const translate = progress * 40;
           img.style.transform = `scale(${scale}) translateY(${translate}px)`;
         } else if (imgTop > scroll + vh) {
-          // below viewport → zoomed in
           img.style.transform = `scale(1.20) translateY(40px)`;
         } else {
-          // above viewport → normal
           img.style.transform = `scale(1.0) translateY(0)`;
         }
       });
@@ -389,7 +437,43 @@
 
     window.addEventListener('scroll', updateTransforms);
     window.addEventListener('resize', updateTransforms);
-    updateTransforms(); // initial call
+    updateTransforms();
+
+    // ────────────────────────────────────────────────
+    // LEFT NAVIGATION – scroll spy
+    // ────────────────────────────────────────────────
+    const navLinks = document.querySelectorAll('.section-nav a');
+    const sections = [
+      document.querySelector('#hero'),
+      document.querySelector('#intro'),
+      document.querySelector('#start'),
+      document.querySelector('#mta'),
+      document.querySelector('#friends'),
+      document.querySelector('#memories'),
+      document.querySelector('#now'),
+      document.querySelector('#closing')
+    ];
+
+    function updateActiveNav() {
+      const scrollPos = window.scrollY + 150; // offset so it activates a bit earlier
+
+      navLinks.forEach((link, index) => {
+        const section = sections[index];
+        if (section) {
+          const top = section.offsetTop;
+          const height = section.offsetHeight;
+
+          if (scrollPos >= top && scrollPos < top + height) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveNav);
+    updateActiveNav(); // initial
   </script>
 </body>
 </html>
