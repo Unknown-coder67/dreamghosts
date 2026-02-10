@@ -110,7 +110,7 @@
     }
 
     /* ────────────────────────────────────────────────
-       HARD CLIP ZOOM – delayed start
+       HARD CLIP ZOOM – faster, delayed start
     ──────────────────────────────────────────────── */
     .screenshot-wrapper {
       overflow: hidden;
@@ -124,6 +124,7 @@
       width: 100%;
       height: auto;
       display: block;
+      transition: none; /* ← KEY: remove delay → instant zoom response */
     }
 
     /* Friends list – horizontal drag-scroll */
@@ -470,14 +471,21 @@
     playNext();
 
     // ────────────────────────────────────────────────
-    // SMOOTH ZOOM + PARALLAX + DELAYED ZOOM START
+    // SMOOTH ZOOM + PARALLAX + FASTER / DELAYED ZOOM
     // ────────────────────────────────────────────────
     const heroEl = document.querySelector('.parallax-hero');
     const screenshots = document.querySelectorAll('.screenshot');
 
+    let lastScroll = 0;
+    let velocity = 0;
+
     function updateTransforms() {
       const scroll = window.scrollY;
       const vh = window.innerHeight;
+
+      // Calculate scroll velocity (pixels per frame)
+      velocity = scroll - lastScroll;
+      lastScroll = scroll;
 
       if (scroll < vh) {
         const progress = scroll / vh;
@@ -495,14 +503,16 @@
         const imgBottom = imgTop + rect.height;
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
-          // Delay zoom start: only begin when image is past ~35% of screen height
-          const triggerOffset = vh * 0.10; // ← CHANGE THIS VALUE to control delay
-          // Higher = zoom starts later (e.g. 0.5 = after halfway down screen)
-          // Lower = zoom starts sooner (e.g. 0.2 = earlier)
+          // Delay zoom start: begin only when image is past ~10% of screen height
+          const triggerOffset = vh * 0.10; // ← small delay (change to 0.25–0.40 for later start)
           const effectiveProgress = Math.max(0, (scroll - imgTop + triggerOffset) / vh);
           const progress = Math.min(1, effectiveProgress);
 
-          const scale = 1.0 + progress * 0.80; // zoom strength – adjust 0.80
+          // Base zoom + velocity boost (makes it feel faster when scrolling quickly)
+          const baseScale = 1.0 + progress * 1.20; // ← stronger base zoom (adjust 1.20)
+          const velocityBoost = Math.abs(velocity) > 50 ? 0.4 : 0; // extra scale when fast scroll
+          const scale = baseScale + velocityBoost;
+
           const translate = progress * 40;
           img.style.transform = `scale(${scale}) translateY(${translate}px)`;
         } else if (imgTop > scroll + vh) {
