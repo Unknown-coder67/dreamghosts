@@ -41,6 +41,9 @@
       height: 100vh;
       overflow: hidden;
       background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .hero-video {
@@ -62,6 +65,13 @@
       z-index: 1;
     }
 
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 5%;
+    }
+
     .content {
       position: relative;
       z-index: 2;
@@ -69,7 +79,7 @@
       margin: 0 auto;
       padding: 5rem 5% 8rem;
       display: flex;
-      gap: 4rem; /* space between nav and main content */
+      gap: 4rem;
     }
 
     .main-content {
@@ -82,7 +92,7 @@
       text-shadow: var(--glow);
     }
 
-    h1 { font-size: 5.5rem; text-align: center; margin-bottom: 1.5rem; }
+    h1 { font-size: 5.5rem; margin-bottom: 1.5rem; }
     h2 { font-size: 3.2rem; margin: 6rem 0 2.5rem; color: #c0c0c0; }
 
     .intro, .era, .friends, .gallery-section, .now, .closing {
@@ -164,18 +174,18 @@
     }
 
     /* ────────────────────────────────────────────────
-       LEFT VERTICAL NAVIGATION – sticky inside .content
+       LEFT NAVIGATION – sticky inside content
     ──────────────────────────────────────────────── */
     .section-nav {
       position: sticky;
-      top: 40vh;                    /* centers vertically – adjust 30–50vh */
+      top: 40vh;                    /* vertical centering – change 30vh–50vh to move up/down */
       align-self: flex-start;
-      margin-left: -220px;          /* left offset – tune this */
-      width: 200px;
+      margin-left: -260px;          /* ← how far left the nav is (increase to move more left) */
+      width: 240px;                 /* ← wider container so long titles fit on one line when big */
       z-index: 1000;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.8rem;                  /* space between items – adjust if too tight */
       font-size: 1rem;
       color: var(--text-dim);
     }
@@ -186,21 +196,22 @@
       transition: all 0.4s ease;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       opacity: 0.6;
+      white-space: nowrap;          /* prevents wrapping */
     }
 
     .section-nav a:hover,
     .section-nav a.active {
       color: white;
       opacity: 1;
-      font-size: 1.15rem;
+      font-size: 1.18rem;           /* bigger active size – adjust if still wraps */
       text-decoration: underline;
-      text-underline-offset: 4px;
+      text-underline-offset: 5px;
     }
 
     .section-nav .icon {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       opacity: 0.7;
     }
 
@@ -214,7 +225,7 @@
     }
 
     @media (max-width: 1200px) {
-      .section-nav { margin-left: -180px; width: 160px; font-size: 0.95rem; }
+      .section-nav { margin-left: -200px; width: 180px; font-size: 0.95rem; }
     }
   </style>
 </head>
@@ -229,9 +240,9 @@
       <img src="images/hero-bg.jpg" alt="Fallback">
     </video>
     <div class="overlay"></div>
-    <div class="content" style="padding-top: 22vh;">
+    <div class="hero-content">
       <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhosts</h1>
-      <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; text-align:center; opacity:0.8;">
+      <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; opacity:0.8;">
         Since 2012 – a friendship that outlived every game
       </p>
     </div>
@@ -239,7 +250,7 @@
 
   <div class="content">
 
-    <!-- Sticky Nav (inside content so sticky works) -->
+    <!-- Sticky Nav -->
     <nav class="section-nav">
       <a href="#hero"><span class="icon">👻</span> DreamGhosts</a>
       <a href="#intro"><span class="icon">👻</span> Who are we?</a>
@@ -251,7 +262,7 @@
       <a href="#closing"><span class="icon">👻</span> Final thank you</a>
     </nav>
 
-    <!-- Main content area -->
+    <!-- Main content -->
     <div class="main-content">
 
       <!-- Intro -->
@@ -448,7 +459,7 @@
     updateTransforms();
 
     // ────────────────────────────────────────────────
-    // LEFT NAVIGATION – STICKY + SCROLL SPY
+    // LEFT NAVIGATION – STICKY + SCROLL SPY (starts after hero)
     // ────────────────────────────────────────────────
     const navLinks = document.querySelectorAll('.section-nav a');
     const sections = [
@@ -463,7 +474,8 @@
     ];
 
     function updateActiveNav() {
-      const scrollPos = window.scrollY + window.innerHeight * 0.10;
+      const scrollPos = window.scrollY + window.innerHeight * 0.50; // ← middle of screen trigger
+      // ↑↑↑ Change 0.50 here to control when highlight activates (0.30 = earlier, 0.60 = later)
 
       let current = 0;
 
