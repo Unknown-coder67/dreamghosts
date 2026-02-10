@@ -115,19 +115,24 @@
 .screenshot-wrapper {
   overflow: hidden;
   border-radius: 8px;
+  background: var(--bg);
 
-  background: var(--bg); /* ← THE MAGIC */
-
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  margin: 2.5rem auto;
   max-width: 1000px;
+  margin: 2.5rem auto;
+
+  padding: 80px; /* ← invisible growth space */
 }
 
-  .screenshot {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
+.screenshot {
+  width: calc(100% + 160px); /* 2 × padding */
+  margin: -80px;
+
+  height: auto;
+  display: block;
+
+  transform-origin: center;
+  will-change: transform;
+}
 
     /* Friends list – horizontal drag-scroll */
     .friends { overflow: hidden; }
