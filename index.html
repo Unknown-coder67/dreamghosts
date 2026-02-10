@@ -36,6 +36,10 @@
       overflow-x: hidden;
     }
 
+    [id] {
+      scroll-margin-top: 50vh; /* ← FIX: lands section in middle of screen on nav click */
+    }
+
     .parallax-hero {
       position: relative;
       height: 100vh;
@@ -180,7 +184,7 @@
       position: sticky;
       top: 40vh;
       align-self: flex-start;
-      margin-left: -450px;          /* ← adjust to move nav left/right */
+      margin-left: -260px;          /* ← adjust to move nav left/right */
       width: 240px;                 /* ← wider for long titles to fit on one line */
       z-index: 1000;
       display: flex;
@@ -227,10 +231,6 @@
     @media (max-width: 1200px) {
       .section-nav { margin-left: -200px; width: 180px; font-size: 0.95rem; }
     }
-    section {
-  scroll-margin-top: 50vh;
-}
-
   </style>
 </head>
 <body>
@@ -489,17 +489,15 @@
 
         navLinks.forEach(l => l.classList.remove('active'));
 
-        // DreamGhosts ONLY active while hero visible
         if (id === "hero") {
           navLinks[0].classList.add('active');
           return;
         }
 
-        // Normal sections
         navLinks[index].classList.add('active');
       });
     }, {
-      rootMargin: "-45% 0px -45% 0px", // trigger when section is in middle of screen
+      rootMargin: "-45% 0px -45% 0px", // middle of screen trigger – adjust -40% / -50% if needed
       threshold: 0
     });
 
@@ -511,20 +509,9 @@
     document.querySelectorAll('.section-nav a').forEach(link => {
       link.addEventListener('click', () => {
         setTimeout(() => {
-          // Force re-check after scroll settles
-          const scrollPos = window.scrollY + window.innerHeight / 2;
-          let found = false;
-          sections.forEach((section, i) => {
-            if (!section || found) return;
-            const top = section.offsetTop;
-            const bottom = top + section.offsetHeight;
-            if (scrollPos >= top && scrollPos < bottom) {
-              navLinks.forEach(l => l.classList.remove('active'));
-              navLinks[i].classList.add('active');
-              found = true;
-            }
-          });
-        }, 300); // small delay after smooth scroll
+          navLinks.forEach(l => l.classList.remove('active'));
+          // Observer will handle correct highlight
+        }, 300); // delay after scroll settles
       });
     });
   </script>
