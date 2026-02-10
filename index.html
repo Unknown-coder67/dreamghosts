@@ -46,12 +46,12 @@
       object-fit: cover;
       opacity: 0.75;
       filter: brightness(1.15);
-      transition: transform 0.9s ease-out; /* faster & smoother zoom */
-      transform: scale(1.0); /* normal size when in view */
+      transition: transform 1.2s ease-out; /* smooth zoom + parallax duration */
+      transform: scale(1.0) translateY(0); /* starting state */
     }
 
     .hero-video.zoomed {
-      transform: scale(1.20); /* stronger zoom when scrolled away */
+      transform: scale(1.20) translateY(30px); /* zoom in + slight downward shift when scrolled away */
     }
 
     .overlay {
@@ -96,12 +96,12 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       display: block;
-      transition: transform 0.9s ease-out; /* same smooth zoom */
-      transform: scale(1.0);
+      transition: transform 1.2s ease-out;
+      transform: scale(1.0) translateY(0);
     }
 
     .screenshot.zoomed {
-      transform: scale(1.20); /* stronger zoom */
+      transform: scale(1.20) translateY(20px); /* zoom + downward shift */
     }
 
     /* Friends list styling */
@@ -175,18 +175,18 @@
 
     @media (max-width: 600px) {
       #ghosts-list { columns: 1; }
+      .hero-video, .screenshot { object-position: center center; }
     }
   </style>
 </head>
 <body>
 
   <!-- Hero – VIDEO playlist -->
-  <div class="parallax-hero" data-zoom-section>
+  <div class="parallax-hero">
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
       <source src="videos/hero-clip-1.mp4" type="video/mp4">
       <source src="videos/hero-clip-2.mp4" type="video/mp4">
       <source src="videos/hero-clip-3.mp4" type="video/mp4">
-      <!-- Add more clips here if you have them -->
       <img src="images/hero-bg.jpg" alt="Fallback">
     </video>
     <div class="overlay"></div>
@@ -214,7 +214,7 @@
       <p>
         Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
       </p>
-      <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300" data-zoom-section>
+      <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
     </div>
 
     <!-- What is MTA -->
@@ -226,7 +226,7 @@
       <p>
         One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
       </p>
-      <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300" data-zoom-section>
+      <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
     </div>
 
     <!-- Wall of Friends -->
@@ -325,33 +325,34 @@
     });
 
     // ────────────────────────────────────────────────
-    // SMOOTH BIDIRECTIONAL ZOOM (stronger & visible)
+    // SMOOTH BIDIRECTIONAL ZOOM + PARALLAX FOR VIDEO & SCREENSHOTS
     // ────────────────────────────────────────────────
-    const zoomElements = document.querySelectorAll('.parallax-hero, .screenshot');
+    const zoomSections = document.querySelectorAll('.parallax-hero, .screenshot');
 
     const zoomObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
+        const el = entry.target;
         if (entry.isIntersecting) {
-          entry.target.classList.remove('zoomed'); // normal size
+          el.classList.remove('zoomed'); // normal size + no shift
         } else {
-          entry.target.classList.add('zoomed');   // zoom in when out of view
+          el.classList.add('zoomed');    // zoom in + slight downward shift
         }
       });
     }, {
-      threshold: 0.15,  // trigger when ~15% of element is visible
+      threshold: 0.2,   // trigger when 20% visible (adjust 0.1–0.3 for earlier/later)
       rootMargin: '0px'
     });
 
-    zoomElements.forEach(el => zoomObserver.observe(el));
+    zoomSections.forEach(section => zoomObserver.observe(section));
 
     // ────────────────────────────────────────────────
-    // VIDEO PLAYLIST – fixed sequential + loop
+    // VIDEO PLAYLIST – sequential + loop
     // ────────────────────────────────────────────────
     const video = document.getElementById("hero-video");
     const clips = [
       "videos/hero-clip-1.mp4",
       "videos/hero-clip-2.mp4"
-      // Add more clips here: "videos/hero-clip-3.mp4",
+      // Add more clips here if needed
     ];
 
     let currentClip = 0;
@@ -366,15 +367,11 @@
 
     video.addEventListener("ended", playNext);
     video.addEventListener("error", () => {
-      console.log("Video error, skipping to next...");
+      console.log("Video error, skipping...");
       playNext();
     });
 
-    // Start with first clip
-    playNext();
-
-    // Optional: log for debugging
-    video.addEventListener("canplay", () => console.log("Clip ready:", video.src));
+    playNext(); // start playback
   </script>
 </body>
 </html>
