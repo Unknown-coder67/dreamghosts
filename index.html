@@ -46,7 +46,12 @@
       object-fit: cover;
       opacity: 0.75;
       filter: brightness(1.15);
-      transition: transform 1.6s ease-out; /* smooth zoom duration – increase for slower */
+      transition: transform 0.9s ease-out; /* faster & smoother zoom */
+      transform: scale(1.0); /* normal size when in view */
+    }
+
+    .hero-video.zoomed {
+      transform: scale(1.20); /* stronger zoom when scrolled away */
     }
 
     .overlay {
@@ -91,7 +96,12 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
       margin: 2.5rem auto;
       display: block;
-      transition: transform 1.6s ease-out; /* same smooth zoom as video */
+      transition: transform 0.9s ease-out; /* same smooth zoom */
+      transform: scale(1.0);
+    }
+
+    .screenshot.zoomed {
+      transform: scale(1.20); /* stronger zoom */
     }
 
     /* Friends list styling */
@@ -128,7 +138,6 @@
       transform: scale(1.03);
     }
 
-    /* Closing – very wide, no early wrapping */
     .closing {
       text-align: center;
       font-size: 1.45rem;
@@ -166,7 +175,6 @@
 
     @media (max-width: 600px) {
       #ghosts-list { columns: 1; }
-      .hero-video, .screenshot { object-position: center center; }
     }
   </style>
 </head>
@@ -177,7 +185,7 @@
     <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
       <source src="videos/hero-clip-1.mp4" type="video/mp4">
       <source src="videos/hero-clip-2.mp4" type="video/mp4">
-      <!-- Fallback -->
+      <!-- Add more clips here if you have them -->
       <img src="images/hero-bg.jpg" alt="Fallback">
     </video>
     <div class="overlay"></div>
@@ -248,7 +256,7 @@
       </p>
     </div>
 
-    <!-- Final thank you – very wide -->
+    <!-- Final thank you -->
     <div class="closing" data-aos="fade-up">
       <p>
         We wanted this space to thank everyone we ever met along the way.<br>
@@ -303,7 +311,7 @@
       "Vuak",
       "NoMercy",
       "Vutalic",
-      // Add remaining names
+      // Add remaining names here
     ];
 
     friends.sort((a, b) => a.localeCompare(b));
@@ -316,35 +324,33 @@
     });
 
     // ────────────────────────────────────────────────
-    // SMOOTH BIDIRECTIONAL ZOOM FOR VIDEO & ALL SCREENSHOTS
+    // SMOOTH BIDIRECTIONAL ZOOM (stronger & visible)
     // ────────────────────────────────────────────────
     const zoomElements = document.querySelectorAll('.parallax-hero, .screenshot');
 
     const zoomObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // In view → zoom out to normal size
-          entry.target.classList.add('in-view');
+          entry.target.classList.remove('zoomed'); // normal size
         } else {
-          // Out of view → zoom in slightly
-          entry.target.classList.remove('in-view');
+          entry.target.classList.add('zoomed');   // zoom in when out of view
         }
       });
     }, {
-      threshold: 0.1,           // start changing when 10% visible
-      rootMargin: '0px'         // adjust if you want earlier/later trigger
+      threshold: 0.15,  // trigger when ~15% of element is visible
+      rootMargin: '0px'
     });
 
     zoomElements.forEach(el => zoomObserver.observe(el));
 
     // ────────────────────────────────────────────────
-    // VIDEO PLAYLIST – sequential + loop
+    // VIDEO PLAYLIST – fixed sequential + loop
     // ────────────────────────────────────────────────
     const video = document.getElementById("hero-video");
     const clips = [
       "videos/hero-clip-1.mp4",
       "videos/hero-clip-2.mp4"
-      // Add more: "videos/hero-clip-3.mp4",
+      // Add more clips here: "videos/hero-clip-3.mp4",
     ];
 
     let currentClip = 0;
@@ -359,11 +365,15 @@
 
     video.addEventListener("ended", playNext);
     video.addEventListener("error", () => {
-      console.log("Video failed, skipping...");
+      console.log("Video error, skipping to next...");
       playNext();
     });
 
-    playNext(); // start
+    // Start with first clip
+    playNext();
+
+    // Optional: log for debugging
+    video.addEventListener("canplay", () => console.log("Clip ready:", video.src));
   </script>
 </body>
 </html>
