@@ -496,7 +496,7 @@
 
         if (imgBottom > scroll && imgTop < scroll + vh) {
           // Delay zoom start: only begin when image is past ~35% of screen height
-          const triggerOffset = vh * 0.35; // ← CHANGE THIS VALUE to control delay
+          const triggerOffset = vh * 0.55; // ← CHANGE THIS VALUE to control delay
           // Higher = zoom starts later (e.g. 0.5 = after halfway down screen)
           // Lower = zoom starts sooner (e.g. 0.2 = earlier)
           const effectiveProgress = Math.max(0, (scroll - imgTop + triggerOffset) / vh);
