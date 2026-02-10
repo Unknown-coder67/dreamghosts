@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
@@ -23,14 +22,24 @@
 
     * { margin:0; padding:0; box-sizing:border-box; }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* center anchors nicely */
+    [id] {
+      scroll-margin-top: 35vh;
+    }
+
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'Roboto Mono', monospace;
       line-height: 1.7;
-      min-height: 100vh;
       overflow-x: hidden;
     }
+
+    /* ───────── HERO ───────── */
 
     .parallax-hero {
       position: relative;
@@ -53,9 +62,14 @@
     .overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.65));
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,0.45),
+        rgba(0,0,0,0.55) 50%,
+        rgba(0,0,0,0.65));
       z-index: 1;
     }
+
+    /* ───────── CONTENT WRAPPER ───────── */
 
     .content {
       position: relative;
@@ -63,6 +77,57 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 5rem 5% 8rem;
+      display: flex;
+      gap: 3rem;
+    }
+
+    /* ───────── STICKY NAV (NEW) ───────── */
+
+    .section-nav {
+      position: sticky;
+      top: 50vh;
+      transform: translateY(-50%);
+
+      height: fit-content;
+
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      font-size: 1rem;
+      color: var(--text-dim);
+
+      min-width: 200px;
+    }
+
+    .section-nav a {
+      color: var(--text-dim);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-nav a:hover,
+    .section-nav a.active {
+      color: white;
+      opacity: 1;
+      font-size: 1.12rem;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .section-nav { display:none; }
+      .content { flex-direction: column; }
+    }
+
+    /* ───────── MAIN AREA ───────── */
+
+    .main {
+      flex: 1;
     }
 
     h1, h2 {
@@ -71,11 +136,16 @@
       text-shadow: var(--glow);
     }
 
-    h1 { font-size: 5.5rem; text-align: center; margin-bottom: 1.5rem; }
-    h2 { font-size: 3.2rem; margin: 6rem 0 2.5rem; color: #c0c0c0; }
+    h1 {
+      font-size: 5.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
 
-    .intro, .era, .friends, .gallery-section, .now, .closing {
-      margin: 8rem 0;
+    h2 {
+      font-size: 3.2rem;
+      margin: 6rem 0 2.5rem;
+      color: #c0c0c0;
     }
 
     .era p, .intro p, .now p {
@@ -95,405 +165,146 @@
       transition: transform 0.2s ease-out;
     }
 
-    /* Friends list styling */
+    /* friends */
     #ghosts-list {
-      list-style: none;
-      columns: 3;
-      column-gap: 4rem;
-      font-size: 1.25rem;
-      line-height: 2.1;
-      padding: 0;
+      list-style:none;
+      columns:3;
+      column-gap:4rem;
+      font-size:1.25rem;
+      line-height:2.1;
     }
 
     #ghosts-list li {
-      break-inside: avoid;
-      margin-bottom: 0.4rem;
+      break-inside:avoid;
     }
 
+    /* gallery */
     .gallery {
-      column-count: 3;
-      column-gap: 1.5rem;
-      margin: 6rem 0;
+      column-count:3;
+      column-gap:1.5rem;
+      margin:6rem 0;
     }
 
     .gallery img {
-      width: 100%;
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-      break-inside: avoid;
-      transition: transform 0.4s ease;
+      width:100%;
+      margin-bottom:1.5rem;
+      border-radius:8px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.7);
+      transition:transform 0.4s ease;
     }
 
     .gallery img:hover {
-      transform: scale(1.03);
+      transform:scale(1.03);
     }
 
     .closing {
-      text-align: center;
-      font-size: 1.45rem;
-      opacity: 0.85;
-      padding: 6rem 5%;
-      max-width: 1400px;
-      margin: 8rem auto;
-    }
-
-    .closing p {
-      max-width: 120ch;
-      margin: 1.5rem auto;
-      color: var(--text);
+      text-align:center;
+      font-size:1.45rem;
+      padding:6rem 0;
     }
 
     footer {
-      text-align: center;
-      padding: 4rem 1rem;
-      color: #555;
-      font-size: 0.95rem;
-      border-top: 1px solid #222;
-    }
-
-    /* Left Navigation – sticky, appears from "Who are we?", sticks on last */
-    .section-nav {
-      position: fixed;
-      top: 50%;
-      left: 30px;
-      transform: translateY(-50%);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      font-size: 1rem;
-      color: var(--text-dim);
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      opacity: 0;
-    }
-
-    .section-nav.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .section-nav a {
-      color: var(--text-dim);
-      text-decoration: none;
-      transition: all 0.4s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0.6;
-    }
-
-    .section-nav a:hover,
-    .section-nav a.active {
-      color: white;
-      opacity: 1;
-      font-size: 1.15rem;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
-
-    .section-nav .icon {
-      font-size: 1.3rem;
-      opacity: 0.7;
-    }
-
-    .section-nav a.active .icon {
-      opacity: 1;
-    }
-
-    @media (max-width: 900px) {
-      .section-nav { display: none; }
-    }
-
-    @media (max-width: 1200px) {
-      .section-nav { left: 15px; }
+      text-align:center;
+      padding:4rem 1rem;
+      color:#555;
+      border-top:1px solid #222;
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Left Navigation -->
-  <nav class="section-nav">
-    <a href="#hero"><span class="icon">👻</span> DreamGhosts</a>
-    <a href="#intro"><span class="icon">👻</span> Who are we?</a>
-    <a href="#start"><span class="icon">👻</span> How did we start?</a>
-    <a href="#mta"><span class="icon">👻</span> What is MTA:SA?</a>
-    <a href="#friends"><span class="icon">👻</span> Those We Met Along the Way</a>
-    <a href="#memories"><span class="icon">👻</span> Memories</a>
-    <a href="#now"><span class="icon">👻</span> Where are we now?</a>
-    <a href="#closing"><span class="icon">👻</span> Final thank you</a>
-  </nav>
-
-  <!-- Hero -->
+  <!-- HERO -->
   <div class="parallax-hero" id="hero">
-    <video id="hero-video" class="hero-video" autoplay muted playsinline preload="auto">
-      <source src="videos/hero-clip-1.mp4" type="video/mp4">
-      <source src="videos/hero-clip-2.mp4" type="video/mp4">
-      <source src="videos/hero-clip-3.mp4" type="video/mp4">
-      <img src="images/hero-bg.jpg" alt="Fallback">
-    </video>
+    <video id="hero-video" class="hero-video" autoplay muted playsinline></video>
     <div class="overlay"></div>
-    <div class="content" style="padding-top: 22vh;">
-      <h1 data-aos="fade-up" data-aos-duration="1400">DreamGhosts</h1>
-      <p class="subtitle" data-aos="fade-up" data-aos-delay="400" style="font-size:1.7rem; text-align:center; opacity:0.8;">
-        Since 2012 – a friendship that outlived every game
-      </p>
-    </div>
   </div>
 
+  <!-- CONTENT (nav now inside this) -->
   <div class="content">
 
-    <!-- Intro -->
-    <div class="intro" id="intro" data-aos="fade-up">
-      <h2>Who are we?</h2>
-      <p>
-        DreamGhosts is simply a group of longtime friends who grew up together. What started as late-night laughs slowly turned into over a decade of beautiful memories, inside jokes, and a bond that never really faded. Even when life pulled us in different directions, we always found our way back to each other, and always will.
-      </p>
-    </div>
+    <!-- NAV -->
+    <nav class="section-nav">
+      <a href="#hero">👻 DreamGhosts</a>
+      <a href="#intro">👻 Who are we?</a>
+      <a href="#start">👻 How did we start?</a>
+      <a href="#mta">👻 What is MTA:SA?</a>
+      <a href="#friends">👻 Those We Met Along the Way</a>
+      <a href="#memories">👻 Memories</a>
+      <a href="#now">👻 Where are we now?</a>
+      <a href="#closing">👻 Final thank you</a>
+    </nav>
 
-    <!-- How it started -->
-    <div class="era" id="start" data-aos="fade-up">
-      <h2>How did we start?</h2>
-      <p>
-        Each of us began our journey as a random newcomer, just exploring the game and trying our best to prove ourselves. Everyone wanted to win, to stand out, and to show they belonged. Eventually, the first two of us met and decided to team up, working together to take down other players and win matches in Destruction Derby. From there, the group slowly grew bigger and bigger, until we had more than 100 members over the years.
-      </p>
-      <img class="screenshot" src="images/mta-era-1.jpg" alt="Early MTA days" data-aos="zoom-in-up" data-aos-delay="300">
-    </div>
+    <!-- MAIN -->
+    <div class="main">
 
-    <!-- What is MTA -->
-    <div class="era" id="mta" data-aos="fade-up">
-      <h2>What is MTA:SA?</h2>
-      <p>
-        MTA:SA (Multi Theft Auto: San Andreas) is a multiplayer modification for Grand Theft Auto: San Andreas that allows players to create custom servers and game modes. People can build their own maps, scripts, and experiences such as racing, deathmatch, and many completely unique modes.
-      </p>
-      <p>
-        One of our favorite modes at the beginning of our journey was DD (Destruction Derby), where players fought using cars on maps built over the ocean. The goal was simple: knock other players off the platform and into the water and be the last driver standing.
-      </p>
-      <img class="screenshot" src="images/mta-era-2.jpg" alt="Classic MTA screenshot" data-aos="zoom-in-up" data-aos-delay="300">
-    </div>
-
-    <!-- Wall of Friends -->
-    <div class="friends" id="friends" data-aos="fade-up">
-      <h2>Those We Met Along the Way</h2>
-      <ul id="ghosts-list"></ul>
-    </div>
-
-    <!-- Gallery Memories -->
-    <div class="gallery-section" id="memories" data-aos="fade-up">
-      <h2>Memories</h2>
-      <div class="gallery">
-        <img src="images/gallery-1.jpg" alt="Memory 1" data-aos="fade-up" data-aos-delay="200">
-        <img src="images/gallery-2.jpg" alt="Memory 2" data-aos="fade-up" data-aos-delay="300">
-        <img src="images/gallery-3.jpg" alt="Memory 3" data-aos="fade-up" data-aos-delay="400">
+      <div class="intro" id="intro">
+        <h2>Who are we?</h2>
+        <p>DreamGhosts is simply a group of longtime friends...</p>
       </div>
-    </div>
 
-    <!-- Where are we now -->
-    <div class="now" id="now" data-aos="fade-up">
-      <h2>Where are we now?</h2>
-      <p>
-        We’re still alive, thankfully. But time moved on, and so did we. Some of us left to study, some got married and built families, and others became busy with work and responsibilities.<br>
-        Every now and then we still gather, laugh, and relive those small beautiful moments together.<br>
-        Some of us may not show up on the FFS server as often anymore, but we still remember those memories, and our hearts remain close no matter the distance.<br>
-        Even if we’re not around as much, the connection never really faded.
-      </p>
-    </div>
+      <div class="era" id="start">
+        <h2>How did we start?</h2>
+        <img class="screenshot" src="images/mta-era-1.jpg">
+      </div>
 
-    <!-- Final thank you -->
-    <div class="closing" id="closing" data-aos="fade-up">
-      <p>
-        We wanted this space to thank everyone we ever met along the way.<br>
-        The ones who made us laugh, who stayed up too late with us, who shared wins, losses, and countless inside jokes.<br>
-        You gave us memories we will never forget, and we hope we gave you a few smiles too.<br>
-        If you were part of this, even for one day, thank you.
-      </p>
-      <p>
-        These memories only exist because we shared them.<br>
-        And if you're reading this years from now, we were here.<br>
-        Still haunting. Still laughing.
-      </p>
-    </div>
+      <div class="era" id="mta">
+        <h2>What is MTA:SA?</h2>
+      </div>
 
+      <div id="friends">
+        <h2>Those We Met Along the Way</h2>
+        <ul id="ghosts-list"></ul>
+      </div>
+
+      <div id="memories">
+        <h2>Memories</h2>
+        <div class="gallery">
+          <img src="images/gallery-1.jpg">
+          <img src="images/gallery-2.jpg">
+          <img src="images/gallery-3.jpg">
+        </div>
+      </div>
+
+      <div id="now">
+        <h2>Where are we now?</h2>
+      </div>
+
+      <div class="closing" id="closing">
+        <p>Final thank you...</p>
+      </div>
+
+    </div>
   </div>
 
-  <footer>
-    © DreamGhosts • just memories now
-  </footer>
+  <footer>© DreamGhosts • just memories now</footer>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init({
-      duration: 900,
-      offset: 80,
-      once: false,
-      mirror: false,
-      easing: 'ease-out-cubic'
-    });
+<script>
+/* FRIENDS SORT */
+const friends = ["nonenile","EataRiD","iTRiCKS","Mrko1","999xx"];
+friends.sort((a,b)=>a.localeCompare(b));
+const list = document.getElementById("ghosts-list");
+friends.forEach(n=>{
+  const li=document.createElement("li");
+  li.textContent=n;
+  list.appendChild(li);
+});
 
-    window.addEventListener('load', () => AOS.refreshHard());
+/* STICKY NAV SCROLL SPY */
+const navLinks = document.querySelectorAll('.section-nav a');
+const sections = [...navLinks].map(l => document.querySelector(l.getAttribute('href')));
 
-    // ────────────────────────────────────────────────
-    // WALL OF FRIENDS
-    // ────────────────────────────────────────────────
-    const friends = [
-      "nonenile",
-      "EataRiD",
-      "iTRiCKS",
-      "Mrko1",
-      "999xx",
-      "FIY9AL",
-      "General",
-      "F5M",
-      "Swidrox",
-      "Antar",
-      "Genax",
-      "SmoK",
-      "Mica",
-      "F0XY",
-      "RiNO",
-      "Vuak",
-      "NoMercy",
-      "Vutalic",
-      // Add remaining names here
-    ];
+function updateNav(){
+  const middle = window.scrollY + window.innerHeight/2;
+  let current = 0;
+  sections.forEach((s,i)=>{
+    if(s && middle >= s.offsetTop) current=i;
+  });
+  navLinks.forEach((l,i)=>l.classList.toggle('active',i===current));
+}
+window.addEventListener('scroll',updateNav);
+updateNav();
+</script>
 
-    friends.sort((a, b) => a.localeCompare(b));
-
-    const list = document.getElementById("ghosts-list");
-    friends.forEach(name => {
-      const li = document.createElement("li");
-      li.textContent = name;
-      list.appendChild(li);
-    });
-
-    // ────────────────────────────────────────────────
-    // VIDEO PLAYLIST
-    // ────────────────────────────────────────────────
-    const video = document.getElementById("hero-video");
-    const clips = [
-      "videos/hero-clip-1.mp4",
-      "videos/hero-clip-2.mp4",
-      "videos/hero-clip-3.mp4"
-    ];
-
-    let currentClip = 0;
-
-    function playNext() {
-      if (clips.length === 0) return;
-      video.src = clips[currentClip];
-      video.load();
-      video.play().catch(() => console.log("Autoplay blocked"));
-      currentClip = (currentClip + 1) % clips.length;
-    }
-
-    video.addEventListener("ended", playNext);
-    video.addEventListener("error", () => {
-      console.log("Video error, skipping...");
-      playNext();
-    });
-
-    playNext();
-
-    // ────────────────────────────────────────────────
-    // SMOOTH ZOOM + PARALLAX
-    // ────────────────────────────────────────────────
-    const hero = document.querySelector('.parallax-hero');
-    const screenshots = document.querySelectorAll('.screenshot');
-
-    function updateTransforms() {
-      const scroll = window.scrollY;
-      const vh = window.innerHeight;
-
-      if (scroll < vh) {
-        const progress = scroll / vh;
-        const scale = 1.0 + progress * 0.20;
-        const translate = progress * 60;
-        hero.querySelector('.hero-video').style.transform = `scale(${scale}) translateY(${translate}px)`;
-      } else {
-        hero.querySelector('.hero-video').style.transform = `scale(1.20) translateY(60px)`;
-      }
-
-      screenshots.forEach(img => {
-        const rect = img.getBoundingClientRect();
-        const imgTop = rect.top + scroll;
-        const imgBottom = imgTop + rect.height;
-
-        if (imgBottom > scroll && imgTop < scroll + vh) {
-          const progress = Math.max(0, Math.min(1, (scroll - imgTop + vh/2) / vh));
-          const scale = 1.0 + progress * 0.20;
-          const translate = progress * 40;
-          img.style.transform = `scale(${scale}) translateY(${translate}px)`;
-        } else if (imgTop > scroll + vh) {
-          img.style.transform = `scale(1.20) translateY(40px)`;
-        } else {
-          img.style.transform = `scale(1.0) translateY(0)`;
-        }
-      });
-    }
-
-    window.addEventListener('scroll', updateTransforms);
-    window.addEventListener('resize', updateTransforms);
-    updateTransforms();
-
-    // ────────────────────────────────────────────────
-    // LEFT NAVIGATION – STICKY, NEVER HIDES AFTER APPEAR, STOPS AT MIDDLE OF LAST
-    // ────────────────────────────────────────────────
-    const nav = document.querySelector('.section-nav');
-    const navLinks = document.querySelectorAll('.section-nav a');
-    const sections = [
-      document.querySelector('#hero'),     // 0
-      document.querySelector('#intro'),    // 1 – start showing nav here
-      document.querySelector('#start'),
-      document.querySelector('#mta'),
-      document.querySelector('#friends'),
-      document.querySelector('#memories'),
-      document.querySelector('#now'),
-      document.querySelector('#closing')   // 7 – stick here after middle
-    ];
-
-    function updateActiveNav() {
-      const scrollPos = window.scrollY + window.innerHeight * 0.10; // your offset
-      const lastSection = sections[7];
-      const lastMiddle = lastSection ? lastSection.offsetTop + (lastSection.offsetHeight * 0.5) : Infinity;
-
-      let current = 0; // default to first (DreamGhosts) if above
-
-      // Find current section
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
-        if (!section) continue;
-
-        const top = section.offsetTop;
-        const bottom = top + section.offsetHeight;
-
-        if (scrollPos >= top && scrollPos < bottom) {
-          current = i;
-          break;
-        }
-      }
-
-      // If past middle of last section, force current to last
-      if (scrollPos >= lastMiddle) {
-        current = 7;
-      }
-
-      // Update active link
-      navLinks.forEach((link, index) => {
-        link.classList.toggle('active', index === current);
-      });
-
-      // Show nav from "Who are we?" (index 1) onward – never hide again
-      const showNav = window.scrollY >= sections[1]?.offsetTop - 100; // appear a bit before "Who are we?"
-      nav.classList.toggle('visible', showNav);
-    }
-
-    window.addEventListener('scroll', updateActiveNav);
-    window.addEventListener('resize', updateActiveNav);
-    window.addEventListener('load', () => {
-      setTimeout(updateActiveNav, 500);
-    });
-    updateActiveNav();
-  </script>
 </body>
 </html>
